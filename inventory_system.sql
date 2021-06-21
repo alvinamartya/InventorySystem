@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2021 at 11:50 PM
+-- Generation Time: Jun 21, 2021 at 09:39 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -191,7 +191,7 @@ CREATE TABLE `shelf` (
 CREATE TABLE `shelf_details` (
   `id` int(11) NOT NULL,
   `shelf_id` varchar(20) NOT NULL,
-  `product_id` int(11) NOT NULL,
+  `product_id` int(11) DEFAULT NULL,
   `expired_at` datetime DEFAULT NULL,
   `row` int(11) NOT NULL,
   `col` int(11) NOT NULL
