@@ -13,36 +13,34 @@
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/driver/update/{id}(id=${driverObject.id})}" th:object="${driverObject}"
-                          method="post">
+                    <form th:action="@{/driver/save}" th:object="${driverObject}" method="post">
 
                         <div class="form-group">
                             <label for="txtName">Name<span style="color: red;">*</span></label>
-                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name"
-                                   placeholder="Input Name">
+                            <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtIdVehicle">Vehicle ID<span style="color: red;">*</span></label>
-                            <input th:field="*{vehicle_id}" type="text" class="form-control" id="txtIdVehicle"
-                                   name="vehicle_id" placeholder="Input Vehicle ID">
+                            <input type="text" class="form-control" id="txtIdVehicle" name="vehicle_id"
+                                   placeholder="Input Vehicle ID">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtIdWarehouse">Warehouse ID<span style="color: red;">*</span></label>
-                            <input th:field="*{warehouse_id}" type="text" class="form-control" id="txtIdWarehouse"
-                                   name="warehouse_id" placeholder="Input Warehouse ID">
+                            <input type="text" class="form-control" id="txtIdWarehouse" name="warehouse_id"
+                                   placeholder="Input Warehouse ID">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone"
+                            <input type="text" class="form-control" id="txtPhone" name="phone"
                                    placeholder="Input Phone Number">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/Driver/index'}">Back To List</a>
+                            <a th:href="@{'/driver/index'}">Back To List</a>
                         </div>
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
@@ -89,6 +87,7 @@
                 validate[3] = 1;
             }
 
+
             if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
                 return true;
             } else {
@@ -123,6 +122,7 @@
             }
         }
 
+
         $(document).ready(function () {
             $('select').change(function () {
                 Clear(this);
@@ -137,7 +137,6 @@
                 Clear(this);
             });
         });
-
         $('#btnSave').click(function (event) {
             if (ValidateInput() == true) {
                 return true;

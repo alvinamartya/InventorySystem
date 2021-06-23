@@ -84,8 +84,8 @@
             <ul class="nav">
                 <!-- dashboard -->
                 <li>
-                    <a href="index.html">
-                        <i class="material-icons text-primary">home</i>
+                    <a th:href="@{/dashboard}">
+                        <i class="material-icons text-cyan">dashboard</i>
                         <span>Dashboard</span>
                     </a>
                 </li>
@@ -93,47 +93,48 @@
                 <!-- /dashboard -->
                 <!-- apps -->
                 <li>
-                    <a href="index.html">
-                        <i class="material-icons text-primary">home</i>
+                    <a th:href="@{/warehouse/index}">
+                        <i class="material-icons text-amber">home</i>
                         <span>Warehouses</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">
-                        <i class="material-icons text-primary">home</i>
+                    <a th:href="@{/store/index}">
+                        <i class="material-icons text-green">store</i>
                         <span>Stores</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">
-                        <i class="material-icons text-primary">home</i>
+                    <a th:href="@{/staff/index}">
+                        <i class="material-icons text-info">people</i>
                         <span>Staffs</span>
                     </a>
                 </li>
                 <li>
+                    <a th:href="@{/driver/index}">
+                        <i class="material-icons text-primary">directions_car</i>
+                        <span>Driver</span>
+                    </a>
+                </li>
+                <li>
                     <a th:href="@{/supplier/index}">
-                        <i class="material-icons text-primary">home</i>
+                        <i class="material-icons text-danger">extension</i>
                         <span>Supplier</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">
-                        <i class="material-icons text-primary">home</i>
+                    <a th:href="@{/product/index}">
+                        <i class="material-icons text-bluegrey">view_module</i>
                         <span>Product</span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">
-                        <i class="material-icons text-primary">home</i>
+                    <a th:href="@{/shelf/index}">
+                        <i class="material-icons text-deeppurple">view_agenda</i>
                         <span>Shelf</span>
                     </a>
                 </li>
-                <li>
-                    <a th:href="@{/driver/index}">
-                        <i class="material-icons text-primary">home</i>
-                        <span>Driver</span>
-                    </a>
-                </li>
+
             </ul>
 
         </nav>

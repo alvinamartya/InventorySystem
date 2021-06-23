@@ -14,10 +14,6 @@
 
                 <div class="card-block" th:object="${driverObject}">
                     <div class="form-group">
-                        <label>ID</label>
-                        <p><b>#<span th:text="*{id}"></span></b></p>
-                    </div>
-                    <div class="form-group">
                         <label>Name</label>
                         <p th:text="*{name}"></p>
                     </div>
@@ -35,29 +31,36 @@
                     </div>
                     <div class="form-group">
                         <label>Status</label>
-                        <p th:text="*{status}"></p>
+                        <div th:switch="*{status}">
+                            <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
+                            <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
+                        </div>
                     </div>
 
                     <div style="margin-top:50px;float:left">
-                        <a th:href="@{'http://localhost:8080/Driver/Index'}">Back To List</a>
+                        <a th:href="@{'/driver/index'}">Back To List</a>
                     </div>
+
+
                     <div style="margin-top:50px;float:right">
-
-                        <form
-                                th:action="${driverObject.status} == 'A'
-                                    ? @{/driver/delete-confirmed/{id}(id=${driverObject.id})}
-                                    : @{/driver/activate-confirmed/{id}(id=${driverObject.id})}"
-                                method="post">
-                            <input th:field="*{id}" type="hidden" >
-                            <button type="submit" id="btnSave" th:class="*{status=='A'} ? 'btn btn-danger m-b3':'btn btn-success m-b3'"
-                                    th:text="*{status=='A'} ? 'Deactivate':'Activate'"></button>
+                        <a href="" onclick="confirmDelete(); return false;" class="btn btn-danger m-b3">Delete</a>
+                        <form th:action="@{/driver/delete-confirmed/{id}(id=${driverObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden">
                         </form>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function confirmDelete() {
+            const confirmDelete = confirm("Are you sure to delete this data?");
+            if(confirmDelete == true) {
+                $("#formDelete").submit();
+            }
+        }
+    </script>
 
 
     <!--######### END OF SECTION HEREEE ################ -->

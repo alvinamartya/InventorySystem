@@ -68,4 +68,14 @@ public class DriverService {
     }
 
 
+    public int activate(int id, Driver driver){
+        driver.setStatus("A");
+        driver.setUpdated_at(new Date());
+        driver.setUpdated_by("Admin");
+        driversRepository.save(driver);
+
+        return 1;
+    }
+
+
 }
