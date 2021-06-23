@@ -1,0 +1,67 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Driver List
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-4" style="padding-bottom:30px">
+                            <a href="create" class="btn btn-primary">+ Add New</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered datatable">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>Vehicle ID</th>
+                                <th>Warehouse</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="driver, counter: ${listDriver}">
+                                <th th:text="${counter.count}"></th>
+                                <td th:text="${driver.name}"></td>
+                                <td th:text="${driver.vehicle_id}"></td>
+                                <td th:text="${driver.warehouse_id}"></td>
+                                <td th:text="${driver.phone}"></td>
+                                <td>
+                                    <div th:switch="${driver.status}">
+                                        <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
+                                        <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
+                                    </div>
+                                </td>
+
+                                <td th:if='${driver.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{edit/{id}(id=${driver.id})}" class="btn btn-outline-primary">Edit</a>
+                                    <a th:href="@{delete/{id}(id=${driver.id})}" class="btn btn-danger">Delete</a>
+                                </td>
+
+                                <td th:unless='${driver.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

@@ -1,0 +1,140 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Edit Supplier</h2>
+                </div>
+
+                <div class="card-block">
+                    <form th:action="@{/supplier/update/{id}(id=${supplierObject.id})}" th:object="${supplierObject}" method="post">
+
+                        <div class="form-group">
+                            <label>Name<span style="color: red;">*</span></label>
+                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone<span style="color: red;">*</span></label>
+                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone" placeholder="Input Phone Number">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtAddress">Address<span style="color: red;">*</span></label>
+                            <textarea th:field="*{address}" name="address" id="txtAddress" class="form-control"  cols="30" rows="10" placeholder="Input Address"></textarea>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div style="margin-top:50px;float:left">
+                            <a th:href="@{'/supplier/index'}">Back To List</a>
+                        </div>
+
+                        <div style="margin-top:50px;float:right">
+                            <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function ValidateInput() {
+            const validate = [0, 0, 0];
+
+            if ($(txtName).val() === '') {
+                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            } else {
+                setClearFor($(txtName));
+                validate[0] = 1;
+            }
+
+            if ($(txtAddress).val() === '') {
+                setErrorFor($(txtAddress), 'Address Cannot Be Empty');
+            } else {
+                setClearFor($(txtAddress));
+                validate[1] = 1;
+            }
+
+            if ($(txtPhone).val() === '') {
+                setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
+            } else if (!isDigit($(txtPhone).val())) {
+                setErrorFor($(txtPhone), 'Phone Number must be numeric');
+            } else {
+                setClearFor($(txtPhone));
+                validate[2] = 1;
+            }
+
+            if (validate[0] == 1 && validate[1] == 1&& validate[2] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function setClearFor(input) {
+            const alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).removeClass('input-invalid');
+            alert.addClass('hide');
+        }
+
+        function setErrorFor(input, message) {
+            const alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).addClass('input-invalid');
+            alert.removeClass('hide');
+            alert.html(message);
+        }
+
+        function isChar(textbox) {
+            return /^[a-zA-Z]*$/g.test(textbox);
+        }
+
+        function isDigit(textBox) {
+            return /^[0-9]*$/g.test(textBox);
+        }
+
+        function Clear(element) {
+            if ($(element).hasClass("form-control input-invalid")) {
+                setClearFor(element);
+            }
+        }
+
+        $(document).ready(function () {
+            $('select').change(function () {
+                Clear(this);
+            });
+            $('input[type=text],input[type=number]').on('input', function () {
+                Clear(this);
+            });
+            $('textarea').on('input', function () {
+                Clear(this);
+            });
+            $('#potongan').on('input', function () {
+                Clear(this);
+            });
+        });
+
+        $('#btnSave').click(function (event) {
+            if (ValidateInput() == true) {
+                return true;
+            } else {
+
+                return false;
+            }
+        })
+    </script>
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>
