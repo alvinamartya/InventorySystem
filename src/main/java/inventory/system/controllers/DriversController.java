@@ -41,6 +41,7 @@ public class DriversController {
     public String save(Driver driver, RedirectAttributes redirectAttrs) {
         driverService.saveDriver(driver);
         redirectAttrs.addFlashAttribute("success_create", "Driver Successfully Added!");
+
         return "redirect:/driver/index";
     }
 
