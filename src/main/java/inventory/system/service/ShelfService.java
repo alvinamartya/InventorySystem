@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShelfService {
@@ -73,7 +74,7 @@ public class ShelfService {
                             x.getWarehouse_id().equals(warehouseId) &&
                                     x.getProduct_category_id().equals(productCategoryId) &&
                                     x.getType().equals(warehouseType))
-                    .toList();
+                    .collect(Collectors.toList());
 
             if (shelfFiltered.size() > 0) {
                 shelfFiltered.sort(Comparator.comparing(Shelf::getId));
