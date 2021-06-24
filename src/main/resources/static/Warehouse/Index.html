@@ -13,6 +13,42 @@
                 </div>
                 <div class="card-block">
                     <div class="row">
+                        <div class="col-md-12 col-lg-12" th:if="${success_create}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_create}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_update}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_update}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_active}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_active}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_deactive}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_deactive}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
                         <div class="col-md-4" style="padding-bottom:30px">
                             <a href="create" class="btn btn-primary">+ Add New</a>
                         </div>
@@ -22,10 +58,9 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <td>Warehouses Id</td>
                                 <td>Name</td>
-                                <td>City</td>
                                 <td>Province</td>
+                                <td>City</td>
                                 <td>Branch</td>
                                 <td>Status</td>
                                 <td>Action</td>
@@ -34,11 +69,15 @@
                             <tbody>
                             <tr th:each="warehouse, counter: ${listWarehouse}">
                                 <th th:text="${counter.count}"></th>
-                                <td th:text="${warehouse.id}"></td>
                                 <td th:text="${warehouse.name}"></td>
-                                <td th:text="${warehouse.city}"></td>
                                 <td th:text="${warehouse.province}"></td>
-                                <td th:text="${warehouse.is_branch}"></td>
+                                <td th:text="${warehouse.city}"></td>
+                                <td>
+                                    <div th:switch="${warehouse.is_branch}">
+                                        <span th:case="'1'" class="tag tag-pill tag-success">Yes</span>
+                                        <span th:case="'0'" class="tag tag-pill tag-danger">No</span>
+                                    </div>
+                                </td>
                                 <td>
                                     <div th:switch="${warehouse.status}">
                                         <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
@@ -49,11 +88,12 @@
                                 <td th:if='${warehouse.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${warehouse.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${warehouse.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{delete/{id}(id=${warehouse.id})}" class="btn btn-danger">Delete</a>
+                                    <a th:href="@{delete/{id}(id=${warehouse.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
                                 <td th:unless='${warehouse.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${warehouse.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{activate/{id}(id=${warehouse.id})}" class="btn btn-success">Activate</a>
                                 </td>
                             </tr>
                             </tbody>

@@ -243,6 +243,15 @@
 <script th:src="@{'/assets/vendor/datatables/media/js/dataTables.bootstrap4.js'}" ></script>
 <!-- end initialize page scripts -->
 
+<script>
+    $(document).ready(function () {
+        $('.datatable').DataTable({
+            "processing": true,
+            "serverSide": false
+        });
+    });
+</script>
+
 </body>
 
 </html>

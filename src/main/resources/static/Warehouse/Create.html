@@ -9,27 +9,14 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add New Driver</h2>
+                    <h2>Add New Warehouse</h2>
                 </div>
 
                 <div class="card-block">
                     <form th:action="@{/warehouse/save}" th:object="${warehouseObject}" method="post">
-
-                        <div class="form-group">
-                            <label for="txtId">Name<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtId" name="id" placeholder="Input Warehouse ID">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-
                         <div class="form-group">
                             <label for="txtName">Name<span style="color: red;">*</span></label>
                             <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtCity">City<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtCity" name="city"
-                                   placeholder="Input City">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
@@ -39,10 +26,27 @@
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtPhone">Branch<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtPhone" name="is_branch"
-                                   placeholder="Input Branch" maxlength="5">
+                            <label for="txtCity">City<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtCity" name="city"
+                                   placeholder="Input City">
                             <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Branch<span style="color: red;">*</span></label>
+                            <div class="form-check" style="margin-left: 2.5%">
+                                <input class="form-check-input" type="radio" name="is_branch" id="rbYes"
+                                       value="1" checked>
+                                <label class="form-check-label" style="margin-left: -20px" for="rbYes">
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="form-check" style="margin-left: 2.5%">
+                                <input class="form-check-input" type="radio" name="is_branch" id="rbNo"
+                                       value="0">
+                                <label class="form-check-label" style="margin-left: -20px" for="rbNo">
+                                    No
+                                </label>
+                            </div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
@@ -61,7 +65,7 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0, 0];
+            const validate = [0, 0, 0, 0];
 
             if ($(txtName).val() === '') {
                 setErrorFor($(txtName), 'Name Cannot Be Empty');
@@ -93,15 +97,8 @@
                 validate[3] = 1;
             }
 
-            if ($(txtId).val() === '') {
-                setErrorFor($(txtId), 'Warehouse ID Cannot Be Empty');
-            } else {
-                setClearFor($(txtId));
-                validate[4] = 1;
-            }
 
-
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[4] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
                 return true;
             } else {
                 return false;

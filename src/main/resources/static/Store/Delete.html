@@ -18,12 +18,12 @@
                         <p th:text="*{name}"></p>
                     </div>
                     <div class="form-group">
-                        <label>City</label>
-                        <p th:text="*{city}"></p>
-                    </div>
-                    <div class="form-group">
                         <label>Province</label>
                         <p th:text="*{province}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <p th:text="*{city}"></p>
                     </div>
                     <div class="form-group">
                         <label>Address</label>
@@ -51,9 +51,16 @@
 
 
                     <div style="margin-top:50px;float:right">
-                        <a href="" onclick="confirmDelete(); return false;" class="btn btn-danger m-b3">Delete</a>
-                        <form th:action="@{/store/delete-confirmed/{id}(id=${storeObject.id})}" method="post" id="formDelete">
-                            <input th:field="*{id}" type="hidden">
+                        <a href="" onclick="confirmDelete(); return false;" class="btn m-b3"
+                           th:classappend="*{status=='A'} ? 'btn-danger' : 'btn-success'"
+                           th:text="*{status=='A'} ? 'Deactivate':'Activate'"></a>
+
+                        <form th:if='${storeObject.status.equals("A")}' th:action="@{/store/delete-confirmed/{id}(id=${storeObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden" >
+                        </form>
+
+                        <form th:if='${!storeObject.status.equals("A")}' th:action="@{/store/activate-confirmed/{id}(id=${storeObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden" >
                         </form>
                     </div>
                 </div>

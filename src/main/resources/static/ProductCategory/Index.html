@@ -13,89 +13,89 @@
                 </div>
                 <div class="card-block">
                     <div class="row">
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12" th:if="${success_create}">
-                                <div class="alert alert-success alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                        &times;
-                                    </button>
-                                    <span th:text="${success_create}"></span>
-                                </div>
-                            </div>
-                            <!--                        -->
-                            <div class="col-md-12 col-lg-12" th:if="${success_update}">
-                                <div class="alert alert-success alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                        &times;
-                                    </button>
-                                    <span th:text="${success_update}"></span>
-                                </div>
-                            </div>
-                            <!--                        -->
-                            <div class="col-md-12 col-lg-12" th:if="${success_active}">
-                                <div class="alert alert-success alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                        &times;
-                                    </button>
-                                    <span th:text="${success_active}"></span>
-                                </div>
-                            </div>
-                            <!--                        -->
-                            <div class="col-md-12 col-lg-12" th:if="${success_deactive}">
-                                <div class="alert alert-success alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                        &times;
-                                    </button>
-                                    <span th:text="${success_deactive}"></span>
-                                </div>
-                            </div>
-                            <!--                        -->
-                            <div class="col-md-4" style="padding-bottom:30px">
-                                <a href="create" class="btn btn-primary">+ Add New</a>
+                        <div class="col-md-12 col-lg-12" th:if="${success_create}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_create}"></span>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered datatable">
-                                <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Name</th>
-                                    <th>Can Be Stale</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="productCategory, counter: ${listProductCategory}">
-                                    <th th:text="${counter.count}"></th>
-                                    <td th:text="${productCategory.name}"></td>
-                                    <td>
-                                        <div th:switch="${productCategory.is_can_be_stale}">
-                                            <span th:case="'0'" class="tag tag-pill tag-success">No</span>
-                                            <span th:case="'1'" class="tag tag-pill tag-danger">Yes</span>
-                                        </div>
-                                    <td>
-                                        <div th:switch="${productCategory.status}">
-                                            <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
-                                            <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
-                                        </div>
-                                    </td>
-
-                                    <td th:if='${productCategory.status.equals("A")}'>
-                                        <a th:href="@{detail/{id}(id=${productCategory.id})}" class="btn btn-info">Detail</a>
-                                        <a th:href="@{edit/{id}(id=${productCategory.id})}"
-                                           class="btn btn-outline-primary">Edit</a>
-                                        <a th:href="@{delete/{id}(id=${productCategory.id})}" class="btn btn-danger">Deactivate</a>
-                                    </td>
-
-                                    <td th:unless='${productCategory.status.equals("A")}'>
-                                        <a th:href="@{detail/{id}(id=${productCategory.id})}" class="btn btn-info">Detail</a>
-                                        <a th:href="@{activate/{id}(id=${productCategory.id})}" class="btn btn-success">Activate</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_update}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_update}"></span>
+                            </div>
                         </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_active}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_active}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_deactive}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <span th:text="${success_deactive}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-4" style="padding-bottom:30px">
+                            <a href="create" class="btn btn-primary">+ Add New</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered datatable">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>Can Be Stale</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="productCategory, counter: ${listProductCategory}">
+                                <th th:text="${counter.count}"></th>
+                                <td th:text="${productCategory.name}"></td>
+                                <td>
+                                    <div th:switch="${productCategory.is_can_be_stale}">
+                                        <span th:case="'0'" class="tag tag-pill tag-success">No</span>
+                                        <span th:case="'1'" class="tag tag-pill tag-danger">Yes</span>
+                                    </div>
+                                <td>
+                                    <div th:switch="${productCategory.status}">
+                                        <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
+                                        <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
+                                    </div>
+                                </td>
+
+                                <td th:if='${productCategory.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${productCategory.id})}"
+                                       class="btn btn-info">Detail</a>
+                                    <a th:href="@{edit/{id}(id=${productCategory.id})}"
+                                       class="btn btn-outline-primary">Edit</a>
+                                    <a th:href="@{delete/{id}(id=${productCategory.id})}" class="btn btn-danger">Deactivate</a>
+                                </td>
+
+                                <td th:unless='${productCategory.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${productCategory.id})}"
+                                       class="btn btn-info">Detail</a>
+                                    <a th:href="@{activate/{id}(id=${productCategory.id})}" class="btn btn-success">Activate</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

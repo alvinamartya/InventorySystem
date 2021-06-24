@@ -5,6 +5,7 @@ import inventory.system.repository.StoresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +16,17 @@ public class StoresService {
     @Autowired
     StoresRepository storesRepository;
 
-    public List<Stores> getAllStores(){
-        List<Stores> storesList = (List<Stores>) storesRepository.findAll();
+    public List<Stores> getAllStores() {
+        List<Stores> storesList = storesRepository.findAll();
+        storesList.sort(
+                Comparator
+                        .comparing(Stores::getStatus)
+                        .thenComparing(Stores::getName)
+        );
         return storesList;
     }
 
-    public List<Stores> saveStores(Stores stores){
+    public List<Stores> saveStores(Stores stores) {
         stores.setStatus("A");
         stores.setCreated_at(new Date());
         stores.setCreated_by("Admin");
@@ -30,7 +36,7 @@ public class StoresService {
         return getAllStores();
     }
 
-    public int update(int id, Stores store){
+    public int update(int id, Stores store) {
         Stores stores = storesRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid store Id:" + id));
         stores.setName(store.getName());
@@ -46,22 +52,31 @@ public class StoresService {
         return 1;
     }
 
-    public Stores getStoresById(Integer id){
+    public Stores getStoresById(Integer id) {
         Optional<Stores> optional = storesRepository.findById(id);
         Stores stores = null;
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             stores = optional.get();
-        }else{
+        } else {
             throw new RuntimeException(" stores not found for id :: " + id);
         }
         return stores;
     }
 
-    public List<Stores> deleteStores(Stores stores){
+    public List<Stores> deleteStores(Stores stores) {
         stores.setStatus("D");
         stores.setUpdated_at(new Date());
         stores.setUpdated_by("Admin");
         storesRepository.save(stores);
         return getAllStores();
+    }
+
+    public int activate(Stores stores) {
+        stores.setStatus("A");
+        stores.setUpdated_at(new Date());
+        stores.setUpdated_by("Admin");
+        storesRepository.save(stores);
+
+        return 1;
     }
 }

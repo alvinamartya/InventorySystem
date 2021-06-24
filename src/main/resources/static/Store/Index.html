@@ -13,6 +13,34 @@
                 </div>
                 <div class="card-block">
                     <div class="row">
+                        <div class="col-md-12 col-lg-12" th:if="${success_create}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_create}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_update}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_update}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_active}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_active}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_deactive}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_deactive}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
                         <div class="col-md-4" style="padding-bottom:30px">
                             <a href="create" class="btn btn-primary">+ Add New</a>
                         </div>
@@ -23,8 +51,8 @@
                             <tr>
                                 <th>No</th>
                                 <td>Name</td>
-                                <td>City</td>
                                 <td>Province</td>
+                                <td>City</td>
                                 <td>Address</td>
                                 <td>Head Stores</td>
                                 <td>Phone</td>
@@ -36,8 +64,8 @@
                             <tr th:each="store, counter: ${listStore}">
                                 <th th:text="${counter.count}"></th>
                                 <td th:text="${store.name}"></td>
-                                <td th:text="${store.city}"></td>
                                 <td th:text="${store.province}"></td>
+                                <td th:text="${store.city}"></td>
                                 <td th:text="${store.address}"></td>
                                 <td th:text="${store.head_of_store_name}"></td>
                                 <td th:text="${store.phone}"></td>
@@ -51,11 +79,12 @@
                                 <td th:if='${store.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${store.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${store.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{delete/{id}(id=${store.id})}" class="btn btn-danger">Delete</a>
+                                    <a th:href="@{delete/{id}(id=${store.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
                                 <td th:unless='${store.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${store.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{activate/{id}(id=${store.id})}" class="btn btn-success">Activate</a>
                                 </td>
                             </tr>
                             </tbody>

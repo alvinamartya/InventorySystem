@@ -34,7 +34,11 @@ public class SupplierService {
     private int getLastCounter() {
         List<Supplier> suppliers = getAllSupplier();
         if (suppliers.size() > 0) {
-            suppliers.sort(Comparator.comparing(Supplier::getId));
+            suppliers.sort(
+                    Comparator
+                            .comparing(Supplier::getStatus)
+                            .thenComparing(Supplier::getName)
+            );
             return Integer.parseInt(suppliers.get(suppliers.size() - 1).getId());
         }
 
