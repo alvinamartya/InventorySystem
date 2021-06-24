@@ -26,6 +26,14 @@ public class Driver {
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Warehouses warehousesList;
 
+    public Warehouses getWarehousesList() {
+        return warehousesList;
+    }
+
+    public void setWarehousesList(Warehouses warehousesList) {
+        this.warehousesList = warehousesList;
+    }
+
     public Integer getId() {
         return id;
     }
