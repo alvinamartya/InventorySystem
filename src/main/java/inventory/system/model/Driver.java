@@ -15,11 +15,11 @@ public class Driver {
     private String name;
     private String vehicle_id;
 
-    @OneToMany (mappedBy = "warehouses")
-    private List<Warehouses> warehouses = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Warehouses warehouses;
 
     private String warehouse_id;
-
 
     private String phone;
     private String status;
