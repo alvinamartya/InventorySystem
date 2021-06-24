@@ -1,0 +1,154 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">s
+                    <h2>Edit Warehouse</h2>
+                </div>
+
+                <div class="card-block">
+                    <form th:action="@{/warehouse/update/{id}(id=${warehouseObject.id})}" th:object="${warehouseObject}"
+                          method="post">
+
+                        <div class="form-group">
+                            <label for="txtName">Name<span style="color: red;">*</span></label>
+                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name"
+                                   placeholder="Input Name">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtCity">City<span style="color: red;">*</span></label>
+                            <input th:field="*{city}" type="text" class="form-control" id="txtCity"
+                                   name="city" placeholder="Input City">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtProvince">Province<span style="color: red;">*</span></label>
+                            <input th:field="*{province}" type="text" class="form-control" id="txtProvince"
+                                   name="province" placeholder="Input Province">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtBranch">Branch<span style="color: red;">*</span></label>
+                            <input th:field="*{is_branch}" type="text" class="form-control" id="txtBranch" name="is_branch"
+                                   placeholder="Input Branch">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div style="margin-top:50px;float:left">
+                            <a th:href="@{'/warehouse/index'}">Back To List</a>
+                        </div>
+                        <div style="margin-top:50px;float:right">
+                            <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function ValidateInput() {
+            const validate = [0, 0, 0, 0];
+
+            if ($(txtName).val() === '') {
+                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            } else {
+                setClearFor($(txtName));
+                validate[0] = 1;
+            }
+
+            if ($(txtCity).val() === '') {
+                setErrorFor($(txtCity), 'City Cannot Be Empty');
+            } else {
+                setClearFor($(txtCity));
+                validate[1] = 1;
+            }
+
+            if ($(txtProvince).val() === '') {
+                setErrorFor($(txtProvince), 'Province Cannot Be Empty');
+            } else {
+                setClearFor($(txtProvince));
+                validate[2] = 1;
+            }
+
+            if ($(txtBranch).val() === '') {
+                setErrorFor($(txtBranch), 'Branch Cannot Be Empty');
+            } else if (!isDigit($(txtBranch).val())) {
+                setErrorFor($(txtBranch), 'Branch must be numeric');
+            } else {
+                setClearFor($(txtBranch));
+                validate[3] = 1;
+            }
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function setClearFor(input) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).removeClass('input-invalid');
+            alert.addClass('hide');
+        }
+
+        function setErrorFor(input, message) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).addClass('input-invalid');
+            alert.removeClass('hide');
+            alert.html(message);
+        }
+
+        function isChar(textbox) {
+            return /^[a-zA-Z]*$/g.test(textbox);
+        }
+
+        function isDigit(textBox) {
+            return /^[0-9]*$/g.test(textBox);
+        }
+
+        function Clear(element) {
+            if ($(element).hasClass("form-control input-invalid")) {
+                setClearFor(element);
+            }
+        }
+
+        $(document).ready(function () {
+            $('select').change(function () {
+                Clear(this);
+            });
+            $('input[type=text],input[type=number]').on('input', function () {
+                Clear(this);
+            });
+            $('textarea').on('input', function () {
+                Clear(this);
+            });
+            $('#potongan').on('input', function () {
+                Clear(this);
+            });
+        });
+
+        $('#btnSave').click(function (event) {
+            if (ValidateInput() == true) {
+                return true;
+            } else {
+
+                return false;
+            }
+        })
+    </script>
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

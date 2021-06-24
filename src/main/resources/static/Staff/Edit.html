@@ -1,0 +1,189 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Update New Staff</h2>
+                </div>
+
+                <div class="card-block">
+                    <form th:action="@{staff/edit/{id}(id=${staffObject.id})}" th:object="${staffObject}"
+                          method="post">
+
+                        <input type="hidden" th:field="*{id}" />
+
+                        <div class="form-group">
+                            <label for="name">Name<span style="color: red;">*</span></label>
+                            <input th:field="*{name}" type="text" class="form-control" id="name" name="name" placeholder="Input Name">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtPhone">Phone<span style="color: red;">*</span></label>
+                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone"
+                                   placeholder="Input Phone Number" maxlength="13">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address<span style="color: red;">*</span></label>
+                            <textarea th:field="*{address}" type="text" class="form-control" id="address" name="address"
+                                      placeholder="Input Address"></textarea>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender<span style="color: red;">*</span></label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="gender" id="gender" value="M"  th:field="*{gender}"/>
+                                    Male
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="gender" id="gender1" value="F"  th:field="*{gender}"/>
+                                    Female
+                                </label>
+                            </div>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role_id">Role<span style="color: red;">*</span></label>
+                            <select class="form-control" name="role_id" id="role_id" th:field="*{role_id}">
+                                <option value="1">Transaction Admin</option>
+                                <option value="2">Warehouse Admin</option>
+                                <option value="3">Master Data Admin</option>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div style="margin-top:50px;float:left">
+                            <a th:href="@{'/staff/index'}">Back To List</a>
+                        </div>
+                        <div style="margin-top:50px;float:right">
+                            <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function ValidateInput() {
+            const validate = [0, 0, 0, 0];
+
+            if ($(txtName).val() === '') {
+                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            } else {
+                setClearFor($(txtName));
+                validate[0] = 1;
+            }
+
+            if ($(address).val() === '') {
+                setErrorFor($(address), 'Address Cannot Be Empty');
+            } else {
+                setClearFor($(address));
+                validate[1] = 1;
+            }
+
+            if ($(email).val() === '') {
+                setErrorFor($(email), 'Email Address Cannot Be Empty');
+            } else {
+                setClearFor($(email));
+                validate[2] = 1;
+            }
+
+            if ($(password).val() === '') {
+                setErrorFor($(password), 'Password Cannot Be Empty');
+            } else {
+                setClearFor($(password));
+                validate[2] = 1;
+            }
+
+            if ($(password2).val() === '') {
+                setErrorFor($(password2), 'Confirm Password Cannot Be Empty');
+            } else {
+                setClearFor($(password2));
+                validate[2] = 1;
+            }
+
+            if ($(txtPhone).val() === '') {
+                setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
+            } else if (!isDigit($(txtPhone).val())) {
+                setErrorFor($(txtPhone), 'Phone Number must be numeric');
+            } else {
+                setClearFor($(txtPhone));
+                validate[3] = 1;
+            }
+
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function setClearFor(input) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).removeClass('input-invalid');
+            alert.addClass('hide');
+        }
+
+        function setErrorFor(input, message) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).addClass('input-invalid');
+            alert.removeClass('hide');
+            alert.html(message);
+        }
+
+        function isChar(textbox) {
+            return /^[a-zA-Z]*$/g.test(textbox);
+        }
+
+        function isDigit(textBox) {
+            return /^[0-9]*$/g.test(textBox);
+        }
+
+        function Clear(element) {
+            if ($(element).hasClass("form-control input-invalid")) {
+                setClearFor(element);
+            }
+        }
+
+
+        $(document).ready(function () {
+            $('select').change(function () {
+                Clear(this);
+            });
+            $('input[type=text],input[type=number]').on('input', function () {
+                Clear(this);
+            });
+            $('textarea').on('input', function () {
+                Clear(this);
+            });
+            $('#potongan').on('input', function () {
+                Clear(this);
+            });
+        });
+        $('#btnSave').click(function (event) {
+            if (ValidateInput() == true) {
+                return true;
+            } else {
+
+                return false;
+            }
+        })
+    </script>
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>
