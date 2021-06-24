@@ -1,7 +1,9 @@
 package inventory.system.controllers;
 
 import inventory.system.model.Driver;
+import inventory.system.model.Warehouses;
 import inventory.system.service.DriverService;
+import inventory.system.service.WarehousesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,9 @@ public class DriversController {
     @Autowired
     DriverService driverService;
 
+    @Autowired
+    WarehousesService warehouseService;
+
     // view index
     @RequestMapping("/index")
     public String index(Model model) {
@@ -33,6 +38,10 @@ public class DriversController {
     @RequestMapping("/create")
     public String create(Model model) {
         model.addAttribute("driverObject", new Driver());
+
+        List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
+        model.addAttribute("listWarehouse", warehouseList);
+
         return "Driver/Create";
     }
 
@@ -41,6 +50,7 @@ public class DriversController {
     public String save(Driver driver, RedirectAttributes redirectAttrs) {
         driverService.saveDriver(driver);
         redirectAttrs.addFlashAttribute("success_create", "Driver Successfully Added!");
+
         return "redirect:/driver/index";
     }
 
@@ -49,6 +59,9 @@ public class DriversController {
     public String update(@PathVariable(value = "id") Integer id, Model model) {
         Driver drivers = driverService.getDriverById(id);
         model.addAttribute("driverObject", drivers);
+
+        List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
+        model.addAttribute("listWarehouse", warehouseList);
 
         return "Driver/Edit";
     }

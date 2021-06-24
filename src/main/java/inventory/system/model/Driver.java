@@ -1,7 +1,9 @@
 package inventory.system.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "drivers")
@@ -19,6 +21,18 @@ public class Driver {
     private Date created_at;
     private String updated_by;
     private Date updated_at;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Warehouses warehousesList;
+
+    public Warehouses getWarehousesList() {
+        return warehousesList;
+    }
+
+    public void setWarehousesList(Warehouses warehousesList) {
+        this.warehousesList = warehousesList;
+    }
 
     public Integer getId() {
         return id;
