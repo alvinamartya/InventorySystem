@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -37,8 +38,11 @@ public class DriversController {
 
     // save driver
     @PostMapping("/save")
-    public String save(Driver driver) {
+    public String save(Driver driver, RedirectAttributes redirAttrs) {
         driverService.saveDriver(driver);
+
+
+        redirAttrs.addFlashAttribute("success_create", "Driver Successfully Added!");
         return "redirect:/driver/index";
     }
 
@@ -54,13 +58,15 @@ public class DriversController {
     // update driver
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") int id, Driver driver,
-                         BindingResult result) {
+                         BindingResult result, RedirectAttributes redirAttrs) {
         if (result.hasErrors()) {
             driver.setId(id);
             return "Driver/Edit";
         }
 
         driverService.update(id, driver);
+
+        redirAttrs.addFlashAttribute("success_update", "Driver Successfully Updated!");
         return "redirect:/driver/index";
     }
 
@@ -84,10 +90,40 @@ public class DriversController {
 
     // confirm to delete driver
     @PostMapping("/delete-confirmed/{id}")
-    public String deleteConfirmed(@PathVariable("id") int id) {
+    public String deleteConfirmed(@PathVariable("id") int id, RedirectAttributes redirAttrs) {
         Driver driver = driverService.getDriverById(id);
 
         driverService.delete(driver);
+
+        redirAttrs.addFlashAttribute("success_deactive", "Driver Successfully Deactivated!");
         return "redirect:/driver/index";
+    }
+
+    //    #Delete
+    @GetMapping("/deactivate/{id}")
+    public String Delete(@PathVariable(value = "id") Integer id, Model model){
+        Driver drivers = driverService.getDriverById(id);
+        model.addAttribute("driverObject", drivers);
+
+        return "Driver/Delete";
+    }
+
+
+    //    #Activated
+    @GetMapping("/activate/{id}")
+    public String Activate(@PathVariable(value = "id") Integer id, Model model){
+        Driver drivers = driverService.getDriverById(id);
+        model.addAttribute("driverObject", drivers);
+
+        return "Driver/Delete";
+    }
+
+    @PostMapping("/activate-confirmed/{id}")
+    public String activateconfirmed(@PathVariable("id") int id, Model model, RedirectAttributes redirAttrs) {
+        Driver driver = driverService.getDriverById(id);
+        driverService.activate(id, driver);
+
+        redirAttrs.addFlashAttribute("success_active", "Driver Successfully Activated!");
+        return "redirect:/Driver/Index";
     }
 }
