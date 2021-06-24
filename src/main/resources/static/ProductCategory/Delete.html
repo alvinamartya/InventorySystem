@@ -9,25 +9,20 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Driver Detail</h2>
+                    <h2>Product Category Detail</h2>
                 </div>
 
-                <div class="card-block" th:object="${driverObject}">
+                <div class="card-block" th:object="${productCategoryObject}">
                     <div class="form-group">
                         <label>Name</label>
                         <p th:text="*{name}"></p>
                     </div>
                     <div class="form-group">
-                        <label>Vehicle ID</label>
-                        <p th:text="*{vehicle_id}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label>Warehouse ID</label>
-                        <p th:text="*{warehouse_id}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <p th:text="*{phone}"></p>
+                        <label>Can Be Stale</label>
+                        <div th:switch="*{is_can_be_stale}">
+                            <span th:case="'0'" class="tag tag-pill tag-success">No</span>
+                            <span th:case="'1'" class="tag tag-pill tag-danger">Yes</span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Status</label>
@@ -38,7 +33,7 @@
                     </div>
 
                     <div style="margin-top:50px;float:left">
-                        <a th:href="@{'/driver/index'}">Back To List</a>
+                        <a th:href="@{'/product-category/index'}">Back To List</a>
                     </div>
 
                     <div style="margin-top:50px;float:right">
@@ -46,11 +41,11 @@
                            th:classappend="*{status=='A'} ? 'btn-danger' : 'btn-success'"
                            th:text="*{status=='A'} ? 'Deactivate':'Activate'"></a>
 
-                        <form th:if='${driverObject.status.equals("A")}' th:action="@{/driver/delete-confirmed/{id}(id=${driverObject.id})}" method="post" id="formDelete">
+                        <form th:if='${productCategoryObject.status.equals("A")}' th:action="@{/product-category/delete-confirmed/{id}(id=${productCategoryObject.id})}" method="post" id="formDelete">
                             <input th:field="*{id}" type="hidden" >
                         </form>
 
-                        <form th:if='${!driverObject.status.equals("A")}' th:action="@{/driver/activate-confirmed/{id}(id=${driverObject.id})}" method="post" id="formDelete">
+                        <form th:if='${!productCategoryObject.status.equals("A")}' th:action="@{/product-category/activate-confirmed/{id}(id=${productCategoryObject.id})}" method="post" id="formDelete">
                             <input th:field="*{id}" type="hidden" >
                         </form>
                     </div>
