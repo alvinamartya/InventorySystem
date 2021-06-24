@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -37,8 +38,9 @@ public class SuppliersController {
 
     // save supplier
     @PostMapping("/save")
-    public String save(Supplier supplier) {
+    public String save(Supplier supplier, RedirectAttributes redirectAttrs) {
         supplierService.saveSupplier(supplier);
+        redirectAttrs.addFlashAttribute("success_create", "Supplier Successfully Added!");
         return "redirect:/supplier/index";
     }
 
@@ -83,10 +85,39 @@ public class SuppliersController {
 
     // confirm to delete supplier
     @PostMapping("/delete-confirmed/{id}")
-    public String deleteConfirmed(@PathVariable("id") String id) {
+    public String deleteConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs) {
         Supplier supplier = supplierService.getSupplierById(id);
         supplierService.delete(supplier);
 
+        redirectAttrs.addFlashAttribute("success_deactive", "Supplier Successfully Deactivated!");
+        return "redirect:/supplier/index";
+    }
+
+    // deactivate supplier
+    @GetMapping("/deactivate/{id}")
+    public String deactivate(@PathVariable(value = "id") String id, Model model) {
+        Supplier supplier = supplierService.getSupplierById(id);
+        model.addAttribute("supplierObject", supplier);
+
+        return "Supplier/Delete";
+    }
+
+    // activated supplier
+    @GetMapping("/activate/{id}")
+    public String active(@PathVariable(value = "id") String id, Model model) {
+        Supplier supplier = supplierService.getSupplierById(id);
+        model.addAttribute("supplierObject", supplier);
+
+        return "Supplier/Delete";
+    }
+
+    // activate status supplier
+    @PostMapping("/activate-confirmed/{id}")
+    public String activateConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs) {
+        Supplier supplier = supplierService.getSupplierById(id);
+        supplierService.activate(supplier);
+
+        redirectAttrs.addFlashAttribute("success_active", "Supplier Successfully Activated!");
         return "redirect:/supplier/index";
     }
 }

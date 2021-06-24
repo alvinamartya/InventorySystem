@@ -74,4 +74,13 @@ public class SupplierService {
 
         return 1;
     }
+
+    public int activate(Supplier supplier) {
+        supplier.setStatus("A");
+        supplier.setUpdated_at(new Date());
+        supplier.setUpdated_by("Admin");
+        supplierRepository.save(supplier);
+
+        return 1;
+    }
 }

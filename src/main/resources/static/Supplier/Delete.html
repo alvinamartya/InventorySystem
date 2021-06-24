@@ -36,9 +36,17 @@
                     <div style="margin-top:50px;float:left">
                         <a th:href="@{'/supplier/index'}">Back To List</a>
                     </div>
+
                     <div style="margin-top:50px;float:right">
-                        <a href="" onclick="confirmDelete(); return false;" class="btn btn-danger m-b3">Delete</a>
-                        <form th:action="@{/supplier/delete-confirmed/{id}(id=${supplierObject.id})}" method="post" id="formDelete">
+                        <a href="" onclick="confirmDelete(); return false;" class="btn m-b3"
+                           th:classappend="*{status=='A'} ? 'btn-danger' : 'btn-success'"
+                           th:text="*{status=='A'} ? 'Deactivate':'Activate'"></a>
+
+                        <form th:if='${supplierObject.status.equals("A")}' th:action="@{/supplier/delete-confirmed/{id}(id=${supplierObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden" >
+                        </form>
+
+                        <form th:if='${!supplierObject.status.equals("A")}' th:action="@{/supplier/activate-confirmed/{id}(id=${supplierObject.id})}" method="post" id="formDelete">
                             <input th:field="*{id}" type="hidden" >
                         </form>
                     </div>
@@ -50,6 +58,7 @@
     <script>
         function confirmDelete() {
             const confirmDelete = confirm("Are you sure to delete this data?");
+            console.log('confirm ' + confirmDelete);
             if(confirmDelete == true) {
                 $("#formDelete").submit();
             }
