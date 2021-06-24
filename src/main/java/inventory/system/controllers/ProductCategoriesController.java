@@ -1,6 +1,5 @@
 package inventory.system.controllers;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import inventory.system.model.ProductCategory;
 import inventory.system.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +76,7 @@ public class ProductCategoriesController {
     }
 
     // view delete product category
-    @GetMapping
+    @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") String id, Model model) {
         ProductCategory productCategory = productCategoryService.getProductCategoryById(id);
         model.addAttribute("productCategoryObject", productCategory);
@@ -105,7 +104,7 @@ public class ProductCategoriesController {
     }
 
     // activated driver
-    @GetMapping("/active/{id}")
+    @GetMapping("/activate/{id}")
     public String active(@PathVariable(value = "id") String id, Model model) {
         ProductCategory productCategory = productCategoryService.getProductCategoryById(id);
         model.addAttribute("productCategoryObject", productCategory);
