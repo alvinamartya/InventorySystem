@@ -68,7 +68,7 @@ public class DriverService {
     }
 
 
-    public int activate(int id, Driver driver){
+    public int activate(Driver driver){
         driver.setStatus("A");
         driver.setUpdated_at(new Date());
         driver.setUpdated_by("Admin");

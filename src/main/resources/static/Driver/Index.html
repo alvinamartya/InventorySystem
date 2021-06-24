@@ -13,7 +13,6 @@
                 </div>
                 <div class="card-block">
                     <div class="row">
-
                         <div class="col-md-12 col-lg-12" th:if="${success_create}">
                             <div class="alert alert-success alert-dismissable">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -76,14 +75,12 @@
                                 <td th:if='${driver.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${driver.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <div th:switch="${driver.status}">
-                                        <a th:href="@{deactivate/{id}(id=${driver.id})}" class="btn btn-danger" th:case="'A'">Deactivate</a>
-                                        <a th:href="@{activate/{id}(id=${driver.id})}" class="btn btn-success" th:case="'D'">Activate</a>
-                                    </div>
+                                    <a th:href="@{deactivate/{id}(id=${driver.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
                                 <td th:unless='${driver.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{activate/{id}(id=${driver.id})}" class="btn btn-success">Activate</a>
                                 </td>
                             </tr>
                             </tbody>
