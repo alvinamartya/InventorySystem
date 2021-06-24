@@ -1,0 +1,130 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Edit Product Category</h2>
+                </div>
+
+                <div class="card-block">
+                    <form th:action="@{/product-category/update/{id}(id=${productCategoryObject.id})}" th:object="${productCategoryObject}" method="post">
+
+                        <div class="form-group">
+                            <label for="txtName">Name<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Can Be Stale<span style="color: red;">*</span></label>
+                            <div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_can_be_stale" id="rbYes" th:checked="${productCategoryObject.is_can_be_stale == 1}" value="1">
+                                    <label class="form-check-label" for="rbYes">
+                                        Yes
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_can_be_stale" id="rbNo" th:checked="${productCategoryObject.is_can_be_stale == 0}" value="0">
+                                    <label class="form-check-label" for="rbNo">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:50px;float:left">
+                            <a th:href="@{'/product-category/index'}">Back To List</a>
+                        </div>
+
+                        <div style="margin-top:50px;float:right">
+                            <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function ValidateInput() {
+            const validate = [0];
+
+            if ($(txtName).val() === '') {
+                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            } else {
+                setClearFor($(txtName));
+                validate[0] = 1;
+            }
+
+            if (validate[0] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function setClearFor(input) {
+            const alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).removeClass('input-invalid');
+            alert.addClass('hide');
+        }
+
+        function setErrorFor(input, message) {
+            const alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).addClass('input-invalid');
+            alert.removeClass('hide');
+            alert.html(message);
+        }
+
+        function isChar(textbox) {
+            return /^[a-zA-Z]*$/g.test(textbox);
+        }
+
+        function isDigit(textBox) {
+            return /^[0-9]*$/g.test(textBox);
+        }
+
+        function Clear(element) {
+            if ($(element).hasClass("form-control input-invalid")) {
+                setClearFor(element);
+            }
+        }
+
+        $(document).ready(function () {
+            $('select').change(function () {
+                Clear(this);
+            });
+            $('input[type=text],input[type=number]').on('input', function () {
+                Clear(this);
+            });
+            $('textarea').on('input', function () {
+                Clear(this);
+            });
+            $('#potongan').on('input', function () {
+                Clear(this);
+            });
+        });
+
+        $('#btnSave').click(function (event) {
+            if (ValidateInput() == true) {
+                return true;
+            } else {
+
+                return false;
+            }
+        })
+    </script>
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>
