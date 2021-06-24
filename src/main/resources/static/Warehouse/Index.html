@@ -9,7 +9,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Supplier List
+                    Warehouse List
                 </div>
                 <div class="card-block">
                     <div class="row">
@@ -58,40 +58,42 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
-                                <th>Can Be Stale</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <td>Name</td>
+                                <td>Province</td>
+                                <td>City</td>
+                                <td>Branch</td>
+                                <td>Status</td>
+                                <td>Action</td>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="productCategory, counter: ${listProductCategory}">
+                            <tr th:each="warehouse, counter: ${listWarehouse}">
                                 <th th:text="${counter.count}"></th>
-                                <td th:text="${productCategory.name}"></td>
+                                <td th:text="${warehouse.name}"></td>
+                                <td th:text="${warehouse.province}"></td>
+                                <td th:text="${warehouse.city}"></td>
                                 <td>
-                                    <div th:switch="${productCategory.is_can_be_stale}">
-                                        <span th:case="'0'" class="tag tag-pill tag-success">No</span>
-                                        <span th:case="'1'" class="tag tag-pill tag-danger">Yes</span>
+                                    <div th:switch="${warehouse.is_branch}">
+                                        <span th:case="'1'" class="tag tag-pill tag-success">Yes</span>
+                                        <span th:case="'0'" class="tag tag-pill tag-danger">No</span>
                                     </div>
+                                </td>
                                 <td>
-                                    <div th:switch="${productCategory.status}">
+                                    <div th:switch="${warehouse.status}">
                                         <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
                                         <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
                                     </div>
                                 </td>
 
-                                <td th:if='${productCategory.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${productCategory.id})}"
-                                       class="btn btn-info">Detail</a>
-                                    <a th:href="@{edit/{id}(id=${productCategory.id})}"
-                                       class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{delete/{id}(id=${productCategory.id})}" class="btn btn-danger">Deactivate</a>
+                                <td th:if='${warehouse.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${warehouse.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{edit/{id}(id=${warehouse.id})}" class="btn btn-outline-primary">Edit</a>
+                                    <a th:href="@{delete/{id}(id=${warehouse.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
-                                <td th:unless='${productCategory.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${productCategory.id})}"
-                                       class="btn btn-info">Detail</a>
-                                    <a th:href="@{activate/{id}(id=${productCategory.id})}" class="btn btn-success">Activate</a>
+                                <td th:unless='${warehouse.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${warehouse.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{activate/{id}(id=${warehouse.id})}" class="btn btn-success">Activate</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -100,7 +102,8 @@
                 </div>
             </div>
         </div>
-        <!--######### END OF SECTION HEREEE ################ -->
     </div>
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
 
 </html>

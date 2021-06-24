@@ -6,7 +6,6 @@ import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.transform.sax.SAXResult;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +19,11 @@ public class ProductCategoryService {
 
     public List<ProductCategory> getAllProductCategory() {
         List<ProductCategory> productCategoryList = (List<ProductCategory>) productCategoryRepository.findAll();
-        productCategoryList.sort(Comparator.comparing(ProductCategory::getStatus));
+        productCategoryList.sort(
+                Comparator
+                        .comparing(ProductCategory::getStatus)
+                        .thenComparing(ProductCategory::getName)
+        );
         return productCategoryList;
     }
 
@@ -37,7 +40,7 @@ public class ProductCategoryService {
 
     private int getLastCounter() {
         List<ProductCategory> productCategoryList = getAllProductCategory();
-        if(productCategoryList.size() > 0) {
+        if (productCategoryList.size() > 0) {
             productCategoryList.sort(Comparator.comparing(ProductCategory::getId));
             return Integer.parseInt(productCategoryList.get(productCategoryList.size() - 1).getId());
         }
@@ -48,7 +51,7 @@ public class ProductCategoryService {
     public int update(String id, ProductCategory productCategory) {
         ProductCategory p = productCategoryRepository
                 .findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("Invalid product category Id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product category Id: " + id));
 
         p.setName(productCategory.getName());
         p.setIs_can_be_stale(productCategory.getIs_can_be_stale());
@@ -60,7 +63,7 @@ public class ProductCategoryService {
     public ProductCategory getProductCategoryById(String id) {
         Optional<ProductCategory> optional = productCategoryRepository.findById(id);
         ProductCategory productCategory = null;
-        if(optional.isPresent()) {
+        if (optional.isPresent()) {
             productCategory = optional.get();
         } else {
             throw new RuntimeException(" Product Category not found for id :: " + id);

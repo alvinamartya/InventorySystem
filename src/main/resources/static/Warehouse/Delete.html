@@ -1,0 +1,78 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Warehouse Detail</h2>
+                </div>
+
+                <div class="card-block" th:object="${warehouseObject}">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <p th:text="*{name}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Province</label>
+                        <p th:text="*{province}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <p th:text="*{city}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Branch</label>
+                        <div th:switch="*{is_branch}">
+                            <span th:case="'1'" class="tag tag-pill tag-success">Yes</span>
+                            <span th:case="'0'" class="tag tag-pill tag-danger">No</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <div th:switch="*{status}">
+                            <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
+                            <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:50px;float:left">
+                        <a th:href="@{'/warehouse/index'}">Back To List</a>
+                    </div>
+
+                    <div style="margin-top:50px;float:right">
+                        <a href="" onclick="confirmDelete(); return false;" class="btn m-b3"
+                           th:classappend="*{status=='A'} ? 'btn-danger' : 'btn-success'"
+                           th:text="*{status=='A'} ? 'Deactivate':'Activate'"></a>
+
+                        <form th:if='${warehouseObject.status.equals("A")}' th:action="@{/warehouse/delete-confirmed/{id}(id=${warehouseObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden" >
+                        </form>
+
+                        <form th:if='${!warehouseObject.status.equals("A")}' th:action="@{/warehouse/activate-confirmed/{id}(id=${warehouseObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden" >
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete() {
+            const confirmDelete = confirm("Are you sure to delete this data?");
+            if(confirmDelete == true) {
+                $("#formDelete").submit();
+            }
+        }
+    </script>
+
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>
