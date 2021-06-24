@@ -8,6 +8,7 @@ import inventory.system.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,8 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
     ProductCategoryService productCategoryService;
 
     // view index
@@ -31,6 +34,56 @@ public class ProductController {
         List<Product> productList = productService.getAllProduct();
         model.addAttribute("listProduct", productList);
         return "Product/Index";
+    }
+
+    // view create
+    @RequestMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("productObject", new Product());
+
+        List<String> unitList = productService.getUnits();
+        List<ProductCategory> categoryList = productCategoryService.getAllProductCategory();
+        model.addAttribute("listUnit", unitList);
+        model.addAttribute("listCategory", categoryList);
+
+        return "Product/Create";
+    }
+
+    // save product
+    @PostMapping("/save")
+    public String save(Product product, RedirectAttributes redirectAttrs) {
+        productService.saveProduct(product);
+        redirectAttrs.addFlashAttribute("success_create", "Product Successfully Added!");
+
+        return "redirect:/product/index";
+    }
+
+    // view edit product
+    @GetMapping("/edit/{id}")
+    public String update(@PathVariable(value = "id") int id, Model model) {
+        Product product = productService.getProductById(id);
+        model.addAttribute("productObject", product);
+
+        List<String> unitList = productService.getUnits();
+        List<ProductCategory> categoryList = productCategoryService.getAllProductCategory();
+        model.addAttribute("listUnit", unitList);
+        model.addAttribute("listCategory", categoryList);
+
+        return "Product/Edit";
+    }
+
+    // update product
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable("id") int id, Product product, BindingResult result, RedirectAttributes redirectAttrs) {
+        if(result.hasErrors()) {
+            product.setId(id);
+            return "Product/Edit";
+        }
+
+        productService.update(id, product);
+
+        redirectAttrs.addFlashAttribute("success_update", "Product Successfully Updated!");
+        return "redirect:/product/index";
     }
 
     // view detail product
