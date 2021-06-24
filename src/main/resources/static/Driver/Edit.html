@@ -30,8 +30,15 @@
                         </div>
                         <div class="form-group">
                             <label for="txtIdWarehouse">Warehouse ID<span style="color: red;">*</span></label>
-                            <input th:field="*{warehouse_id}" type="text" class="form-control" id="txtIdWarehouse"
-                                   name="warehouse_id" placeholder="Input Warehouse ID">
+                            <select class="form-control" name="warehouse_id" id="txtIdWarehouse">
+                                <option value=""> -Select Warehouse- </option>
+                                <option th:each="warehouse : ${listWarehouse}"
+                                        th:value="${warehouse.id}"
+                                        th:text="${warehouse.name}"
+                                        th:selected="${warehouse.id == driverObject.warehouse_id}"
+                                />
+                            </select>
+
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">

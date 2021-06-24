@@ -2,6 +2,7 @@ package inventory.system.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
@@ -18,6 +19,9 @@ public class Warehouses {
     private Date created_at;
     private String updated_by;
     private Date updated_at;
+
+    @ManyToOne
+    private Driver driver;
 
     public String getId() {
         return id;

@@ -1,7 +1,9 @@
 package inventory.system.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "drivers")
@@ -12,7 +14,13 @@ public class Driver {
     private Integer id;
     private String name;
     private String vehicle_id;
+
+    @OneToMany (mappedBy = "warehouses")
+    private List<Warehouses> warehouses = new ArrayList<>();
+
     private String warehouse_id;
+
+
     private String phone;
     private String status;
     private String created_by;
