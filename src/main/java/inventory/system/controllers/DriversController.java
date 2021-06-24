@@ -1,6 +1,6 @@
 package inventory.system.controllers;
 
-import inventory.system.model.Driver;
+import inventory.system.entity.Driver;
 import inventory.system.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

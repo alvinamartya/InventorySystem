@@ -1,6 +1,6 @@
 package inventory.system.service;
 
-import inventory.system.model.ProductCategory;
+import inventory.system.entity.ProductCategory;
 import inventory.system.repository.ProductCategoryRepository;
 import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;

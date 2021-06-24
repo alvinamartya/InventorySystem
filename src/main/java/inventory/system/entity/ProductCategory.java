@@ -1,34 +1,44 @@
-package inventory.system.model;
+package inventory.system.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-public class Stores {
-
+@Table(name = "product_categories")
+public class ProductCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
     private String name;
-    private String city;
-    private String province;
-    private String address;
-    private String head_of_store_name;
-    private String phone;
+    private int is_can_be_stale;
     private String status;
     private String created_by;
     private Date created_at;
     private String updated_by;
     private Date updated_at;
 
-    public Integer getId() {
+    public ProductCategory() {
+    }
+
+    public ProductCategory(String id, String name, int is_can_be_stale, String status, String created_by, Date created_at, String updated_by, Date updated_at) {
+        this.id = id;
+        this.name = name;
+        this.is_can_be_stale = is_can_be_stale;
+        this.status = status;
+        this.created_by = created_by;
+        this.created_at = created_at;
+        this.updated_by = updated_by;
+        this.updated_at = updated_at;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -40,44 +50,12 @@ public class Stores {
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public int getIs_can_be_stale() {
+        return is_can_be_stale;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getHead_of_store_name() {
-        return head_of_store_name;
-    }
-
-    public void setHead_of_store_name(String head_of_store_name) {
-        this.head_of_store_name = head_of_store_name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setIs_can_be_stale(int is_can_be_stale) {
+        this.is_can_be_stale = is_can_be_stale;
     }
 
     public String getStatus() {

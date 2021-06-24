@@ -1,4 +1,4 @@
-package inventory.system.model;
+package inventory.system.entity;
 
 import javax.persistence.*;
 import java.util.Date;
