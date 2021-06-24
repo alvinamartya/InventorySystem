@@ -1,0 +1,71 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Store List
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-4" style="padding-bottom:30px">
+                            <a href="create" class="btn btn-primary">+ Add New</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered datatable">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <td>Name</td>
+                                <td>City</td>
+                                <td>Province</td>
+                                <td>Address</td>
+                                <td>Head Stores</td>
+                                <td>Phone</td>
+                                <td>Status</td>
+                                <td>Action</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="store, counter: ${listStore}">
+                                <th th:text="${counter.count}"></th>
+                                <td th:text="${store.name}"></td>
+                                <td th:text="${store.city}"></td>
+                                <td th:text="${store.province}"></td>
+                                <td th:text="${store.address}"></td>
+                                <td th:text="${store.head_of_store_name}"></td>
+                                <td th:text="${store.phone}"></td>
+                                <td>
+                                    <div th:switch="${store.status}">
+                                        <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
+                                        <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
+                                    </div>
+                                </td>
+
+                                <td th:if='${store.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${store.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{edit/{id}(id=${store.id})}" class="btn btn-outline-primary">Edit</a>
+                                    <a th:href="@{delete/{id}(id=${store.id})}" class="btn btn-danger">Delete</a>
+                                </td>
+
+                                <td th:unless='${store.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${store.id})}" class="btn btn-info">Detail</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

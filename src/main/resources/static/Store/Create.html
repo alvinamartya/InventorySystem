@@ -9,40 +9,50 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add New Driver</h2>
+                    <h2>Add New Store</h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/driver/update/{id}(id=${driverObject.id})}" th:object="${driverObject}"
-                          method="post">
+                    <form th:action="@{/store/save}" th:object="${storeObject}" method="post">
 
                         <div class="form-group">
                             <label for="txtName">Name<span style="color: red;">*</span></label>
-                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name"
-                                   placeholder="Input Name">
+                            <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtIdVehicle">Vehicle ID<span style="color: red;">*</span></label>
-                            <input th:field="*{vehicle_id}" type="text" class="form-control" id="txtIdVehicle"
-                                   name="vehicle_id" placeholder="Input Vehicle ID">
+                            <label for="txtCity">City<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtCity" name="city"
+                                   placeholder="Input City">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtIdWarehouse">Warehouse ID<span style="color: red;">*</span></label>
-                            <input th:field="*{warehouse_id}" type="text" class="form-control" id="txtIdWarehouse"
-                                   name="warehouse_id" placeholder="Input Warehouse ID">
+                            <label for="txtProvince">Province<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtProvince" name="province"
+                                   placeholder="Input Province">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtAddress">Address<span style="color: red;">*</span></label>
+                            <textarea type="text" class="form-control" id="txtAddress" name="address"
+                                      placeholder="Input Address"></textarea>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtHead">Head Store<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtHead" name="head_of_store_name"
+                                   placeholder="Input Head of Store Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone"
+                            <input type="text" class="form-control" id="txtPhone" name="phone"
                                    placeholder="Input Phone Number">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/Driver/index'}">Back To List</a>
+                            <a th:href="@{'/store/index'}">Back To List</a>
                         </div>
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
@@ -57,7 +67,7 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0];
+            const validate = [0, 0, 0, 0, 0, 0];
 
             if ($(txtName).val() === '') {
                 setErrorFor($(txtName), 'Name Cannot Be Empty');
@@ -66,18 +76,32 @@
                 validate[0] = 1;
             }
 
-            if ($(txtIdVehicle).val() === '') {
-                setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
+            if ($(txtCity).val() === '') {
+                setErrorFor($(txtCity), 'City Cannot Be Empty');
             } else {
-                setClearFor($(txtIdVehicle));
+                setClearFor($(txtCity));
                 validate[1] = 1;
             }
 
-            if ($(txtIdWarehouse).val() === '') {
-                setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
+            if ($(txtProvince).val() === '') {
+                setErrorFor($(txtProvince), 'Province Cannot Be Empty');
             } else {
-                setClearFor($(txtIdWarehouse));
+                setClearFor($(txtProvince));
                 validate[2] = 1;
+            }
+
+            if ($(txtHead).val() === '') {
+                setErrorFor($(txtHead), 'Head Store Cannot Be Empty');
+            } else {
+                setClearFor($(txtHead));
+                validate[3] = 1;
+            }
+
+            if ($(txtAddress).val() === '') {
+                setErrorFor($(txtAddress), 'Address Cannot Be Empty');
+            } else {
+                setClearFor($(txtAddress));
+                validate[4] = 1;
             }
 
             if ($(txtPhone).val() === '') {
@@ -86,10 +110,11 @@
                 setErrorFor($(txtPhone), 'Phone Number must be numeric');
             } else {
                 setClearFor($(txtPhone));
-                validate[3] = 1;
+                validate[5] = 1;
             }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[4] == 1 && validate[5] == 1) {
                 return true;
             } else {
                 return false;
@@ -123,6 +148,7 @@
             }
         }
 
+
         $(document).ready(function () {
             $('select').change(function () {
                 Clear(this);
@@ -137,7 +163,6 @@
                 Clear(this);
             });
         });
-
         $('#btnSave').click(function (event) {
             if (ValidateInput() == true) {
                 return true;
