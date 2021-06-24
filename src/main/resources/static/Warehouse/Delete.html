@@ -14,24 +14,23 @@
 
                 <div class="card-block" th:object="${warehouseObject}">
                     <div class="form-group">
-                        <label>Warehouse ID</label>
-                        <p th:text="*{id}"></p>
-                    </div>
-                    <div class="form-group">
                         <label>Name</label>
                         <p th:text="*{name}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label>City</label>
-                        <p th:text="*{city}"></p>
                     </div>
                     <div class="form-group">
                         <label>Province</label>
                         <p th:text="*{province}"></p>
                     </div>
                     <div class="form-group">
+                        <label>City</label>
+                        <p th:text="*{city}"></p>
+                    </div>
+                    <div class="form-group">
                         <label>Branch</label>
-                        <p th:text="*{is_branch}"></p>
+                        <div th:switch="*{is_branch}">
+                            <span th:case="'1'" class="tag tag-pill tag-success">Yes</span>
+                            <span th:case="'0'" class="tag tag-pill tag-danger">No</span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Status</label>
@@ -45,11 +44,17 @@
                         <a th:href="@{'/warehouse/index'}">Back To List</a>
                     </div>
 
-
                     <div style="margin-top:50px;float:right">
-                        <a href="" onclick="confirmDelete(); return false;" class="btn btn-danger m-b3">Delete</a>
-                        <form th:action="@{/warehouse/delete-confirmed/{id}(id=${warehouseObject.id})}" method="post" id="formDelete">
-                            <input th:field="*{id}" type="hidden">
+                        <a href="" onclick="confirmDelete(); return false;" class="btn m-b3"
+                           th:classappend="*{status=='A'} ? 'btn-danger' : 'btn-success'"
+                           th:text="*{status=='A'} ? 'Deactivate':'Activate'"></a>
+
+                        <form th:if='${warehouseObject.status.equals("A")}' th:action="@{/warehouse/delete-confirmed/{id}(id=${warehouseObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden" >
+                        </form>
+
+                        <form th:if='${!warehouseObject.status.equals("A")}' th:action="@{/warehouse/activate-confirmed/{id}(id=${warehouseObject.id})}" method="post" id="formDelete">
+                            <input th:field="*{id}" type="hidden" >
                         </form>
                     </div>
                 </div>

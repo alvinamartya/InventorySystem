@@ -9,39 +9,29 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add New Warehouse</h2>
+                    <h2>Add New Product Category</h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/warehouse/save}" th:object="${warehouseObject}" method="post">
+                    <form th:action="@{/product-category/save}" th:object="${productCategoryObject}" method="post">
+
                         <div class="form-group">
                             <label for="txtName">Name<span style="color: red;">*</span></label>
                             <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
+
                         <div class="form-group">
-                            <label for="txtProvince">Province<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtProvince" name="province"
-                                   placeholder="Input Province">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtCity">City<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtCity" name="city"
-                                   placeholder="Input City">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Branch<span style="color: red;">*</span></label>
+                            <label>Can Be Stale<span style="color: red;">*</span></label>
                             <div class="form-check" style="margin-left: 2.5%">
-                                <input class="form-check-input" type="radio" name="is_branch" id="rbYes"
+                                <input class="form-check-input" type="radio" name="is_can_be_stale" id="rbYes"
                                        value="1" checked>
                                 <label class="form-check-label" style="margin-left: -20px" for="rbYes">
                                     Yes
                                 </label>
                             </div>
                             <div class="form-check" style="margin-left: 2.5%">
-                                <input class="form-check-input" type="radio" name="is_branch" id="rbNo"
+                                <input class="form-check-input" type="radio" name="is_can_be_stale" id="rbNo"
                                        value="0">
                                 <label class="form-check-label" style="margin-left: -20px" for="rbNo">
                                     No
@@ -50,8 +40,9 @@
                         </div>
 
                         <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/warehouse/index'}">Back To List</a>
+                            <a th:href="@{'/product-category/index'}">Back To List</a>
                         </div>
+
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
                         </div>
@@ -65,7 +56,7 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0];
+            const validate = [0];
 
             if ($(txtName).val() === '') {
                 setErrorFor($(txtName), 'Name Cannot Be Empty');
@@ -74,31 +65,7 @@
                 validate[0] = 1;
             }
 
-            if ($(txtCity).val() === '') {
-                setErrorFor($(txtCity), 'City Cannot Be Empty');
-            } else {
-                setClearFor($(txtCity));
-                validate[1] = 1;
-            }
-
-            if ($(txtProvince).val() === '') {
-                setErrorFor($(txtProvince), 'Province Cannot Be Empty');
-            } else {
-                setClearFor($(txtProvince));
-                validate[2] = 1;
-            }
-
-            if ($(txtPhone).val() === '') {
-                setErrorFor($(txtPhone), 'Branch Cannot Be Empty');
-            } else if (!isDigit($(txtPhone).val())) {
-                setErrorFor($(txtPhone), 'Branch must be numeric');
-            } else {
-                setClearFor($(txtPhone));
-                validate[3] = 1;
-            }
-
-
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+            if (validate[0] == 1) {
                 return true;
             } else {
                 return false;
@@ -106,20 +73,20 @@
         }
 
         function setClearFor(input) {
-            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            const alert = $(input).parent().closest(".form-group").find('.validate-alert');
             $(input).removeClass('input-invalid');
             alert.addClass('hide');
         }
 
         function setErrorFor(input, message) {
-            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            const alert = $(input).parent().closest(".form-group").find('.validate-alert');
             $(input).addClass('input-invalid');
             alert.removeClass('hide');
             alert.html(message);
         }
 
-        function isChar(textbox) {
-            return /^[a-zA-Z]*$/g.test(textbox);
+        function isChar(textBox) {
+            return /^[a-zA-Z]*$/g.test(textBox);
         }
 
         function isDigit(textBox) {
@@ -131,7 +98,6 @@
                 setClearFor(element);
             }
         }
-
 
         $(document).ready(function () {
             $('select').change(function () {
@@ -147,6 +113,7 @@
                 Clear(this);
             });
         });
+
         $('#btnSave').click(function (event) {
             if (ValidateInput() == true) {
                 return true;

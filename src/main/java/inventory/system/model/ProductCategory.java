@@ -1,23 +1,36 @@
-package inventory.system.entity;
+package inventory.system.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-public class Warehouses {
-
+@Table(name = "product_categories")
+public class ProductCategory {
     @Id
     private String id;
     private String name;
-    private String city;
-    private String province;
-    private Integer is_branch;
+    private int is_can_be_stale;
     private String status;
     private String created_by;
     private Date created_at;
     private String updated_by;
     private Date updated_at;
+
+    public ProductCategory() {
+    }
+
+    public ProductCategory(String id, String name, int is_can_be_stale, String status, String created_by, Date created_at, String updated_by, Date updated_at) {
+        this.id = id;
+        this.name = name;
+        this.is_can_be_stale = is_can_be_stale;
+        this.status = status;
+        this.created_by = created_by;
+        this.created_at = created_at;
+        this.updated_by = updated_by;
+        this.updated_at = updated_at;
+    }
 
     public String getId() {
         return id;
@@ -35,28 +48,12 @@ public class Warehouses {
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public int getIs_can_be_stale() {
+        return is_can_be_stale;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public Integer getIs_branch() {
-        return is_branch;
-    }
-
-    public void setIs_branch(Integer is_branch) {
-        this.is_branch = is_branch;
+    public void setIs_can_be_stale(int is_can_be_stale) {
+        this.is_can_be_stale = is_can_be_stale;
     }
 
     public String getStatus() {

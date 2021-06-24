@@ -16,14 +16,18 @@ public class DriverService {
     @Autowired
     DriverRepository driversRepository;
 
-    public List<Driver> getAllDriver(){
+    public List<Driver> getAllDriver() {
         List<Driver> driversList = (List<Driver>) driversRepository.findAll();
-        driversList.sort(Comparator.comparing(Driver::getStatus));
+        driversList.sort(
+                Comparator
+                        .comparing(Driver::getStatus)
+                        .thenComparing(Driver::getName)
+        );
 
         return driversList;
     }
 
-    public List<Driver> saveDriver(Driver driver){
+    public List<Driver> saveDriver(Driver driver) {
         driver.setStatus("A");
         driver.setCreated_at(new Date());
         driver.setCreated_by("Admin");
@@ -33,7 +37,7 @@ public class DriverService {
         return getAllDriver();
     }
 
-    public int update(int id, Driver driver){
+    public int update(int id, Driver driver) {
         Driver drivers = driversRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
         drivers.setName(driver.getName());
@@ -47,18 +51,18 @@ public class DriverService {
         return 1;
     }
 
-    public Driver getDriverById(Integer id){
+    public Driver getDriverById(Integer id) {
         Optional<Driver> optional = driversRepository.findById(id);
         Driver driver = null;
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             driver = optional.get();
-        }else{
+        } else {
             throw new RuntimeException(" Driver not found for id :: " + id);
         }
         return driver;
     }
 
-    public int delete(Driver driver){
+    public int delete(Driver driver) {
         driver.setStatus("D");
         driver.setUpdated_at(new Date());
         driver.setUpdated_by("Admin");
@@ -68,7 +72,7 @@ public class DriverService {
     }
 
 
-    public int activate(Driver driver){
+    public int activate(Driver driver) {
         driver.setStatus("A");
         driver.setUpdated_at(new Date());
         driver.setUpdated_by("Admin");

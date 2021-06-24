@@ -1,6 +1,6 @@
 package inventory.system.controllers;
 
-import inventory.system.model.Stores;
+import inventory.system.entity.Stores;
 import inventory.system.service.StoresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -88,6 +89,34 @@ public class StoresController {
         Stores stores = storesService.getStoresById(id);
 
         storesService.deleteStores(stores);
+        return "redirect:/store/index";
+    }
+
+    // deactivate store
+    @GetMapping("/deactivate/{id}")
+    public String deactivate(@PathVariable(value = "id") Integer id, Model model){
+        Stores stores = storesService.getStoresById(id);
+        model.addAttribute("storeObject", stores);
+
+        return "Store/Delete";
+    }
+
+    // activated store
+    @GetMapping("/activate/{id}")
+    public String active(@PathVariable(value = "id") Integer id, Model model){
+        Stores stores = storesService.getStoresById(id);
+        model.addAttribute("storeObject", stores);
+
+        return "Store/Delete";
+    }
+
+    // confirm to activate status store
+    @PostMapping("/activate-confirmed/{id}")
+    public String activateConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs) {
+        Stores stores = storesService.getStoresById(id);
+        storesService.activate(stores);
+
+        redirectAttrs.addFlashAttribute("success_active", "Store Successfully Activated!");
         return "redirect:/store/index";
     }
 }

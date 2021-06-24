@@ -1,6 +1,6 @@
 package inventory.system.controllers;
 
-import inventory.system.model.Warehouses;
+import inventory.system.entity.Warehouses;
 import inventory.system.service.WarehousesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -88,6 +89,35 @@ public class WarehousesController {
         Warehouses warehouses = warehousesService.getWarehousesById(id);
 
         warehousesService.deleteWarehouses(warehouses);
+        return "redirect:/warehouse/index";
+    }
+
+
+    // deactivate warehouse
+    @GetMapping("/deactivate/{id}")
+    public String deactivate(@PathVariable(value = "id") String id, Model model){
+        Warehouses warehouse = warehousesService.getWarehousesById(id);
+        model.addAttribute("warehouseObject", warehouse);
+
+        return "Warehouse/Delete";
+    }
+
+    // activated warehouse
+    @GetMapping("/activate/{id}")
+    public String active(@PathVariable(value = "id") String id, Model model){
+        Warehouses warehouse = warehousesService.getWarehousesById(id);
+        model.addAttribute("warehouseObject", warehouse);
+
+        return "Warehouse/Delete";
+    }
+
+    // confirm to activate status warehous
+    @PostMapping("/activate-confirmed/{id}")
+    public String activateConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs) {
+        Warehouses warehouse = warehousesService.getWarehousesById(id);
+        warehousesService.activate(warehouse);
+
+        redirectAttrs.addFlashAttribute("success_active", "Warehouse Successfully Activated!");
         return "redirect:/warehouse/index";
     }
 }

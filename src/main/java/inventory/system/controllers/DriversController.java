@@ -128,7 +128,7 @@ public class DriversController {
         return "Driver/Delete";
     }
 
-    // activate status driver
+    // confirm to activate status driver
     @PostMapping("/activate-confirmed/{id}")
     public String activateConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs) {
         Driver driver = driverService.getDriverById(id);

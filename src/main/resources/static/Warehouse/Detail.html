@@ -14,24 +14,23 @@
 
                 <div class="card-block" th:object="${warehouseObject}">
                     <div class="form-group">
-                        <label>Warehouse ID</label>
-                        <p th:text="*{id}"></p>
-                    </div>
-                    <div class="form-group">
                         <label>Name</label>
                         <p th:text="*{name}"></p>
-                    </div>
-                    <div class="form-group">
-                        <label>City</label>
-                        <p th:text="*{city}"></p>
                     </div>
                     <div class="form-group">
                         <label>Province</label>
                         <p th:text="*{province}"></p>
                     </div>
                     <div class="form-group">
+                        <label>City</label>
+                        <p th:text="*{city}"></p>
+                    </div>
+                    <div class="form-group">
                         <label>Branch</label>
-                        <p th:text="*{is_branch}"></p>
+                        <div th:switch="*{is_branch}">
+                            <span th:case="'1'" class="tag tag-pill tag-success">Yes</span>
+                            <span th:case="'0'" class="tag tag-pill tag-danger">No</span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Status</label>

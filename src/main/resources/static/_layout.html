@@ -225,24 +225,33 @@
 <!-- endbuild -->
 
 <!-- page scripts -->
-<script th:src="@{'http://localhost:8080/assets/vendor/flot/jquery.flot.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/flot/jquery.flot.resize.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/flot/jquery.flot.stack.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/flot-spline/js/jquery.flot.spline.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.min.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/data/maps/jquery-jvectormap-us-aea.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/jquery.easy-pie-chart/dist/jquery.easypiechart.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/noty/js/noty/packaged/jquery.noty.packaged.min.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/scripts/helpers/noty-defaults.js'}"></script>
+<script th:src="@{'/assets/vendor/flot/jquery.flot.js'}"></script>
+<script th:src="@{'/assets/vendor/flot/jquery.flot.resize.js'}"></script>
+<script th:src="@{'/assets/vendor/flot/jquery.flot.stack.js'}"></script>
+<script th:src="@{'/assets/vendor/flot-spline/js/jquery.flot.spline.js'}"></script>
+<script th:src="@{'/assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.min.js'}"></script>
+<script th:src="@{'/assets/data/maps/jquery-jvectormap-us-aea.js'}"></script>
+<script th:src="@{'/assets/vendor/jquery.easy-pie-chart/dist/jquery.easypiechart.js'}"></script>
+<script th:src="@{'/assets/vendor/noty/js/noty/packaged/jquery.noty.packaged.min.js'}"></script>
+<script th:src="@{'/assets/scripts/helpers/noty-defaults.js'}"></script>
 <!-- end page scripts -->
 
 <!-- initialize page scripts -->
-<script th:src="@{'http://localhost:8080/assets/scripts/dashboard/dashboard.js'}"></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/sweetalert/dist/sweetalert.min.js'}" ></script>
-<script th:src="@{'http://localhost:8080/assets/scripts/ui/alert.js'}" ></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/datatables/media/js/jquery.dataTables.js'}" ></script>
-<script th:src="@{'http://localhost:8080/assets/vendor/datatables/media/js/dataTables.bootstrap4.js'}" ></script>
+<script th:src="@{'/assets/scripts/dashboard/dashboard.js'}"></script>
+<script th:src="@{'/assets/vendor/sweetalert/dist/sweetalert.min.js'}" ></script>
+<script th:src="@{'/assets/scripts/ui/alert.js'}" ></script>
+<script th:src="@{'/assets/vendor/datatables/media/js/jquery.dataTables.js'}" ></script>
+<script th:src="@{'/assets/vendor/datatables/media/js/dataTables.bootstrap4.js'}" ></script>
 <!-- end initialize page scripts -->
+
+<script>
+    $(document).ready(function () {
+        $('.datatable').DataTable({
+            "processing": true,
+            "serverSide": false
+        });
+    });
+</script>
 
 </body>
 
