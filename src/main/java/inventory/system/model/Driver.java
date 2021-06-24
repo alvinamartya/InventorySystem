@@ -14,19 +14,17 @@ public class Driver {
     private Integer id;
     private String name;
     private String vehicle_id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Warehouses warehouses;
-
     private String warehouse_id;
-
     private String phone;
     private String status;
     private String created_by;
     private Date created_at;
     private String updated_by;
     private Date updated_at;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Warehouses warehousesList;
 
     public Integer getId() {
         return id;
