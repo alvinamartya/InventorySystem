@@ -1,7 +1,7 @@
 package inventory.system.repository;
 
-import inventory.system.model.Staffs;
-import inventory.system.model.Warehouses;
+import inventory.system.entity.Staffs;
+import inventory.system.entity.Warehouses;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

@@ -9,11 +9,11 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Edit Driver</h2>
+                    <h2>Edit Product</h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/driver/update/{id}(id=${driverObject.id})}" th:object="${driverObject}"
+                    <form th:action="@{/product/update/{id}(id=${productObject.id})}" th:object="${productObject}"
                           method="post">
 
                         <div class="form-group">
@@ -23,33 +23,32 @@
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtIdVehicle">Vehicle ID<span style="color: red;">*</span></label>
-                            <input th:field="*{vehicle_id}" type="text" class="form-control" id="txtIdVehicle"
-                                   name="vehicle_id" placeholder="Input Vehicle ID">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtIdWarehouse">Warehouse ID<span style="color: red;">*</span></label>
-                            <select class="form-control" name="warehouse_id" id="txtIdWarehouse">
-                                <option value=""> -Select Warehouse- </option>
-                                <option th:each="warehouse : ${listWarehouse}"
-                                        th:value="${warehouse.id}"
-                                        th:text="${warehouse.name}"
-                                        th:selected="${warehouse.id == driverObject.warehouse_id}"
+                            <label for="txtIdProductCategory">Product Category<span style="color: red;">*</span></label>
+                            <select class="form-control" name="product_category_id" id="txtIdProductCategory">
+                                <option value=""> -Select Product Category- </option>
+                                <option th:each="productCategory : ${listCategory}"
+                                        th:value="${productCategory.id}"
+                                        th:utext="${productCategory.name}"
+                                        th:selected="${productCategory.id == productObject.product_category_id}"
                                 />
                             </select>
-
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone"
-                                   placeholder="Input Phone Number">
+                            <label for="txtIdUnit">Units<span style="color: red;">*</span></label>
+                            <select class="form-control" name="units" id="txtIdUnit">
+                                <option value=""> -Select Unit- </option>
+                                <option th:each="unit : ${listUnit}"
+                                        th:value="${unit}"
+                                        th:utext="${unit}"
+                                        th:selected="${unit == productObject.units}"
+                                />
+                            </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/driver/index'}">Back To List</a>
+                            <a th:href="@{'/product/index'}">Back To List</a>
                         </div>
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
@@ -64,7 +63,7 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0];
+            const validate = [0, 0, 0];
 
             if ($(txtName).val() === '') {
                 setErrorFor($(txtName), 'Name Cannot Be Empty');
@@ -73,30 +72,21 @@
                 validate[0] = 1;
             }
 
-            if ($(txtIdVehicle).val() === '') {
-                setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
+            if ($(txtIdProductCategory).val() === '') {
+                setErrorFor($(txtIdProductCategory), 'Product Category Cannot Be Empty');
             } else {
-                setClearFor($(txtIdVehicle));
+                setClearFor($(txtIdProductCategory));
                 validate[1] = 1;
             }
 
-            if ($(txtIdWarehouse).val() === '') {
-                setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
+            if ($(txtIdUnit).val() === '') {
+                setErrorFor($(txtIdUnit), 'Units Cannot Be Empty');
             } else {
-                setClearFor($(txtIdWarehouse));
+                setClearFor($(txtIdUnit));
                 validate[2] = 1;
             }
 
-            if ($(txtPhone).val() === '') {
-                setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
-            } else if (!isDigit($(txtPhone).val())) {
-                setErrorFor($(txtPhone), 'Phone Number must be numeric');
-            } else {
-                setClearFor($(txtPhone));
-                validate[3] = 1;
-            }
-
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1) {
                 return true;
             } else {
                 return false;

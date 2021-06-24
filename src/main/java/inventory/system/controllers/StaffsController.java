@@ -1,6 +1,6 @@
 package inventory.system.controllers;
 
-import inventory.system.model.Staffs;
+import inventory.system.entity.Staffs;
 import inventory.system.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

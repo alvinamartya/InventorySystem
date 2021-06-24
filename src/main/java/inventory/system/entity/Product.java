@@ -1,44 +1,57 @@
-package inventory.system.model;
+package inventory.system.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "suppliers")
-public class Supplier {
+@Table(name = "products")
+public class Product {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String name;
-    private String address;
-    private String phone;
+    @Column(nullable = false)
+    private String product_category_id;
+    private String units;
     private String status;
     private String created_by;
     private Date created_at;
     private String updated_by;
     private Date updated_at;
 
-    public Supplier() {
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_category_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private ProductCategory productCategory;
+
+    public Product() {
     }
 
-    public Supplier(String id, String name, String address, String phone, String status, String created_by, Date created_at, String updated_by, Date updated_at) {
+    public ProductCategory getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public Product(int id, String name, String product_category_id, String units, String status, String created_by, Date created_at, String updated_by, Date updated_at, ProductCategory productCategory) {
         this.id = id;
         this.name = name;
-        this.address = address;
-        this.phone = phone;
+        this.product_category_id = product_category_id;
+        this.units = units;
         this.status = status;
         this.created_by = created_by;
         this.created_at = created_at;
         this.updated_by = updated_by;
         this.updated_at = updated_at;
+        this.productCategory = productCategory;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -50,20 +63,20 @@ public class Supplier {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getProduct_category_id() {
+        return product_category_id;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setProduct_category_id(String product_category_id) {
+        this.product_category_id = product_category_id;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getUnits() {
+        return units;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setUnits(String units) {
+        this.units = units;
     }
 
     public String getStatus() {

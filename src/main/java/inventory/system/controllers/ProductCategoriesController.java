@@ -1,6 +1,6 @@
 package inventory.system.controllers;
 
-import inventory.system.model.ProductCategory;
+import inventory.system.entity.ProductCategory;
 import inventory.system.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

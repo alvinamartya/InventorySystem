@@ -1,6 +1,6 @@
 package inventory.system.service;
 
-import inventory.system.model.Supplier;
+import inventory.system.entity.Supplier;
 import inventory.system.repository.SupplierRepository;
 import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,11 @@ public class SupplierService {
 
     public List<Supplier> getAllSupplier() {
         List<Supplier> supplierList = (List<Supplier>) supplierRepository.findAll();
-        supplierList.sort(Comparator.comparing(Supplier::getStatus));
+        supplierList.sort(
+                Comparator
+                        .comparing(Supplier::getStatus)
+                        .thenComparing(Supplier::getName)
+        );
         return supplierList;
     }
 
@@ -53,6 +57,9 @@ public class SupplierService {
         s.setName(supplier.getName());
         s.setAddress(supplier.getAddress());
         s.setPhone(supplier.getPhone());
+        s.setUpdated_at(new Date());
+        s.setUpdated_by("Admin");
+
         supplierRepository.save(s);
 
         return 1;
