@@ -17,7 +17,7 @@
                             <a href="create" class="btn btn-primary">+ Add New</a>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="overflow-x:scroll">
                         <table class="table table-bordered datatable">
                             <thead>
                             <tr>
@@ -65,13 +65,15 @@
                                     </div>
                                 </td>
 
-                                <td th:if='${staffs.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${staffs.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{edit/{id}(id=${staffs.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{delete/{id}(id=${staffs.id})}" class="btn btn-danger">Delete</a>
+                                <td width="30%" th:if='${staffs.status.equals("A")}'>
+                                    <div>
+                                        <a th:href="@{detail/{id}(id=${staffs.id})}" class="btn btn-info">Detail</a>
+                                        <a th:href="@{edit/{id}(id=${staffs.id})}" class="btn btn-outline-primary">Edit</a>
+                                        <a th:href="@{delete/{id}(id=${staffs.id})}" class="btn btn-danger">Delete</a>
+                                    </div>
                                 </td>
 
-                                <td th:unless='${staffs.status.equals("A")}'>
+                                <td width="30%" th:unless='${staffs.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${staffs.id})}" class="btn btn-info">Detail</a>
                                 </td>
                             </tr>

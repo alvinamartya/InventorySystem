@@ -76,13 +76,13 @@
                                     </div>
                                 </td>
 
-                                <td th:if='${store.status.equals("A")}'>
+                                <td width="30%" th:if='${store.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${store.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${store.id})}" class="btn btn-outline-primary">Edit</a>
                                     <a th:href="@{delete/{id}(id=${store.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
-                                <td th:unless='${store.status.equals("A")}'>
+                                <td width="30%" th:unless='${store.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${store.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{activate/{id}(id=${store.id})}" class="btn btn-success">Activate</a>
                                 </td>

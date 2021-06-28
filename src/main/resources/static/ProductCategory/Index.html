@@ -80,7 +80,7 @@
                                     </div>
                                 </td>
 
-                                <td th:if='${productCategory.status.equals("A")}'>
+                                <td width="30%" th:if='${productCategory.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${productCategory.id})}"
                                        class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${productCategory.id})}"
@@ -88,7 +88,7 @@
                                     <a th:href="@{delete/{id}(id=${productCategory.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
-                                <td th:unless='${productCategory.status.equals("A")}'>
+                                <td width="30%" th:unless='${productCategory.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${productCategory.id})}"
                                        class="btn btn-info">Detail</a>
                                     <a th:href="@{activate/{id}(id=${productCategory.id})}" class="btn btn-success">Activate</a>

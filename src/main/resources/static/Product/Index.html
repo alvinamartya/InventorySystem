@@ -70,13 +70,13 @@
                                     </div>
                                 </td>
 
-                                <td th:if='${product.status.equals("A")}'>
+                                <td width="30%" th:if='${product.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${product.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${product.id})}" class="btn btn-outline-primary">Edit</a>
                                     <a th:href="@{deactivate/{id}(id=${product.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
-                                <td th:unless='${product.status.equals("A")}'>
+                                <td width="30%" th:unless='${product.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${product.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{activate/{id}(id=${product.id})}" class="btn btn-success">Activate</a>
                                 </td>

@@ -9,38 +9,62 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add New Driver</h2>
+                    <h2>Add New Shelf</h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/driver/save}" th:object="${driverObject}" method="post">
+                    <form th:action="@{/shelf/save}" th:object="${shelfObject}" method="post">
+                        <div class="form-group">
+                            <label for="txtIdWarehouse">Warehouse<span style="color: red;">*</span></label>
+                            <select class="form-control"  id="txtIdWarehouse" name="warehouse_id">
+                                <option value=""> -Select Warehouse- </option>
+                                <option th:each="warehouse : ${listWarehouse}"
+                                        th:value="${warehouse.id}"
+                                        th:utext="${warehouse.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtType">Type<span style="color: red;">*</span></label>
+                            <select class="form-control"  id="txtType" name="type_shelf">
+                                <option value=""> -Select Type- </option>
+                                <option value="Rak Order">Rak Order</option>
+                                <option value="Rak Retur">Rak Retur</option>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtCategory">Product Category<span style="color: red;">*</span></label>
+                            <select class="form-control"  id="txtCategory" name="product_category_id">
+                                <option value=""> -Select Product Category- </option>
+                                <option th:each="category : ${listCategory}"
+                                        th:value="${category.id}"
+                                        th:utext="${category.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
 
                         <div class="form-group">
-                            <label for="txtName">Name<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
+                            <label for="txtRow">Row<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtRow" placeholder="Input Row" name="rows_shelf">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtIdVehicle">Vehicle ID<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtIdVehicle" name="vehicle_id"
-                                   placeholder="Input Vehicle ID">
+                            <label for="txtColumn">Column<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtColumn" placeholder="Input Column" name="columns_shelf">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtIdWarehouse">Warehouse ID<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtIdWarehouse" name="warehouse_id"
-                                   placeholder="Input Warehouse ID">
+                            <label for="txtQty">Quantity<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtQty" placeholder="Input Quantity" name="quantity_shelf">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
-                        <div class="form-group">
-                            <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtPhone" name="phone"
-                                   placeholder="Input Phone Number">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
+
+
 
                         <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/driver/index'}">Back To List</a>
+                            <a th:href="@{'/shelf/index'}">Back To List</a>
                         </div>
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
@@ -55,44 +79,45 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0];
-
-            if ($(txtName).val() === '') {
-                setErrorFor($(txtName), 'Name Cannot Be Empty');
-            } else {
-                setClearFor($(txtName));
-                validate[0] = 1;
-            }
-
-            if ($(txtIdVehicle).val() === '') {
-                setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
-            } else {
-                setClearFor($(txtIdVehicle));
-                validate[1] = 1;
-            }
-
-            if ($(txtIdWarehouse).val() === '') {
-                setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
-            } else {
-                setClearFor($(txtIdWarehouse));
-                validate[2] = 1;
-            }
-
-            if ($(txtPhone).val() === '') {
-                setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
-            } else if (!isDigit($(txtPhone).val())) {
-                setErrorFor($(txtPhone), 'Phone Number must be numeric');
-            } else {
-                setClearFor($(txtPhone));
-                validate[3] = 1;
-            }
-
-
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
-                return true;
-            } else {
-                return false;
-            }
+            // const validate = [0, 0, 0, 0];
+            //
+            // if ($(txtName).val() === '') {
+            //     setErrorFor($(txtName), 'Name Cannot Be Empty');
+            // } else {
+            //     setClearFor($(txtName));
+            //     validate[0] = 1;
+            // }
+            //
+            // if ($(txtIdVehicle).val() === '') {
+            //     setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
+            // } else {
+            //     setClearFor($(txtIdVehicle));
+            //     validate[1] = 1;
+            // }
+            //
+            // if ($(txtIdWarehouse).val() === '') {
+            //     setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
+            // } else {
+            //     setClearFor($(txtIdWarehouse));
+            //     validate[2] = 1;
+            // }
+            //
+            // if ($(txtPhone).val() === '') {
+            //     setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
+            // } else if (!isDigit($(txtPhone).val())) {
+            //     setErrorFor($(txtPhone), 'Phone Number must be numeric');
+            // } else {
+            //     setClearFor($(txtPhone));
+            //     validate[3] = 1;
+            // }
+            //
+            //
+            // if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+            return true;
         }
 
         function setClearFor(input) {

@@ -85,13 +85,13 @@
                                     </div>
                                 </td>
 
-                                <td th:if='${warehouse.status.equals("A")}'>
+                                <td width="30%" th:if='${warehouse.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${warehouse.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${warehouse.id})}" class="btn btn-outline-primary">Edit</a>
                                     <a th:href="@{delete/{id}(id=${warehouse.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
-                                <td th:unless='${warehouse.status.equals("A")}'>
+                                <td width="30%" th:unless='${warehouse.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${warehouse.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{activate/{id}(id=${warehouse.id})}" class="btn btn-success">Activate</a>
                                 </td>

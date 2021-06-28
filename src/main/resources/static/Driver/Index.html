@@ -72,13 +72,13 @@
                                     </div>
                                 </td>
 
-                                <td th:if='${driver.status.equals("A")}'>
+                                <td width="30%" th:if='${driver.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{edit/{id}(id=${driver.id})}" class="btn btn-outline-primary">Edit</a>
                                     <a th:href="@{deactivate/{id}(id=${driver.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
-                                <td th:unless='${driver.status.equals("A")}'>
+                                <td width="30%" th:unless='${driver.status.equals("A")}'>
                                     <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
                                     <a th:href="@{activate/{id}(id=${driver.id})}" class="btn btn-success">Activate</a>
                                 </td>
