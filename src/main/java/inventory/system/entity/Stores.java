@@ -1,18 +1,22 @@
-package inventory.system.model;
+package inventory.system.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
-@Table(name = "drivers")
-public class Driver {
+public class Stores {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String vehicle_id;
-    private String warehouse_id;
+    private String city;
+    private String province;
+    private String address;
+    private String head_of_store_name;
     private String phone;
     private String status;
     private String created_by;
@@ -36,20 +40,36 @@ public class Driver {
         this.name = name;
     }
 
-    public String getVehicle_id() {
-        return vehicle_id;
+    public String getCity() {
+        return city;
     }
 
-    public void setVehicle_id(String vehicle_id) {
-        this.vehicle_id = vehicle_id;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getWarehouse_id() {
-        return warehouse_id;
+    public String getProvince() {
+        return province;
     }
 
-    public void setWarehouse_id(String warehouse_id) {
-        this.warehouse_id = warehouse_id;
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getHead_of_store_name() {
+        return head_of_store_name;
+    }
+
+    public void setHead_of_store_name(String head_of_store_name) {
+        this.head_of_store_name = head_of_store_name;
     }
 
     public String getPhone() {

@@ -1,51 +1,44 @@
-package inventory.system.model;
+package inventory.system.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-public class Staffs {
-
+@Table(name = "suppliers")
+public class Supplier {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
     private String name;
-    private String phone;
     private String address;
-    private String gender;
-    private Integer role_id;
-    private String email;
-    private String password;
+    private String phone;
     private String status;
     private String created_by;
     private Date created_at;
     private String updated_by;
     private Date updated_at;
 
-    public String getEmail() {
-        return email;
+    public Supplier() {
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public Supplier(String id, String name, String address, String phone, String status, String created_by, Date created_at, String updated_by, Date updated_at) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.status = status;
+        this.created_by = created_by;
+        this.created_at = created_at;
+        this.updated_by = updated_by;
+        this.updated_at = updated_at;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -57,14 +50,6 @@ public class Staffs {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -73,20 +58,12 @@ public class Staffs {
         this.address = address;
     }
 
-    public String getGender() {
-        return gender;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public Integer getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(Integer role_id) {
-        this.role_id = role_id;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getStatus() {

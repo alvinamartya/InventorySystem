@@ -1,28 +1,38 @@
-package inventory.system.model;
+package inventory.system.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-public class Stores {
+@Table(name = "drivers")
+public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String city;
-    private String province;
-    private String address;
-    private String head_of_store_name;
+    private String vehicle_id;
+    private String warehouse_id;
     private String phone;
     private String status;
     private String created_by;
     private Date created_at;
     private String updated_by;
     private Date updated_at;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Warehouses warehousesList;
+
+    public Warehouses getWarehousesList() {
+        return warehousesList;
+    }
+
+    public void setWarehousesList(Warehouses warehousesList) {
+        this.warehousesList = warehousesList;
+    }
 
     public Integer getId() {
         return id;
@@ -40,36 +50,20 @@ public class Stores {
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public String getVehicle_id() {
+        return vehicle_id;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setVehicle_id(String vehicle_id) {
+        this.vehicle_id = vehicle_id;
     }
 
-    public String getProvince() {
-        return province;
+    public String getWarehouse_id() {
+        return warehouse_id;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getHead_of_store_name() {
-        return head_of_store_name;
-    }
-
-    public void setHead_of_store_name(String head_of_store_name) {
-        this.head_of_store_name = head_of_store_name;
+    public void setWarehouse_id(String warehouse_id) {
+        this.warehouse_id = warehouse_id;
     }
 
     public String getPhone() {

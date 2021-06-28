@@ -9,51 +9,72 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Edit Store</h2>
+                    <h2>Add New Staff</h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/store/update/{id}(id=${storeObject.id})}" th:object="${storeObject}"
-                          method="post">
+                    <form onSubmit = "return checkPassword(this)" th:action="@{/staff/save}" th:object="${staffObject}" method="post">
 
                         <div class="form-group">
                             <label for="txtName">Name<span style="color: red;">*</span></label>
-                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtProvince">Province<span style="color: red;">*</span></label>
-                            <input th:field="*{province}" type="text" class="form-control" id="txtProvince" name="province"
-                                   placeholder="Input Province">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtCity">City<span style="color: red;">*</span></label>
-                            <input th:field="*{city}" type="text" class="form-control" id="txtCity" name="city"
-                                   placeholder="Input City">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtAddress">Address<span style="color: red;">*</span></label>
-                            <textarea th:field="*{address}" type="text" class="form-control" id="txtAddress" name="address"
-                                      placeholder="Input Address"></textarea>
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtHead">Head Store<span style="color: red;">*</span></label>
-                            <input th:field="*{head_of_store_name}" type="text" class="form-control" id="txtHead" name="head_of_store_name"
-                                   placeholder="Input Head of Store Name">
+                            <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone"
-                                   placeholder="Input Phone Number">
+                            <input type="text" class="form-control" id="txtPhone" name="phone"
+                                   placeholder="Input Phone Number" maxlength="13">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtAddress">Address<span style="color: red;">*</span></label>
+                            <textarea type="text" class="form-control" id="txtAddress" name="address"
+                                      placeholder="Input Address"></textarea>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender<span style="color: red;">*</span></label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="gender" id="gender" value="M" checked/>
+                                    Male
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="gender" id="gender1" value="F"/>
+                                    Female
+                                </label>
+                            </div>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role_id">Role<span style="color: red;">*</span></label>
+                            <select class="form-control" name="role_id" id="role_id" th:field="*{role_id}">
+                                <option value="1">Transaction Admin</option>
+                                <option value="2">Warehouse Admin</option>
+                                <option value="3">Master Data Admin</option>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtEmail">Email<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="txtEmail" name="email" placeholder="Input Email Address">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtPassword">Password<span style="color: red;">*</span></label>
+                            <input type="password" class="form-control" id="txtPassword" name="password" placeholder="Input Password">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtPassword2">Confirm Password<span style="color: red;">*</span></label>
+                            <input type="password" class="form-control" id="txtPassword2" name="name" placeholder="Re-type Password">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/store/index'}">Back To List</a>
+                            <a th:href="@{'/staff/index'}">Back To List</a>
                         </div>
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
@@ -70,38 +91,38 @@
         function ValidateInput() {
             const validate = [0, 0, 0, 0, 0, 0];
 
-            if ($(txtName).val() === '') {
-                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            if ($(txName).val() === '') {
+                setErrorFor($(txName), 'Name Cannot Be Empty');
             } else {
-                setClearFor($(txtName));
+                setClearFor($(txName));
                 validate[0] = 1;
-            }
-
-            if ($(txtCity).val() === '') {
-                setErrorFor($(txtCity), 'City Cannot Be Empty');
-            } else {
-                setClearFor($(txtCity));
-                validate[1] = 1;
-            }
-
-            if ($(txtProvince).val() === '') {
-                setErrorFor($(txtProvince), 'Province Cannot Be Empty');
-            } else {
-                setClearFor($(txtProvince));
-                validate[2] = 1;
-            }
-
-            if ($(txtHead).val() === '') {
-                setErrorFor($(txtHead), 'Head Store Cannot Be Empty');
-            } else {
-                setClearFor($(txtHead));
-                validate[3] = 1;
             }
 
             if ($(txtAddress).val() === '') {
                 setErrorFor($(txtAddress), 'Address Cannot Be Empty');
             } else {
                 setClearFor($(txtAddress));
+                validate[1] = 1;
+            }
+
+            if ($(txtEmail).val() === '') {
+                setErrorFor($(txtEmail), 'Email Address Cannot Be Empty');
+            } else {
+                setClearFor($(txtEmail));
+                validate[2] = 1;
+            }
+
+            if ($(txtPassword).val() === '') {
+                setErrorFor($(txtPassword), 'Password Cannot Be Empty');
+            } else {
+                setClearFor($(txtPassword));
+                validate[3] = 1;
+            }
+
+            if ($(txtPassword2).val() === '') {
+                setErrorFor($(txtPassword2), 'Confirm Password Cannot Be Empty');
+            } else {
+                setClearFor($(txtPassword2));
                 validate[4] = 1;
             }
 
@@ -119,6 +140,23 @@
                 return true;
             } else {
                 return false;
+            }
+        }
+
+        function checkPassword(form) {
+            password1 = form.txtPassword.value;
+            password2 = form.txtPassword2.value;
+
+            // If Not same return False.
+            if (password1 != password2) {
+                alert ("\nPassword did not match: Please try again...")
+                return false;
+            }
+
+            // If same return True.
+            else{
+                alert("Success!")
+                return true;
             }
         }
 
@@ -149,6 +187,7 @@
             }
         }
 
+
         $(document).ready(function () {
             $('select').change(function () {
                 Clear(this);
@@ -163,7 +202,6 @@
                 Clear(this);
             });
         });
-
         $('#btnSave').click(function (event) {
             if (ValidateInput() == true) {
                 return true;

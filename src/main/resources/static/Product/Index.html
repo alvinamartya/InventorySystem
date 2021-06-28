@@ -9,7 +9,7 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Driver List
+                    Product List
                 </div>
                 <div class="card-block">
                     <div class="row">
@@ -51,36 +51,34 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>Vehicle ID</th>
-                                <th>Warehouse</th>
-                                <th>Phone</th>
+                                <th>Product Category</th>
+                                <th>Units</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="driver, counter: ${listDriver}">
+                            <tr th:each="product, counter: ${listProduct}">
                                 <th th:text="${counter.count}"></th>
-                                <td th:text="${driver.name}"></td>
-                                <td th:text="${driver.vehicle_id}"></td>
-                                <td th:text="${driver.warehousesList.name}"></td>
-                                <td th:text="${driver.phone}"></td>
+                                <td th:text="${product.name}"></td>
+                                <td th:text="${product.productCategory.name}"></td>
+                                <td th:text="${product.units}"></td>
                                 <td>
-                                    <div th:switch="${driver.status}">
+                                    <div th:switch="${product.status}">
                                         <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
                                         <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
                                     </div>
                                 </td>
 
-                                <td th:if='${driver.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{edit/{id}(id=${driver.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{deactivate/{id}(id=${driver.id})}" class="btn btn-danger">Deactivate</a>
+                                <td th:if='${product.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${product.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{edit/{id}(id=${product.id})}" class="btn btn-outline-primary">Edit</a>
+                                    <a th:href="@{deactivate/{id}(id=${product.id})}" class="btn btn-danger">Deactivate</a>
                                 </td>
 
-                                <td th:unless='${driver.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{activate/{id}(id=${driver.id})}" class="btn btn-success">Activate</a>
+                                <td th:unless='${product.status.equals("A")}'>
+                                    <a th:href="@{detail/{id}(id=${product.id})}" class="btn btn-info">Detail</a>
+                                    <a th:href="@{activate/{id}(id=${product.id})}" class="btn btn-success">Activate</a>
                                 </td>
                             </tr>
                             </tbody>

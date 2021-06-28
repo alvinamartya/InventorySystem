@@ -1,6 +1,6 @@
 package inventory.system.service;
 
-import inventory.system.model.Warehouses;
+import inventory.system.entity.Warehouses;
 import inventory.system.repository.WarehousesRepository;
 import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;

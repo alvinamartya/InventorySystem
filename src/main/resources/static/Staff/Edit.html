@@ -9,42 +9,60 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add New Driver</h2>
+                    <h2>Edit Staff</h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/driver/save}" th:object="${driverObject}" method="post">
+                    <form th:action="@{staff/edit/{id}(id=${staffObject.id})}" th:object="${staffObject}"
+                          method="post">
+
+                        <input type="hidden" th:field="*{id}" />
 
                         <div class="form-group">
-                            <label for="txtName">Name<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtIdVehicle">Vehicle ID<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtIdVehicle" name="vehicle_id"
-                                   placeholder="Input Vehicle ID">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtIdWarehouse">Warehouse ID<span style="color: red;">*</span></label>
-                            <select class="form-control" name="warehouse_id" id="txtIdWarehouse">
-                                <option value=""> -Select Warehouse- </option>
-                                <option th:each="warehouse : ${listWarehouse}"
-                                        th:value="${warehouse.id}"
-                                        th:utext="${warehouse.name}"/>
-                            </select>
+                            <label for="name">Name<span style="color: red;">*</span></label>
+                            <input th:field="*{name}" type="text" class="form-control" id="name" name="name" placeholder="Input Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtPhone" name="phone"
-                                   placeholder="Input Phone Number">
+                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone"
+                                   placeholder="Input Phone Number" maxlength="13">
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address<span style="color: red;">*</span></label>
+                            <textarea th:field="*{address}" type="text" class="form-control" id="address" name="address"
+                                      placeholder="Input Address"></textarea>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender<span style="color: red;">*</span></label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="gender" id="gender" value="M"  th:field="*{gender}"/>
+                                    Male
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="gender" id="gender1" value="F"  th:field="*{gender}"/>
+                                    Female
+                                </label>
+                            </div>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role_id">Role<span style="color: red;">*</span></label>
+                            <select class="form-control" name="role_id" id="role_id" th:field="*{role_id}">
+                                <option value="1">Transaction Admin</option>
+                                <option value="2">Warehouse Admin</option>
+                                <option value="3">Master Data Admin</option>
+                            </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/driver/index'}">Back To List</a>
+                            <a th:href="@{'/staff/index'}">Back To List</a>
                         </div>
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
@@ -68,17 +86,31 @@
                 validate[0] = 1;
             }
 
-            if ($(txtIdVehicle).val() === '') {
-                setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
+            if ($(address).val() === '') {
+                setErrorFor($(address), 'Address Cannot Be Empty');
             } else {
-                setClearFor($(txtIdVehicle));
+                setClearFor($(address));
                 validate[1] = 1;
             }
 
-            if ($(txtIdWarehouse).val() === '') {
-                setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
+            if ($(email).val() === '') {
+                setErrorFor($(email), 'Email Address Cannot Be Empty');
             } else {
-                setClearFor($(txtIdWarehouse));
+                setClearFor($(email));
+                validate[2] = 1;
+            }
+
+            if ($(password).val() === '') {
+                setErrorFor($(password), 'Password Cannot Be Empty');
+            } else {
+                setClearFor($(password));
+                validate[2] = 1;
+            }
+
+            if ($(password2).val() === '') {
+                setErrorFor($(password2), 'Confirm Password Cannot Be Empty');
+            } else {
+                setClearFor($(password2));
                 validate[2] = 1;
             }
 
