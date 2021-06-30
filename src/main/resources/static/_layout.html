@@ -63,20 +63,13 @@
                     <img th:src="@{'/assets/images/avatar.jpg'}" class="avatar img-circle" alt="user" title="user" />
                 </div>
                 <div class="user-info expanding-hidden">
-                    Salsabila Khoirinsin
+
                     <small class="bold">Administrator</small>
                 </div>
             </a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="javascript:;">Settings</a>
-                <a class="dropdown-item" href="javascript:;">Upgrade</a>
-                <a class="dropdown-item" href="javascript:;">
-                    <span>Notifications</span>
-                    <span class="tag bg-primary">34</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:;">Help</a>
-                <a class="dropdown-item" href="">Logout</a>
+                <a class="dropdown-item" th:href="@{/logout}" onclick="return confirm('Are You Sure Want To Log Out?')">Logout</a>
             </div>
         </div>
         <!-- main navigation -->

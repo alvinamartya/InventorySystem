@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Milestone">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Milestone">
+
+    <meta name="theme-color" content="#4C7FF0">
+
+    <title>Djadjan Inventory System Application </title>
+
+    <!-- page icon -->
+    <link rel="icon" type="image/png" href="../assets/images/icon_djadjan.png"/>
+
+    <!-- page stylesheets -->
+    <link rel="stylesheet" href="../assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.css" />
+    <!-- end page stylesheets -->
+
+    <!-- build:css({.tmp,app}) styles/app.min.css -->
+    <link rel="stylesheet" th:href="@{'/assets/vendor/bootstrap/dist/css/bootstrap.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/pace/themes/blue/pace-theme-minimal.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/font-awesome/css/font-awesome.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/animate.css/animate.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/styles/app.css'}"  id="load_styles_before" />
+    <link rel="stylesheet" th:href="@{'/assets/styles/shortcodes.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/styles/app.skins.css'}"  />
+    <!-- endbuild -->
+</head>
+
+<body>
+
+<div class="app error-page no-padding no-footer layout-static">
+    <div class="session-panel">
+        <div class="session bg-danger-dark">
+            <div class="session-content text-xs-center">
+                <div>
+
+                    <div class="card b-a-0 no-bg no-shadow" style="margin:0px">
+                        <div class="card-block">
+                            <div class="center-block lockcode m-t-1">
+                                <div style="padding-bottom:50px;">
+                                    <img th:src="@{'/assets/images/icon_djadjan_horizontal_white.png'}"  class="" alt="user"
+                                         title="Djadjan" width="100%" />
+                                </div>
+                                <form role="form" th:action="@{/login/authentication}" method="post">
+                                    <input type="text" class="form-control b-a-0 m-b-1" id="email" name="email"
+                                           placeholder="Input Email" />
+                                    <input type="password" class="form-control b-a-0 m-b-1" id="password" name="password"
+                                           placeholder="Input Password" />
+
+                                        <div class="alert alert-danger alert-dismissable"th:if="${wrong_password}">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <span th:text="${wrong_password}"></span>
+                                        </div>
+
+
+
+                                        <div class="alert alert-danger alert-dismissable"  th:if="${wrong_email}">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <span th:text="${wrong_email}"></span>
+                                        </div>
+
+                                    <button class="btn btn-info btn-block b-a-0" type="submit">
+                                        Sign In
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- build:js({.tmp,app}) scripts/app.min.js -->
+<script th:src="@{'/assets/vendor/jquery/dist/jquery.js'}" ></script>
+<script th:src="@{'/assets/vendor/pace/pace.js'}"></script>
+<script th:src="@{'/assets/vendor/tether/dist/js/tether.js'}"></script>
+<script th:src="@{'/assets/vendor/bootstrap/dist/js/bootstrap.js'}"></script>
+<script th:src="@{'/assets/vendor/fastclick/lib/fastclick.js'}"></script>
+<script th:src="@{'/assets/scripts/constants.js'}"></script>
+<script th:src="@{'/assets/scripts/main.js'}"></script>
+<!-- endbuild -->
+
+<!-- page scripts -->
+<script th:src="@{'/assets/vendor/flot/jquery.flot.js'}"></script>
+<script th:src="@{'/assets/vendor/flot/jquery.flot.resize.js'}"></script>
+<script th:src="@{'/assets/vendor/flot/jquery.flot.stack.js'}"></script>
+<script th:src="@{'/assets/vendor/flot-spline/js/jquery.flot.spline.js'}"></script>
+<script th:src="@{'/assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.min.js'}"></script>
+<script th:src="@{'/assets/data/maps/jquery-jvectormap-us-aea.js'}"></script>
+<script th:src="@{'/assets/vendor/jquery.easy-pie-chart/dist/jquery.easypiechart.js'}"></script>
+<script th:src="@{'/assets/vendor/noty/js/noty/packaged/jquery.noty.packaged.min.js'}"></script>
+<script th:src="@{'/assets/scripts/helpers/noty-defaults.js'}"></script>
+<!-- end page scripts -->
+
+<!-- end initialize page scripts -->
+
+
+</body>
+
+</html>

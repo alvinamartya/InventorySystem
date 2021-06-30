@@ -1,10 +1,12 @@
 package inventory.system.service;
 
 import inventory.system.entity.Driver;
+import inventory.system.entity.LoggedUser;
 import inventory.system.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Convert;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -27,12 +29,12 @@ public class DriverService {
         return driversList;
     }
 
-    public List<Driver> saveDriver(Driver driver) {
+    public List<Driver> saveDriver(Driver driver, LoggedUser loggedUser) {
         driver.setStatus("A");
         driver.setCreated_at(new Date());
-        driver.setCreated_by("Admin");
+        driver.setCreated_by(loggedUser.getName());
         driver.setUpdated_at(new Date());
-        driver.setUpdated_by("Admin");
+        driver.setUpdated_by(loggedUser.getName());
         driversRepository.save(driver);
         return getAllDriver();
     }

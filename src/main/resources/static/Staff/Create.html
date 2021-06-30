@@ -13,22 +13,22 @@
                 </div>
 
                 <div class="card-block">
-                    <form onSubmit = "return checkPassword(this)" th:action="@{/staff/save}" th:object="${staffObject}" method="post">
+                    <form th:action="@{/staff/save}" th:object="${staffObject}" method="post">
 
                         <div class="form-group">
                             <label for="txtName">Name<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
+                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtPhone" name="phone"
+                            <input th:field="*{phone}" type="text" class="form-control" id="txtPhone" name="phone"
                                    placeholder="Input Phone Number" maxlength="13">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtAddress">Address<span style="color: red;">*</span></label>
-                            <textarea type="text" class="form-control" id="txtAddress" name="address"
+                            <textarea th:text="*{address}" type="text" class="form-control" id="txtAddress" name="address"
                                       placeholder="Input Address"></textarea>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
@@ -36,13 +36,13 @@
                             <label for="gender">Gender<span style="color: red;">*</span></label>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="gender" id="gender" value="M" checked/>
+                                    <input th:field="*{gender}" type="radio" name="gender" id="gender" value="M" checked/>
                                     Male
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="gender" id="gender1" value="F"/>
+                                    <input th:field="*{gender}" type="radio" name="gender" id="gender1" value="F"/>
                                     Female
                                 </label>
                             </div>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group">
                             <label for="role_id">Role<span style="color: red;">*</span></label>
-                            <select class="form-control" name="role_id" id="role_id" th:field="*{role_id}">
+                            <select th:field="*{role_id}" class="form-control" name="role_id" id="role_id" t>
                                 <option value="1">Transaction Admin</option>
                                 <option value="2">Warehouse Admin</option>
                                 <option value="3">Master Data Admin</option>
@@ -59,17 +59,18 @@
                         </div>
                         <div class="form-group">
                             <label for="txtEmail">Email<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtEmail" name="email" placeholder="Input Email Address">
+                            <input th:field="*{email}" th:classappend="${email_exist} ? 'input-invalid' : ''" type="text" class="form-control" id="txtEmail" name="email" placeholder="Input Email Address">
                             <div class="validate-alert hide">Message Here</div>
+                            <div th:if="${email_exist}" th:text="${email_exist}" class="validate-alert">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtPassword">Password<span style="color: red;">*</span></label>
-                            <input type="password" class="form-control" id="txtPassword" name="password" placeholder="Input Password">
+                            <input th:field="*{password}" type="password" class="form-control" id="txtPassword" name="password" placeholder="Input Password">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtPassword2">Confirm Password<span style="color: red;">*</span></label>
-                            <input type="password" class="form-control" id="txtPassword2" name="name" placeholder="Re-type Password">
+                            <input type="password" class="form-control" id="txtPassword2" placeholder="Re-type Password">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
@@ -140,23 +141,6 @@
                 return true;
             } else {
                 return false;
-            }
-        }
-
-        function checkPassword(form) {
-            password1 = form.txtPassword.value;
-            password2 = form.txtPassword2.value;
-
-            // If Not same return False.
-            if (password1 != password2) {
-                alert ("\nPassword did not match: Please try again...")
-                return false;
-            }
-
-            // If same return True.
-            else{
-                alert("Success!")
-                return true;
             }
         }
 
