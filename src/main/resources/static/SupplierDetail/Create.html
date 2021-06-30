@@ -1,0 +1,148 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Add New Supplier Detail</h2>
+                </div>
+
+                <div class="card-block">
+                    <form th:action="@{/supplierDetail/save}" th:object="${supplierDetailObject}" method="post">
+
+                        <div class="form-group" th:object="${listSupplier}">
+                            <h5 th:text="${listSupplier.name}"></h5>
+                        </div>
+
+                        <div class="form-group" th:object="${listSupplier}">
+                            <input th:value="${listSupplier.id}" type="hidden" class="form-control" id="txtSuppID" name="supplier_id">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtIDProductCategory">Warehouse ID<span style="color: red;">*</span></label>
+                            <select class="form-control" name="product_category_id" id="txtIDProductCategory">
+                                <option value=""> -Select Product Category- </option>
+                                <option th:each="productCategory : ${listProductCategory}"
+                                        th:value="${productCategory.id}"
+                                        th:utext="${productCategory.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div style="margin-top:50px;float:left" th:object="${listSupplier}">
+                            <a th:href="@{/supplierDetail/index/{id}(id=${listSupplier.id})}">Back To List</a>
+                        </div>
+                        <div style="margin-top:50px;float:right">
+                            <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function ValidateInput() {
+            const validate = [0, 0, 0, 0];
+
+            if ($(txtName).val() === '') {
+                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            } else {
+                setClearFor($(txtName));
+                validate[0] = 1;
+            }
+
+            if ($(txtIdVehicle).val() === '') {
+                setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
+            } else {
+                setClearFor($(txtIdVehicle));
+                validate[1] = 1;
+            }
+
+            if ($(txtIdWarehouse).val() === '') {
+                setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
+            } else {
+                setClearFor($(txtIdWarehouse));
+                validate[2] = 1;
+            }
+
+            if ($(txtPhone).val() === '') {
+                setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
+            } else if (!isDigit($(txtPhone).val())) {
+                setErrorFor($(txtPhone), 'Phone Number must be numeric');
+            } else {
+                setClearFor($(txtPhone));
+                validate[3] = 1;
+            }
+
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function setClearFor(input) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).removeClass('input-invalid');
+            alert.addClass('hide');
+        }
+
+        function setErrorFor(input, message) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).addClass('input-invalid');
+            alert.removeClass('hide');
+            alert.html(message);
+        }
+
+        function isChar(textbox) {
+            return /^[a-zA-Z]*$/g.test(textbox);
+        }
+
+        function isDigit(textBox) {
+            return /^[0-9]*$/g.test(textBox);
+        }
+
+        function Clear(element) {
+            if ($(element).hasClass("form-control input-invalid")) {
+                setClearFor(element);
+            }
+        }
+
+
+        $(document).ready(function () {
+            $('select').change(function () {
+                Clear(this);
+            });
+            $('input[type=text],input[type=number]').on('input', function () {
+                Clear(this);
+            });
+            $('textarea').on('input', function () {
+                Clear(this);
+            });
+            $('#potongan').on('input', function () {
+                Clear(this);
+            });
+        });
+        $('#btnSave').click(function (event) {
+            if (ValidateInput() == true) {
+                return true;
+            } else {
+
+                return false;
+            }
+        })
+    </script>
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>
