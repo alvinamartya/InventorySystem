@@ -9,42 +9,33 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add New Driver</h2>
+                    <h2>Add New Supplier Detail</h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/driver/save}" th:object="${driverObject}" method="post">
+                    <form th:action="@{/supplierDetail/save}" th:object="${supplierDetailObject}" method="post">
+
+                        <div class="form-group" th:object="${listSupplier}">
+                            <h5 th:text="${listSupplier.name}"></h5>
+                        </div>
+
+                        <div class="form-group" th:object="${listSupplier}">
+                            <input th:value="${listSupplier.id}" type="hidden" class="form-control" id="txtSuppID" name="supplier_id">
+                        </div>
 
                         <div class="form-group">
-                            <label for="txName">Name<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txName" name="name" placeholder="Input Name">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtIdVehicle">Vehicle ID<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtIdVehicle" name="vehicle_id"
-                                   placeholder="Input Vehicle ID">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtIdWarehouse">Warehouse ID<span style="color: red;">*</span></label>
-                            <select class="form-control" name="warehouse_id" id="txtIdWarehouse">
-                                <option value=""> -Select Warehouse- </option>
-                                <option th:each="warehouse : ${listWarehouse}"
-                                        th:value="${warehouse.id}"
-                                        th:utext="${warehouse.name}"/>
+                            <label for="txtIDProductCategory">Warehouse ID<span style="color: red;">*</span></label>
+                            <select class="form-control" name="product_category_id" id="txtIDProductCategory">
+                                <option value=""> -Select Product Category- </option>
+                                <option th:each="productCategory : ${listProductCategory}"
+                                        th:value="${productCategory.id}"
+                                        th:utext="${productCategory.name}"/>
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
-                        <div class="form-group">
-                            <label for="txtPhone">Phone<span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="txtPhone" name="phone"
-                                   placeholder="Input Phone Number">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
 
-                        <div style="margin-top:50px;float:left">
-                            <a th:href="@{'/driver/index'}">Back To List</a>
+                        <div style="margin-top:50px;float:left" th:object="${listSupplier}">
+                            <a th:href="@{/supplierDetail/index/{id}(id=${listSupplier.id})}">Back To List</a>
                         </div>
                         <div style="margin-top:50px;float:right">
                             <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>

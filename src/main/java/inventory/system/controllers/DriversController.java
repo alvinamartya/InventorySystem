@@ -1,6 +1,7 @@
 package inventory.system.controllers;
 
 import inventory.system.entity.Driver;
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Warehouses;
 import inventory.system.service.DriverService;
 import inventory.system.service.WarehousesService;
@@ -8,12 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -26,12 +26,21 @@ public class DriversController {
     @Autowired
     WarehousesService warehouseService;
 
+    public boolean isLogin(LoggedUser logged_user, HttpSession httpsession){
+        if(httpsession.getAttribute("logged_user")==null || logged_user.getId()==null){
+            return false;
+        }
+        return true;
+    }
     // view index
     @RequestMapping("/index")
-    public String index(Model model) {
-        List<Driver> driversList = driverService.getAllDriver();
-        model.addAttribute("listDriver", driversList);
-        return "Driver/Index";
+    public String index(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user) {
+        if(isLogin(logged_user,httpsession)){
+            List<Driver> driversList = driverService.getAllDriver();
+            model.addAttribute("listDriver", driversList);
+            return "Driver/Index";
+        }
+        return "redirect:/login";
     }
 
     // view create
@@ -47,10 +56,10 @@ public class DriversController {
 
     // save driver
     @PostMapping("/save")
-    public String save(Driver driver, RedirectAttributes redirectAttrs) {
-        driverService.saveDriver(driver);
-        redirectAttrs.addFlashAttribute("success_create", "Driver Successfully Added!");
+    public String save(Driver driver, RedirectAttributes redirectAttrs, @SessionAttribute("logged_user") LoggedUser loggedUser) {
 
+        driverService.saveDriver(driver, loggedUser);
+        redirectAttrs.addFlashAttribute("success_create", "Driver Successfully Added!");
         return "redirect:/driver/index";
     }
 

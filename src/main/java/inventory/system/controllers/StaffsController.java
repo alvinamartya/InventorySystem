@@ -1,15 +1,17 @@
 package inventory.system.controllers;
 
+import inventory.system.entity.Driver;
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Staffs;
 import inventory.system.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -19,53 +21,87 @@ public class StaffsController {
     @Autowired
     StaffService staffService;
 
+    public boolean isLogin(LoggedUser logged_user, HttpSession httpsession){
+        if(httpsession.getAttribute("logged_user")==null || logged_user.getId()==null){
+            return false;
+        }
+        return true;
+    }
+
     //index
     @RequestMapping("/index")
-    public String getStaff(Model model){
-        List<Staffs> staffsList = staffService.getAllStaff();
-        model.addAttribute("listStaff", staffsList);
-        return "Staff/Index";
+    public String getStaff(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
+        if(isLogin(logged_user,httpsession)){
+            List<Staffs> staffsList = staffService.getAllStaff();
+
+            model.addAttribute("listStaff", staffsList);
+            return "Staff/Index";
+        }
+        return "redirect:/login";
     }
 
     //view create
     @RequestMapping("/create")
-    public String viewAddStaff(Model model){
-        model.addAttribute("staffObject", new Staffs());
-        return "Staff/Create";
+    public String viewAddStaff(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
+        if(isLogin(logged_user,httpsession)){
+            model.addAttribute("staffObject", new Staffs());
+            return "Staff/Create";
+        }
+        return "redirect:/login";
+
     }
 
     //save staff
     @PostMapping("/save")
-    public String addStaff(Staffs staffs){
-        staffService.saveStaff(staffs);
-        return "redirect:/staff/index";
+    public String addStaff(@ModelAttribute("current_staff") Staffs currstaff, Staffs staffs, Model model, RedirectAttributes redirectAttrs, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
+        if(staffService.isEmailExist(staffs.getEmail())){
+            staffService.saveStaff(staffs);
+            return "redirect:/staff/index";
+        }
+
+        model.addAttribute("staffObject", staffs);
+        model.addAttribute("email_exist", "Email Exist! Try Another One");
+
+        return "Staff/Create";
     }
 
     //view edit staff
     @GetMapping("/edit/{id}")
-    public String Update(@PathVariable(value = "id") Integer id, Model model){
-        Staffs staffs = staffService.getStaffById(id);
+    public String Update(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
+        if(isLogin(logged_user,httpsession)){
+            Staffs staffs = staffService.getStaffById(id);
 
-        model.addAttribute("staffObject", staffs);
-        return "Staff/Edit";
+            model.addAttribute("staffObject", staffs);
+            return "Staff/Edit";
+        }
+        return "redirect:/login";
+
     }
 
     // view detail Staff
     @GetMapping("/detail/{id}")
-    public String detail(@PathVariable(value = "id") Integer id, Model model) {
-        Staffs staffs = staffService.getStaffById(id);
-        model.addAttribute("staffsObject", staffs);
+    public String detail(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user) {
+        if(isLogin(logged_user,httpsession)){
+            Staffs staffs = staffService.getStaffById(id);
+            model.addAttribute("staffsObject", staffs);
 
-        return "Staff/Detail";
+            return "Staff/Detail";
+        }
+        return "redirect:/login";
+
     }
 
     // view delete Staff
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable(value = "id") Integer id, Model model) {
-        Staffs staffs = staffService.getStaffById(id);
-        model.addAttribute("staffsObject", staffs);
+    public String delete(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user) {
+        if(isLogin(logged_user,httpsession)){
+            Staffs staffs = staffService.getStaffById(id);
+            model.addAttribute("staffsObject", staffs);
 
-        return "Staff/Delete";
+            return "Staff/Delete";
+        }
+        return "redirect:/login";
+
     }
 
     // confirm to delete Staff
