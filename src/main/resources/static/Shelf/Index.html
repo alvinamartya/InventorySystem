@@ -64,13 +64,19 @@
                                     </div>
                                 </td>
 
-                                <td width="20%">
+                                <td>
                                     <div th:if='${shelf.is_empty.equals(1)}'>
-                                        <a th:href="@{detail/{id}(id=${shelf.id})}" class="btn btn-info">Detail</a>
-                                        <a th:href="@{delete/{id}(id=${shelf.id})}" class="btn btn-danger">Delete</a>
+                                        <a title="See Detail" th:href="@{detail/{id}(id=${shelf.id})}" class="btn btn-info custom-icon-btn">
+                                            <i class="material-icons text-white">info</i></a>
+                                        </a>
+                                        <a title="Edit Item" th:href="@{delete/{id}(id=${shelf.id})}" class="btn btn-danger custom-icon-btn">
+                                            <i class="material-icons text-white">delete</i></a>
+                                        </a>
                                     </div>
                                     <div th:unless='${shelf.is_empty.equals(1)}'>
-                                        <a th:href="@{detail/{id}(id=${shelf.id})}" class="btn btn-info">Detail</a>
+                                        <a title="See Detail" th:href="@{detail/{id}(id=${shelf.id})}" class="btn btn-info custom-icon-btn">
+                                            <i class="material-icons text-white">info</i></a>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

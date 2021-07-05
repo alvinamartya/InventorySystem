@@ -128,7 +128,7 @@
                         <span>Product Category</span>
                     </a>
                 </li>
-                <li>
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/shelf' ? 'active':''}">
                     <a th:href="@{/shelf/index}">
                         <i class="material-icons text-deeppurple">view_agenda</i>
                         <span>Shelf</span>

@@ -56,6 +56,8 @@ public class StaffsController {
     public String addStaff(@ModelAttribute("current_staff") Staffs currstaff, Staffs staffs, Model model, RedirectAttributes redirectAttrs, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
         if(staffService.isEmailExist(staffs.getEmail())){
             staffService.saveStaff(staffs);
+
+            redirectAttrs.addFlashAttribute("success_create", "Staff Successfully Added!");
             return "redirect:/staff/index";
         }
 

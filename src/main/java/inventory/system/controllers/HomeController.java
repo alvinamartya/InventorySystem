@@ -14,5 +14,4 @@ public class HomeController {
         model.addAttribute("logged_user", loggedUser);
         return "Dashboard/Index";
     }
-
 }

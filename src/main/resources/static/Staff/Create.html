@@ -34,23 +34,24 @@
                         </div>
                         <div class="form-group">
                             <label for="gender">Gender<span style="color: red;">*</span></label>
-                            <div class="radio">
-                                <label>
-                                    <input th:field="*{gender}" type="radio" name="gender" id="gender" value="M" checked/>
-                                    Male
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input th:field="*{gender}" type="radio" name="gender" id="gender1" value="F"/>
-                                    Female
-                                </label>
-                            </div>
+                                <div class="custom-controls-stacked">
+                                    <label class="custom-control custom-radio">
+                                        <input th:checked='*{gender=="M"}' name="gender" id="gender" value="M"  type="radio" class="custom-control-input">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Male</span>
+                                    </label>
+                                    <label class="custom-control custom-radio">
+                                        <input th:checked='*{gender=="F"}' name="gender" id="gender1" value="F" type="radio" class="custom-control-input">
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Female</span>
+                                    </label>
+                                </div>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="role_id">Role<span style="color: red;">*</span></label>
                             <select th:field="*{role_id}" class="form-control" name="role_id" id="role_id" t>
+                                <option value="0"> -Select Role- </option>
                                 <option value="1">Transaction Admin</option>
                                 <option value="2">Warehouse Admin</option>
                                 <option value="3">Master Data Admin</option>
@@ -90,12 +91,12 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0, 0, 0];
+            const validate = [0, 0, 0, 0, 0, 0, 0,0];
 
-            if ($(txName).val() === '') {
-                setErrorFor($(txName), 'Name Cannot Be Empty');
+            if ($(txtName).val() === '') {
+                setErrorFor($(txtName), 'Name Cannot Be Empty');
             } else {
-                setClearFor($(txName));
+                setClearFor($(txtName));
                 validate[0] = 1;
             }
 
@@ -123,9 +124,15 @@
             if ($(txtPassword2).val() === '') {
                 setErrorFor($(txtPassword2), 'Confirm Password Cannot Be Empty');
             } else {
-                setClearFor($(txtPassword2));
-                validate[4] = 1;
+                if ($(txtPassword).val() != $(txtPassword2).val()) {
+                    setErrorFor($(txtPassword2), 'Password Not Match!');
+                } else {
+                    setClearFor($(txtPassword2));
+                    validate[4] = 1;
+                }
             }
+
+
 
             if ($(txtPhone).val() === '') {
                 setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
@@ -136,8 +143,22 @@
                 validate[5] = 1;
             }
 
+            if ($(role_id).val() == '0') {
+                setErrorFor($(role_id), 'Role Cannot Be Empty');
+            } else {
+                setClearFor($(role_id));
+                validate[6] = 1;
+            }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[4] == 1 && validate[5] == 1) {
+            if (!$(gender).is(':checked') && !$(gender1).is(':checked')) {
+                setErrorFor($(gender), 'Gender Cannot Be Empty');
+            } else {
+                setClearFor($(gender));
+                validate[7] = 1;
+            }
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1
+                && validate[4] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
                 return true;
             } else {
                 return false;
@@ -173,10 +194,16 @@
 
 
         $(document).ready(function () {
+            $(gender).change(function(){
+                setClearFor(this);
+            });
+            $(gender1).change(function(){
+                setClearFor(this);
+            });
             $('select').change(function () {
                 Clear(this);
             });
-            $('input[type=text],input[type=number]').on('input', function () {
+            $('input[type=text],input[type=number],input[type=password]').on('input', function () {
                 Clear(this);
             });
             $('textarea').on('input', function () {
