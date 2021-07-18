@@ -1,5 +1,6 @@
 package inventory.system.service;
 
+import inventory.system.entity.Staffs;
 import inventory.system.entity.Warehouses;
 import inventory.system.repository.WarehousesRepository;
 import inventory.system.utils.GeneratorId;
@@ -25,6 +26,18 @@ public class WarehousesService {
                         .thenComparing(Warehouses::getIs_branch)
                         .thenComparing(Warehouses::getName)
         );
+        return warehousesList;
+    }
+
+    public List<Warehouses> getAllWarehousesPusat(){
+        List<Warehouses> warehousesList = warehousesRepository.findAllPusat();
+
+        return warehousesList;
+    }
+
+    public List<Warehouses> getAllWarehousesCabang(){
+        List<Warehouses> warehousesList = warehousesRepository.findAllCabang();
+
         return warehousesList;
     }
 

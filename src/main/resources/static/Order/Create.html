@@ -1,0 +1,471 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Add New Order</h2>
+                </div>
+
+                <div class="card-block">
+                    <form th:action="@{/order/save}" th:object="${orderObject}" method="post">
+                        <div class="form-group">
+                            <label for="txtType">Origin Type<span style="color: red;">*</span></label>
+                            <select class="form-control"  id="txtType" th:field="*{origin_type}">
+                                <option value=""> -Select Type- </option>
+                                <option value="Gudang">Warehouse</option>
+                                <option value="Pemasok">Supplier</option>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtIdWarehouseOr">Origin Warehouse<span style="color: red;">*</span></label>
+                            <select class="form-control" id="txtIdWarehouseOr" th:field="*{origin_warehouse_id}">
+                                <option value=""> -Select Warehouse- </option>
+                                <option th:each="warehouse : ${listWarehouseOr}"
+                                        th:value="${warehouse.id}"
+                                        th:utext="${warehouse.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtTypeDest">Destination Type<span style="color: red;">*</span></label>
+                            <select class="form-control"  id="txtTypeDest" th:field="*{dest_type}">
+                                <option value=""> -Select Type- </option>
+                                <option value="Gudang">Warehouse</option>
+                                <option value="Toko">Store</option>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtIdWarehouse">Dest Warehouse<span style="color: red;">*</span></label>
+                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}">
+                                <option value=""> -Select Warehouse- </option>
+                                <option th:each="warehouse : ${listWarehouseDest}"
+                                        th:value="${warehouse.id}"
+                                        th:utext="${warehouse.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+                        <div th:if='${!level.equals(1)}' class="form-group">
+                            <label for="txtIdDriver">Driver<span style="color: red;">*</span></label>
+                            <select class="form-control" id="txtIdDriver" th:field="*{driver_id}">
+                                <option value=""> -Select Driver- </option>
+                                <option th:each="driver : ${listDriver}"
+                                        th:value="${driver.id}"
+                                        th:utext="${driver.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+
+
+
+                        <input type="hidden" id="arraydetail" th:field="*{detailJSON}">
+                        <div id="variantitem" class="form-group">
+                            <label>Daftar Produk</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="display:block;">
+                                        <button type="button" class="btn btn-outline-primary" id="plus1">
+                                            <span class='fa fa-plus' style="padding-right:20px"></span>
+                                            1
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary" id="plus5">
+                                            <span class='fa fa-plus' style="padding-right:20px"></span>
+                                            5
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary" id="plus10">
+                                            <span class='fa fa-plus' style="padding-right:20px"></span>
+                                            10
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary" id="plus50">
+                                            <span class='fa fa-plus' style="padding-right:20px"></span>
+                                            50
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary" id="plus100">
+                                            <span class='fa fa-plus' style="padding-right:20px"></span>
+                                            100
+                                        </button>
+                                        <button disabled="true" type="button" class="btn btn-danger" id="clearAll">
+                                            <span class='fa fa-trash' style="padding-right:20px"></span>
+                                            Clear All
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Product Added : <span><b id="counterTamu">1</b></span></label>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group" style="padding-top:20px" id="detailtable">
+                                <div class="hide" style="padding-top:20px" id="alertDetailDiv">
+                                    <div class="col">
+                                        <div class="alert alert-danger" role="alert" id="detailAlertMsg">
+                                            Please Fill Product With Valid Value !
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table table-bordered" id="crud_table">
+                                    <thead>
+
+                                    <tr>
+                                        <th width="20%">Product</th>
+                                        <th width="30%">Origin Shelf</th>
+                                        <th width="30%">Dest Shelf</th>
+                                        <th width="15%">Quantity</th>
+                                        <th width="5%" style="border-left-style: none"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr id="baseRow">
+                                        <td class="product_id">
+                                            <select class="form-control">
+                                                <option value=""> -Select Product- </option>
+                                                <option th:each="product : ${listProduct}"
+                                                        th:value="${product.id}"
+                                                        th:utext="${product.name}"/>
+                                            </select>
+                                        </td>
+                                        <td class="product_origin">
+                                            <select class="form-control">
+                                                <option value=""> -Select Origin Shelf- </option>
+                                                <option th:each="shelf : ${listShelf}"
+                                                        th:value="${shelf.id}"
+                                                        th:utext="${shelf.id}"/>
+                                            </select>
+                                        </td>
+                                        <td class="product_dest">
+                                            <select class="form-control">
+                                                <option value=""> -Select Dest Shelf- </option>
+                                                <option th:each="shelf : ${listShelf}"
+                                                        th:value="${shelf.id}"
+                                                        th:utext="${shelf.id}"/>
+                                            </select>
+                                        </td>
+                                        <td class="product_qty">
+                                            <input type="text" class="form-control" placeholder="Fill Quantity">
+                                        </td>
+                                        <td style="border-left-style: none"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div style="margin-top:50px;float:left">
+                            <a th:href="@{'/order/index'}">Back To List</a>
+                        </div>
+                        <div style="margin-top:50px;float:right">
+                            <button type="submit" id="btnSave" class="btn btn-primary m-b3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function ValidateAll() {
+            var validate = [0, 0];
+
+            if(ValidateOrder()==true){
+                validate[0] = 1;
+            }
+            else{
+                validate[0] = 0;
+            }
+
+            if(ValidateOrderDetail()==true){
+                validate[1] = 1;
+            }
+            else{
+                validate[1] = 0;
+            }
+
+            if (validate[0] == 1 && validate[1] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function ValidateOrder() {
+            var validate = [0, 0, 0, 0];
+
+            if ($(txtIdWarehouseOr).val() === '') {
+                setErrorFor($(txtIdWarehouseOr), 'Warehouse Origin ID Cannot Be Empty');
+            } else {
+                setClearFor($(txtIdWarehouseOr));
+                validate[0] = 1;
+            }
+
+            if ($(txtIdWarehouse).val() === '') {
+                setErrorFor($(txtIdWarehouse), 'Warehouse Destination ID Cannot Be Empty');
+            } else {
+                setClearFor($(txtIdWarehouse));
+                validate[1] = 1;
+            }
+
+            if ($(txtType).val() === '') {
+                setErrorFor($(txtType), 'Order Type Cannot Be Empty');
+            } else {
+                setClearFor($(txtType));
+                validate[2] = 1;
+            }
+            if ($(txtIdDriver).val() === '') {
+                setErrorFor($(txtIdDriver), 'Driver ID Cannot Be Empty');
+            } else {
+                setClearFor($(txtIdDriver));
+                validate[3] = 1;
+            }
+
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function ValidateOrderDetail() {
+            var validate3 = [0];
+
+
+            var product_id = [];
+            var product_origin = [];
+            var product_dest = [];
+            var product_qty = [];
+            $('.product_id').each(function() {
+                product_id.push($(this).find("select option:selected").val());
+            });
+            $('.product_origin').each(function() {
+                product_origin.push($(this).find("select option:selected").val());
+            });
+            $('.product_dest').each(function() {
+                product_dest.push($(this).find("select option:selected").val());
+            });
+            $('.product_qty').each(function() {
+                product_qty.push($(this).find("input").val());
+            });
+
+            var itemdetail = [];
+            var i;
+            var limit = product_id.length;
+
+            for (i = 0; i < limit; i++) {
+                var vid = product_id[i];
+                var vorigin = product_origin[i];
+                var vdest = product_dest[i];
+                var vqty = product_qty[i];
+                var itemdetails = {
+                    productID: vid,
+                    productOrigin: vorigin,
+                    productDest: vdest,
+                    productQty: vqty
+                };
+                itemdetail.push(itemdetails);
+            }
+            var detailvalid = true;
+            for (i = 0; i < itemdetail.length; i++) {
+                var varname = itemdetail[i].productID;
+                var varorigin = itemdetail[i].productOrigin;
+                var vardest = itemdetail[i].productDest;
+                var varqty = itemdetail[i].productQty;
+                if (varname == '' || varorigin == '' || vardest == ''|| varqty == '') {
+                    detailvalid = false;
+                }
+            }
+            if (detailvalid == true) {
+                var itemdetailwrapped = JSON.stringify(itemdetail);
+                $('#arraydetail').val(itemdetailwrapped);
+                console.log(itemdetailwrapped);
+                validate3[0] = 1;
+            } else {
+                //$('#detailtable').addClass('alertborder');
+                validate3[0] = 0;
+                $('#alertDetailDiv').removeClass('hide');
+            }
+
+            if (validate3[0] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function setClearFor(input) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).removeClass('input-invalid');
+            alert.addClass('hide');
+        }
+
+        function setErrorFor(input, message) {
+            var alert = $(input).parent().closest(".form-group").find('.validate-alert');
+            $(input).addClass('input-invalid');
+            alert.removeClass('hide');
+            alert.html(message);
+        }
+
+        function isChar(textbox) {
+            return /^[a-zA-Z]*$/g.test(textbox);
+        }
+
+        function Clear(element) {
+            if ($(element).hasClass("form-control input-invalid")) {
+                setClearFor(element);
+            }
+        }
+
+        function cloneRow() {
+            var row = document.getElementById("baseRow"); // find row to copy
+            var table = document.getElementById("crud_table"); // find table to append to
+            var clone = row.cloneNode(true); // copy children too
+            clone.id = ""; // change id or other attributes/contents
+            var html_code = "<button type='button' name='remove' data-row='row" + count + "' class='btn btn-danger btn-xs remove'><span class='fa fa-trash fa-lg'></span></button>";
+
+            clone.getElementsByTagName("td")[4].innerHTML=html_code;
+            table.appendChild(clone); // add new row to end of table
+        }
+
+        var count = 1;
+        //Plus1
+        $('#plus1').click(function() {
+            $('#alertvalidation').removeClass('show');
+            count = count + 1;
+            cloneRow();
+            $('#alertDetailDiv').addClass('hide');
+            setCounter(count);
+            setDisabledClearAll(count);
+        });
+
+        //Plus5
+        $('#plus5').click(function() {
+            $('#alertvalidation').removeClass('show');
+            countedStart = count + 1;
+            countedEnd = count + 5;
+            count = count + 5;;
+            for (i = countedStart; i <= countedEnd; i++) {
+                cloneRow();
+            }
+            $('#alertDetailDiv').addClass('hide');
+            setCounter(count);
+            setDisabledClearAll(count);
+        });
+
+        //Plus10
+        $('#plus10').click(function() {
+            $('#alertvalidation').removeClass('show');
+            countedStart = count + 1;
+            countedEnd = count + 10;
+            count = count + 10;
+            for (i = countedStart; i <= countedEnd; i++) {
+                cloneRow();
+            }
+            $('#alertDetailDiv').addClass('hide');
+            setCounter(count);
+            setDisabledClearAll(count);
+        });
+
+        //Plus50
+        $('#plus50').click(function() {
+            $('#alertvalidation').removeClass('show');
+            countedStart = count + 1;
+            countedEnd = count + 50;
+            count = count + 50;
+            for (i = countedStart; i <= countedEnd; i++) {
+                cloneRow();
+            }
+            $('#alertDetailDiv').addClass('hide');
+            setCounter(count);
+            setDisabledClearAll(count);
+        });
+
+        //Plus100
+        $('#plus100').click(function() {
+            $('#alertvalidation').removeClass('show');
+            countedStart = count + 1;
+            countedEnd = count + 100;
+            count = count + 100;
+            for (i = countedStart; i <= countedEnd; i++) {
+                cloneRow();
+            }
+            $('#alertDetailDiv').addClass('hide');
+            setCounter(count);
+            setDisabledClearAll(count);
+        });
+
+        function setDisabledClearAll(count) {
+            if (count > 1) {
+                $('#clearAll').prop('disabled', false);
+            }
+        }
+
+        function setCounter(count) {
+            $('#counterTamu').html(count);
+        }
+        $(document).on('click', '.remove', function() {
+            $('#alertvalidation').removeClass('show');
+            var delete_row = $(this).data("row");
+            $('#' + delete_row).remove();
+            count = count - 1;
+            $('#alertDetailDiv').addClass('hide');
+            setCounter(count);
+        });
+
+        $(document).on('click', '#clearAll', function() {
+            count = 1;
+            $("#crud_table").find("tr:gt(1)").remove();
+
+            setCounter(count);
+        });
+
+
+        $(document).ready(function() {
+            $('select').change(function() {
+                Clear(this);
+            });
+            $('input[type=text],input[type=number]').on('input', function() {
+                Clear(this);
+            });
+            $('textarea').on('input', function() {
+                Clear(this);
+            });
+
+
+            $('.product_id').on('input', function() {
+                $('#alertDetailDiv').addClass('hide');
+            })
+            $('.product_origin').on('input', function() {
+                $('#alertDetailDiv').addClass('hide');
+            })
+
+            $('.product_dest').on('input', function() {
+                $('#alertDetailDiv').addClass('hide');
+            })
+
+        });
+        $('#btnSave').click(function(event) {
+            //event.preventDefault();
+            if (ValidateAll() == true) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+    </script>
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

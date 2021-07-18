@@ -1,0 +1,85 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Order List
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12" th:if="${success_create}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_create}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-12 col-lg-12" th:if="${success_delete}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_delete}"></span>
+                            </div>
+                        </div>
+                        <!--                        -->
+                        <div class="col-md-4" style="padding-bottom:30px">
+                            <a href="create" class="btn btn-primary">+ Add New</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered datatable">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>ID</th>
+                                <th>Origin ID</th>
+                                <th>Dest ID</th>
+                                <th>Origin Type</th>
+                                <th>Driver ID</th>
+                                <th>Created By</th>
+                                <th>Approved By</th>
+                                <th>Checked By</th>
+                                <th>Last Modified</th>
+                                <th>Last Modified By</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="order, counter: ${listOrder}">
+                                <th th:text="${counter.count}"></th>
+                                <td th:text="${order.id}"></td>
+                                <td th:text="${order.origin_id}"></td>
+                                <td th:text="${order.dest_id}"></td>
+                                <td th:text="${order.origin_type}"></td>
+                                <td th:text="${order.driver_id}"></td>
+                                <td th:text="${order.created_by}"></td>
+                                <td th:text="${order.approved_by}"></td>
+                                <td th:text="${order.checked_by}"></td>
+                                <td th:text="${order.updated_at}"></td>
+                                <td th:text="${order.updated_by}"></td>
+                                <td th:text="${order.status_order_id}"></td>
+
+                                <td width="30%">
+                                    <div>
+                                        <a th:href="@{detail/{id}(id=${order.id})}" class="btn btn-info">Detail</a>
+                                        <a th:href="@{edit/{id}(id=${order.id})}" class="btn btn-outline-primary">Acc(Belom)</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

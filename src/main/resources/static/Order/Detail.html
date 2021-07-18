@@ -1,0 +1,106 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Order Detail</h2>
+                </div>
+
+                <div class="card-block" th:object="${orderObject}">
+                    <div class="form-group">
+                        <label>Order ID</label>
+                        <p th:text="*{id}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Origin Type</label>
+                        <p th:if='*{origin_type.equals("Pemasok")}'>Supplier</p>
+                        <p th:if='*{origin_type.equals("Gudang")}'>Warehouse</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Origin Warehouse</label>
+                        <p th:text="*{originList.name}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Destination Type</label>
+                        <p th:if='*{dest_type.equals("Toko")}'>Store</p>
+                        <p th:if='*{dest_type.equals("Gudang")}'>Warehouse</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Destination Warehouse</label>
+                        <p th:text="*{destList.name}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Driver</label>
+                        <p><b th:text="*{driver_id}"></b><span th:text="*{driverList.name}"></span></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Created By</label>
+                        <p><b th:text="*{created_at}"></b><span>  -  </span><span th:text="*{created_by}"></span></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Checked By</label>
+                        <p th:if='*{checked_by.equals("-")}'><b th:text="*{checked_at}"></b><span>  -  </span><span th:text="*{checked_by}"></span></p>
+                        <p th:unless='*{checked_by.equals("-")}'><i>Not Checked Yet</i></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Approved By</label>
+                        <p th:if='*{approved_by.equals("-")}'><b th:text="*{approved_at}"></b><span>  -  </span><span th:text="*{approved_by}"></span></p>
+                        <p th:unless='*{approved_by.equals("-")}'><i>Not Approved Yet</i></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Modified</label>
+                        <p><b th:text="*{updated_at}"></b><span>  -  </span><span th:text="*{updated_by}"></span></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Order Status</label>
+                        <p th:text="*{status_order_id}"></p>
+                    </div>
+
+
+
+                </div>
+                <div class="card-block">
+                    <div class="form-group">
+                        <label>Order Details</label>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered datatable">
+                            <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Origin Shelf</th>
+                                <th>Dest Shelf</th>
+                                <th>Quantity</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="orderdetail, counter: ${detailorderObject}">
+                                <td th:text="${orderdetail.productList.name}"></td>
+                                <td th:text="${orderdetail.origin_shelf_id}"></td>
+                                <td th:text="${orderdetail.dest_shelf_id}"></td>
+                                <td th:text="${orderdetail.quantity}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top:50px;float:left">
+                        <a th:href="@{'/order/index'}">Back To List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>
