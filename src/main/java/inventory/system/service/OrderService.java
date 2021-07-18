@@ -152,6 +152,36 @@ public class OrderService {
 
         return 0;
     }
+    public void check(String id, String staffName) {
+        Order orders = ordersRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
+        orders.setStatus_order_id(2);
+        orders.setChecked_at(new Date());
+        orders.setChecked_by(staffName);
+        orders.setUpdated_at(new Date());
+        orders.setUpdated_by(staffName);
+        ordersRepository.save(orders);
+    }
+
+    public void approve(String id, String staffName) {
+        Order orders = ordersRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
+        orders.setStatus_order_id(4);
+        orders.setApproved_at(new Date());
+        orders.setApproved_by(staffName);
+        orders.setUpdated_at(new Date());
+        orders.setUpdated_by(staffName);
+        ordersRepository.save(orders);
+    }
+
+    public void reject(String id, String staffName) {
+        Order orders = ordersRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
+        orders.setStatus_order_id(3);
+        orders.setUpdated_at(new Date());
+        orders.setUpdated_by(staffName);
+        ordersRepository.save(orders);
+    }
 
     @Transactional
     public void delete(Order order) {

@@ -45,13 +45,13 @@
                     </div>
                     <div class="form-group">
                         <label>Checked By</label>
-                        <p th:if='*{checked_by.equals("-")}'><b th:text="*{checked_at}"></b><span>  -  </span><span th:text="*{checked_by}"></span></p>
-                        <p th:unless='*{checked_by.equals("-")}'><i>Not Checked Yet</i></p>
+                        <p th:if='*{checked_by.equals("-")}'><i>Not Checked Yet</i></p>
+                        <p th:unless='*{checked_by.equals("-")}'><b th:text="*{checked_at}"></b><span>  -  </span><span th:text="*{checked_by}"></span></p>
                     </div>
                     <div class="form-group">
                         <label>Approved By</label>
-                        <p th:if='*{approved_by.equals("-")}'><b th:text="*{approved_at}"></b><span>  -  </span><span th:text="*{approved_by}"></span></p>
-                        <p th:unless='*{approved_by.equals("-")}'><i>Not Approved Yet</i></p>
+                        <p th:if='*{approved_by.equals("-")}'><i>Not Approved Yet</i></p>
+                        <p th:unless='*{approved_by.equals("-")}'><b th:text="*{approved_at}"></b><span>  -  </span><span th:text="*{approved_by}"></span></p>
                     </div>
                     <div class="form-group">
                         <label>Last Modified</label>

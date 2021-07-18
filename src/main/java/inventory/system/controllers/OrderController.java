@@ -130,51 +130,73 @@ public class OrderController {
         return "Order/Detail";
     }
 
-    // view delete order
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable(value = "id") String id, Model model) {
-        /*Order orders = orderService.getOrderById(id);
-        model.addAttribute("orderObject", orders);*/
+    //Checked
+    @GetMapping("/check/{id}")
+    public String check(@PathVariable(value = "id") String id, Model model) {
+        Order orders = orderService.getOrderById(id);
+        model.addAttribute("orderObject", orders);
 
-        return "Order/Delete";
+        List<OrderDetail> listDetail = orderService.getOrderDetail(id);
+        model.addAttribute("detailorderObject", listDetail);
+
+        model.addAttribute("state", "check");
+        return "Order/Confirmation";
     }
+    @RequestMapping("/check-confirmed/{id}")
+    public String checkconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
+        //**----Dari Session
+        String staffName = "Admin Gudang";
 
-    // confirm to delete order
-    @PostMapping("/delete-confirmed/{id}")
-    public String deleteConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs) {
-        //Order order = orderService.getOrderById(id);
-        //orderService.delete(order);
+        orderService.check(id, staffName);
 
-        redirectAttrs.addFlashAttribute("success_deactive", "Order Successfully Deactivated!");
+        redirectAttrs.addFlashAttribute("success_checked", "Order Successfully Checked!");
         return "redirect:/order/index";
     }
 
-    // deactivate order
-    @GetMapping("/deactivate/{id}")
-    public String deactivate(@PathVariable(value = "id") Integer id, Model model){
-        //Order orders = orderService.getOrderById(id);
-        //model.addAttribute("orderObject", orders);
+    //Approved
+    @GetMapping("/approve/{id}")
+    public String approve(@PathVariable(value = "id") String id, Model model) {
+        Order orders = orderService.getOrderById(id);
+        model.addAttribute("orderObject", orders);
 
-        return "Order/Delete";
+        List<OrderDetail> listDetail = orderService.getOrderDetail(id);
+        model.addAttribute("detailorderObject", listDetail);
+
+        model.addAttribute("state", "approve");
+        return "Order/Confirmation";
     }
 
+    @RequestMapping("/approve-confirmed/{id}")
+    public String approveconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
+        //**----Dari Session
+        String staffName = "Admin Transaksi";
 
-    // activated order
-    @GetMapping("/activate/{id}")
-    public String active(@PathVariable(value = "id") Integer id, Model model){
-        //Order orders = orderService.getOrderById(id);
-        //model.addAttribute("orderObject", orders);
+        orderService.approve(id, staffName);
 
-        return "Order/Delete";
+        redirectAttrs.addFlashAttribute("success_checked", "Order Successfully Approved!");
+        return "redirect:/order/index";
     }
 
-    // confirm to activate status order
-    @PostMapping("/activate-confirmed/{id}")
-    public String activateConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs) {
-        //Order order = orderService.getOrderById(id);
-        //orderService.activate(order);
+    @GetMapping("/reject/{id}")
+    public String reject(@PathVariable(value = "id") String id, Model model) {
+        Order orders = orderService.getOrderById(id);
+        model.addAttribute("orderObject", orders);
 
-        redirectAttrs.addFlashAttribute("success_active", "Order Successfully Activated!");
+        List<OrderDetail> listDetail = orderService.getOrderDetail(id);
+        model.addAttribute("detailorderObject", listDetail);
+
+        model.addAttribute("state", "reject");
+        return "Order/Confirmation";
+    }
+
+    @RequestMapping("/reject-confirmed/{id}")
+    public String rejectconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
+        //**----Dari Session
+        String staffName = "Admin Gudang";
+
+        orderService.reject(id, staffName);
+
+        redirectAttrs.addFlashAttribute("success_checked", "Order Successfully Rejected!");
         return "redirect:/order/index";
     }
 
