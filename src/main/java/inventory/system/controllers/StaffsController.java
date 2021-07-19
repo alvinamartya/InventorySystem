@@ -41,18 +41,26 @@ public class StaffsController {
     }
 
     //view create
-    @RequestMapping("/create")
+    /*@RequestMapping("/create")
     public String viewAddStaff(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
         if(isLogin(logged_user,httpsession)){
-            model.addAttribute("staffObject", new Staffs());
-            return "Staff/Create";
+
         }
+        model.addAttribute("staffObject", new Staffs());
+        return "Staff/Create";
         return "redirect:/login";
+
+    }*/
+
+    @RequestMapping("/create")
+    public String viewAddStaff(Model model){
+        model.addAttribute("staffObject", new Staffs());
+        return "Staff/Create";
 
     }
 
     //save staff
-    @PostMapping("/save")
+    /*@PostMapping("/save")
     public String addStaff(@ModelAttribute("current_staff") Staffs currstaff, Staffs staffs, Model model, RedirectAttributes redirectAttrs, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
         if(staffService.isEmailExist(staffs.getEmail())){
             staffService.saveStaff(staffs);
@@ -65,6 +73,16 @@ public class StaffsController {
         model.addAttribute("email_exist", "Email Exist! Try Another One");
 
         return "Staff/Create";
+    }*/
+
+    @PostMapping("/save")
+    public String addStaff(@ModelAttribute("current_staff") Staffs currstaff, Staffs staffs, Model model, RedirectAttributes redirectAttrs){
+
+            staffService.saveStaff(staffs);
+
+            redirectAttrs.addFlashAttribute("success_create", "Staff Successfully Added!");
+            return "redirect:/staff/index";
+
     }
 
     //view edit staff

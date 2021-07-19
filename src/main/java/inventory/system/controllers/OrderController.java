@@ -44,11 +44,9 @@ public class OrderController {
     // view create
     @RequestMapping("/create")
     public String create(Model model) {
-        model.addAttribute("orderObject", new OrderInput());
-
 
         //----Diambil dari Session
-        int level = 2; // 1=Supplier-Pusat, 2=Pusat-Cabang, 3=Cabang-Toko
+        int level = 3; // 1=Supplier-Pusat, 2=Pusat-Cabang, 3=Cabang-Toko
         //----Diambil dari Session
 
 
@@ -67,6 +65,8 @@ public class OrderController {
             model.addAttribute("listShelf", shelfList);
 
             model.addAttribute("level", 1);
+
+            model.addAttribute("orderObject", new OrderInput("Gudang"));
         }
         else if(level == 2){
             List<Warehouses> warehouseListOr = warehouseService.getAllWarehousesPusat();
@@ -85,6 +85,8 @@ public class OrderController {
             model.addAttribute("listShelf", shelfList);
 
             model.addAttribute("level", 2);
+
+            model.addAttribute("orderObject", new OrderInput("Gudang"));
         }
         else if(level == 3){
             List<Warehouses> warehouseListOr = warehouseService.getAllWarehousesCabang();
@@ -103,6 +105,8 @@ public class OrderController {
             model.addAttribute("listShelf", shelfList);
 
             model.addAttribute("level", 3);
+
+            model.addAttribute("orderObject", new OrderInput("Toko"));
         }
 
 

@@ -1,6 +1,7 @@
 package inventory.system.service;
 
 import inventory.system.entity.Staffs;
+import inventory.system.entity.Stores;
 import inventory.system.entity.Warehouses;
 import inventory.system.repository.WarehousesRepository;
 import inventory.system.utils.GeneratorId;
@@ -39,6 +40,20 @@ public class WarehousesService {
         List<Warehouses> warehousesList = warehousesRepository.findAllCabang();
 
         return warehousesList;
+    }
+
+    public List<Warehouses> getCabangByPusat(String id) {
+        Warehouses selected = getWarehousesById(id);
+        List<Warehouses> warehousesList = warehousesRepository.findCabangByPusat(selected.getProvince());
+
+        return warehousesList;
+    }
+
+    public List<Stores> getStoreByCabang(String id) {
+        Warehouses selected = getWarehousesById(id);
+        List<Stores> storesList = warehousesRepository.findStoreByCabang(selected.getCity());
+
+        return storesList;
     }
 
     public List<Warehouses> saveWarehouses(Warehouses warehouses) {
@@ -103,5 +118,6 @@ public class WarehousesService {
 
         return 1;
     }
+
 
 }

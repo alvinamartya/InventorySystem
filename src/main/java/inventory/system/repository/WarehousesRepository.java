@@ -1,6 +1,7 @@
 package inventory.system.repository;
 
 import inventory.system.entity.Staffs;
+import inventory.system.entity.Stores;
 import inventory.system.entity.Warehouses;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,4 +19,11 @@ public interface WarehousesRepository extends CrudRepository<Warehouses, String>
 
     @Query("select a from Warehouses a where a.is_branch=1")
     public List<Warehouses> findAllCabang();
+
+    @Query("select a from Warehouses a where a.is_branch=1 AND a.province=:province  AND a.status='A' ")
+    public List<Warehouses> findCabangByPusat(@Param("province") String province);
+
+    @Query("select a from Stores a where a.city=:city AND a.status='A' ")
+    public List<Stores> findStoreByCabang(@Param("city") String city);
+
 }

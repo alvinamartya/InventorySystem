@@ -12,7 +12,7 @@
                     <h2>Add New Order</h2>
                 </div>
 
-                <div class="card-block">
+                <div class="card-block" id="divForm">
                     <form th:action="@{/order/save}" th:object="${orderObject}" method="post">
                         <div class="form-group">
                             <label for="txtType">Origin Type<span style="color: red;">*</span></label>
@@ -25,7 +25,10 @@
                         </div>
                         <div class="form-group">
                             <label for="txtIdWarehouseOr">Origin Warehouse<span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdWarehouseOr" th:field="*{origin_warehouse_id}">
+                            <select class="form-control" id="txtIdWarehouseOr" th:field="*{origin_warehouse_id}"
+                                    th:classappend="${level.equals(1)} ? 'ddlOriginLevel1':
+                                                    (${level.equals(2)} ? 'ddlOriginLevel2':
+                                                    (${level.equals(3)} ? 'ddlOriginLevel3':''))" >
                                 <option value=""> -Select Warehouse- </option>
                                 <option th:each="warehouse : ${listWarehouseOr}"
                                         th:value="${warehouse.id}"
@@ -35,17 +38,18 @@
                         </div>
                         <div class="form-group">
                             <label for="txtTypeDest">Destination Type<span style="color: red;">*</span></label>
-                            <select class="form-control"  id="txtTypeDest" th:field="*{dest_type}">
+                            <select class="form-control"  id="txtTypeDest" th:field="*{dest_type}" disabled>
                                 <option value=""> -Select Type- </option>
-                                <option value="Gudang">Warehouse</option>
-                                <option value="Toko">Store</option>
+                                <option th:selected="*{dest_type.equals('Gudang')}" value="Gudang">Warehouse</option>
+                                <option th:selected="*{dest_type.equals('Toko')}" value="Toko">Store</option>
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
-                            <label for="txtIdWarehouse">Dest Warehouse<span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}">
-                                <option value=""> -Select Warehouse- </option>
+                            <label for="txtIdWarehouse">
+                                <span th:text="${!level.equals(3)} ? 'Destination Warehouse':'Destination Store'"></span> <span style="color: red;">*</span></label>
+                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}" disabled>
+                                <option value="" th:text="${!level.equals(3)} ? ' -Select Warehouse- ':' -Select Store- '"></option>
                                 <option th:each="warehouse : ${listWarehouseDest}"
                                         th:value="${warehouse.id}"
                                         th:utext="${warehouse.name}"/>
@@ -416,8 +420,7 @@
         }
         $(document).on('click', '.remove', function() {
             $('#alertvalidation').removeClass('show');
-            var delete_row = $(this).data("row");
-            $('#' + delete_row).remove();
+            $(this).parent().closest("tr").remove();
             count = count - 1;
             $('#alertDetailDiv').addClass('hide');
             setCounter(count);
@@ -452,6 +455,89 @@
 
             $('.product_dest').on('input', function() {
                 $('#alertDetailDiv').addClass('hide');
+            })
+
+
+            function loadStart() {
+                $('#divForm').addClass('loaderElement');
+                $('#divForm').addClass('loaderElement');
+            }
+
+            function loadComplete() {
+                $('#divForm').removeClass('loaderElement');
+                $('#divForm').removeClass('loaderElement');
+            }
+
+            $(".ddlOriginLevel1").change(function () {
+                var id = $(this).val();
+                $('#txtIdWarehouse').val(id);
+
+            })
+
+            $(".ddlOriginLevel2").change(function () {
+                var id = $(this).val();
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getCabang',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $('#txtIdWarehouse').find('option').not(':first').remove();
+                        $('#txtIdWarehouse').attr('disabled', false);
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $('#txtIdWarehouse').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+
+            })
+
+            $(".ddlOriginLevel3").change(function () {
+                var id = $(this).val();
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getStore',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $('#txtIdWarehouse').find('option').not(':first').remove();
+                        $('#txtIdWarehouse').attr('disabled', false);
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $('#txtIdWarehouse').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+
             })
 
         });

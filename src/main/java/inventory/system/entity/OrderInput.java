@@ -17,6 +17,10 @@ public class OrderInput {
     public OrderInput() {
     }
 
+    public OrderInput(String dest_type) {
+        this.dest_type = dest_type;
+    }
+
     public String getDest_type() {
         return dest_type;
     }
