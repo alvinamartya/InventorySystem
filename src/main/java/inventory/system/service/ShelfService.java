@@ -2,6 +2,7 @@ package inventory.system.service;
 
 import inventory.system.entity.Shelf;
 import inventory.system.entity.ShelfDetail;
+import inventory.system.entity.Warehouses;
 import inventory.system.repository.ShelfDetailRepository;
 import inventory.system.repository.ShelfRepository;
 import inventory.system.utils.GeneratorId;
@@ -31,6 +32,17 @@ public class ShelfService {
 //        );
 
         return shelfsList;
+    }
+
+    public List<Shelf> getAllShelfRO(){
+        List<Shelf> shelfList = shelfsRepository.findAllRO();
+
+        return shelfList;
+    }
+    public List<Shelf> getAllShelfRR(){
+        List<Shelf> shelfList = shelfsRepository.findAllRR();
+
+        return shelfList;
     }
 
 //    public List<Shelf> saveShelf(Shelf shelf) {

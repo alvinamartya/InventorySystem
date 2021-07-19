@@ -1,9 +1,28 @@
+.sidebar-panel > nav > ul > li.active{
+  background-color: #f7f7f7;
+}
+
+.custom-icon-btn {
+  padding: 5px 5px !important;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.custom-icon-btn i {
+  font-size:20px !important;
+}
+
+.custom-icon-btn:hover > .custom-outline {
+  color:white !important;
+}
+
 .btn-nowrap {
   display: flex;
 }
 
 .form-control.input-invalid {
   border-color: #f44455;
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
 }
 .form-control.alertborder {
   border-color: #f44455;
@@ -18,38 +37,28 @@
 
 .validate-alert {
   width: 100%;
-  margin-top: 0.25rem;
   font-size: 80%;
+  margin-top: 0.25rem;
   color: #e74c3c;
-  animation: 1s shake alternate;
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-.validate-alert2 {
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: #e74c3c;
-  animation: 1s shake alternate;
-}
 
 @keyframes shake {
-  0% {
-    transform: skewX(-12deg);
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
   }
-  5% {
-    transform: skewX(12deg);
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
   }
-  10% {
-    transform: skewX(-12deg);
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
   }
-  15% {
-    transform: skewX(12deg);
-  }
-  20% {
-    transform: skewX(0deg);
-  }
-  100% {
-    transform: skewX(0deg);
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
   }
 }
 

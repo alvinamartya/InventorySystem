@@ -72,15 +72,24 @@
                                     </div>
                                 </td>
 
-                                <td width="30%" th:if='${driver.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{edit/{id}(id=${driver.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{deactivate/{id}(id=${driver.id})}" class="btn btn-danger">Deactivate</a>
+                                <td th:if='${driver.status.equals("A")}'>
+                                    <a title="See Detail" th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info custom-icon-btn">
+                                        <i class="material-icons text-white">info</i></a>
+                                    <a title="Edit Item" th:href="@{edit/{id}(id=${driver.id})}" class="btn btn-outline-primary custom-icon-btn">
+                                        <i class="material-icons text-primary custom-outline">edit</i>
+                                    </a>
+                                    <a title="Deactivate Item" th:href="@{deactivate/{id}(id=${driver.id})}" class="btn btn-danger custom-icon-btn">
+                                        <i class="material-icons text-white">delete</i>
+                                    </a>
                                 </td>
 
-                                <td width="30%" th:unless='${driver.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{activate/{id}(id=${driver.id})}" class="btn btn-success">Activate</a>
+                                <td th:unless='${driver.status.equals("A")}'>
+                                    <a title="See Detail" th:href="@{detail/{id}(id=${driver.id})}" class="btn btn-info custom-icon-btn">
+                                        <i class="material-icons text-white">info</i></a>
+                                    </a>
+                                    <a title="Activate Item" th:href="@{activate/{id}(id=${driver.id})}" class="btn btn-success custom-icon-btn">
+                                        <i class="material-icons text-white">adjust</i></a>
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>
