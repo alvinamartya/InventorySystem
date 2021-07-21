@@ -81,8 +81,7 @@ public class ShelfController {
             return "Shelf/Edit";
         }
 
-        shelfService.update(id, shelf);
-
+        shelfService.update(id);
         redirectAttrs.addFlashAttribute("success_update", "Shelf Successfully Updated!");
         return "redirect:/shelf/index";
     }
@@ -120,5 +119,4 @@ public class ShelfController {
         redirectAttrs.addFlashAttribute("success_delete", "Shelf Successfully Deleted!");
         return "redirect:/shelf/index";
     }
-
 }

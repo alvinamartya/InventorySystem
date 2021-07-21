@@ -9,21 +9,13 @@ public class Shelf {
 
     @Id
     private String id;
-
     private String warehouse_id;
-
     private String type_shelf;
-
     private String product_category_id;
-
     private int rows_shelf;
-
     private int columns_shelf;
-
     private int quantity_shelf;
-
     private int is_empty;
-
     private Date created_at;
     private String created_by;
     private Date updated_at;
@@ -59,14 +51,6 @@ public class Shelf {
 
     public void setCategoryList(ProductCategory categoryList) {
         this.categoryList = categoryList;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getWarehouse_id() {
@@ -147,5 +131,13 @@ public class Shelf {
 
     public void setUpdated_by(String updated_by) {
         this.updated_by = updated_by;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 }

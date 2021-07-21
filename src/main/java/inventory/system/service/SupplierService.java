@@ -24,7 +24,7 @@ public class SupplierService {
         return supplierList;
     }
 
-    public List<Supplier> saveSupplier(Supplier supplier) {
+    public void saveSupplier(Supplier supplier) {
         supplier.setId(GeneratorId.generateMasterId(getLastCounter()));
         supplier.setStatus("A");
         supplier.setCreated_at(new Date());
@@ -32,7 +32,6 @@ public class SupplierService {
         supplier.setUpdated_at(new Date());
         supplier.setUpdated_by("Admin");
         supplierRepository.save(supplier);
-        return getAllSupplier();
     }
 
     private int getLastCounter() {

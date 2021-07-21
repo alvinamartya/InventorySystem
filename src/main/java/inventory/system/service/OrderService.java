@@ -23,93 +23,72 @@ public class OrderService {
     OrderRepository ordersRepository;
 
     @Autowired
-    OrderDetailRepository orderdetailsRepository;
-
+    OrderDetailRepository orderDetailsRepository;
 
     public List<Order> getAllOrder() {
-        List<Order> ordersList = (List<Order>) ordersRepository.findAll();
-//        ordersList.sort(
-//                Comparator
-//                        .comparing(Order::getStatus)
-//                        .thenComparing(Order::getName)
-//        );
-
-        return ordersList;
+        return (List<Order>) ordersRepository.findAll();
     }
 
-    public List<Order> saveOrder(OrderInput orderinput) {
+    public void saveOrder(OrderInput orderinput) {
         Order orders = new Order();
-        String orderid = generateId(orderinput.getOrigin_warehouse_id()
-                , orderinput.getDest_warehouse_id()
-                , orderinput.getOrigin_type());
-        orders.setId(orderid);
+        String orderId = generateId(
+                orderinput.getOrigin_warehouse_id(),
+                orderinput.getDest_warehouse_id(),
+                orderinput.getOrigin_type()
+        );
 
+        orders.setId(orderId);
         orders.setOrigin_id(orderinput.getOrigin_warehouse_id());
         orders.setOrigin_type(orderinput.getOrigin_type());
-
         orders.setDest_id(orderinput.getDest_warehouse_id());
         orders.setDest_type(orderinput.getDest_type());
-
         orders.setDate(new Date());
         orders.setDriver_id(orderinput.getDriver_id());
-
         orders.setCreated_at(new Date());
         orders.setCreated_by("Admin Transaksi");
-
         orders.setChecked_at(new Date());
         orders.setChecked_by("-");
-
         orders.setApproved_at(new Date());
         orders.setApproved_by("-");
-
         orders.setUpdated_at(new Date());
         orders.setUpdated_by("Admin Transaksi");
-
         orders.setStatus_order_id(1);
-
         ordersRepository.save(orders);
 
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         List<OrderDetailInput> detailList = null;
         try {
-            detailList = objectMapper.readValue(orderinput.getDetailJSON(), new TypeReference<List<OrderDetailInput>>() {});
+            detailList = objectMapper.readValue(
+                    orderinput.getDetailJSON(),
+                    new TypeReference<List<OrderDetailInput>>() {
+                    });
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
-        insertDetail(orderid, detailList);
 
-
-        return getAllOrder();
+        insertDetail(orderId, Objects.requireNonNull(detailList));
+        getAllOrder();
     }
 
-    public int insertDetail(String orderid, List<OrderDetailInput> detailList){
-
-        //List<Student> participantJsonList = mapper.readValue(jsonString, new TypeReference<List<Student>>(){});
-
+    public void insertDetail(String orderId, List<OrderDetailInput> detailList) {
         List<OrderDetail> arrayOrderDetail = new ArrayList<OrderDetail>();
-
-        for(int k = 0; k<detailList.size(); k++){
+        for (OrderDetailInput orderDetailInput : detailList) {
             OrderDetail orderdetail = new OrderDetail();
-            orderdetail.setOrder_id(orderid);
-            orderdetail.setProduct_id(detailList.get(k).getProductID());
-            orderdetail.setOrigin_shelf_id(detailList.get(k).getProductOrigin());
-            orderdetail.setDest_shelf_id(detailList.get(k).getProductDest());
-            orderdetail.setQuantity(detailList.get(k).getProductQty());
+            orderdetail.setOrder_id(orderId);
+            orderdetail.setProduct_id(orderDetailInput.getProductID());
+            orderdetail.setOrigin_shelf_id(orderDetailInput.getProductOrigin());
+            orderdetail.setDest_shelf_id(orderDetailInput.getProductDest());
+            orderdetail.setQuantity(orderDetailInput.getProductQty());
             arrayOrderDetail.add(orderdetail);
         }
 
-        orderdetailsRepository.saveAll(arrayOrderDetail);
-
-        return 1;
+        orderDetailsRepository.saveAll(arrayOrderDetail);
     }
 
     public List<OrderDetail> getOrderDetail(String id) {
-        List<OrderDetail> listDetail = orderdetailsRepository.findAllByOrder(id);
-        return listDetail;
+        return orderDetailsRepository.findAllByOrder(id);
     }
-
 
     public Order getOrderById(String id) {
         Optional<Order> optional = ordersRepository.findById(id);
@@ -126,7 +105,7 @@ public class OrderService {
         int lastCounter = getLastCounter(originType);
 
         String typeId = originType.equals("Gudang") ? "W" : "S";
-        String dateId = LocalDate.now().toString().replace("-","");
+        String dateId = LocalDate.now().toString().replace("-", "");
         return "FO" + "-" + typeId + originId + "-" + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
     }
 
@@ -152,6 +131,7 @@ public class OrderService {
 
         return 0;
     }
+
     public void check(String id, String staffName) {
         Order orders = ordersRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
@@ -185,10 +165,8 @@ public class OrderService {
 
     @Transactional
     public void delete(Order order) {
-        //orderdetailsRepository.deleteDetail(order.getId());
         ordersRepository.delete(order);
     }
-
 
 
 }

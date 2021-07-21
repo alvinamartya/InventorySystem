@@ -1,13 +1,12 @@
 package inventory.system.controllers;
 
-import inventory.system.entity.Driver;
 import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Staffs;
 import inventory.system.service.StaffService;
+import inventory.system.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,17 +20,10 @@ public class StaffsController {
     @Autowired
     StaffService staffService;
 
-    public boolean isLogin(LoggedUser logged_user, HttpSession httpsession){
-        if(httpsession.getAttribute("logged_user")==null || logged_user.getId()==null){
-            return false;
-        }
-        return true;
-    }
-
     //index
     @RequestMapping("/index")
     public String getStaff(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
-        if(isLogin(logged_user,httpsession)){
+        if(Session.isLogin(logged_user,httpsession)){
             List<Staffs> staffsList = staffService.getAllStaff();
 
             model.addAttribute("listStaff", staffsList);
@@ -43,7 +35,7 @@ public class StaffsController {
     //view create
     @RequestMapping("/create")
     public String viewAddStaff(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
-        if(isLogin(logged_user,httpsession)){
+        if(Session.isLogin(logged_user,httpsession)){
             model.addAttribute("staffObject", new Staffs());
             return "Staff/Create";
         }
@@ -70,7 +62,7 @@ public class StaffsController {
     //view edit staff
     @GetMapping("/edit/{id}")
     public String Update(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
-        if(isLogin(logged_user,httpsession)){
+        if(Session.isLogin(logged_user,httpsession)){
             Staffs staffs = staffService.getStaffById(id);
 
             model.addAttribute("staffObject", staffs);
@@ -83,7 +75,7 @@ public class StaffsController {
     // view detail Staff
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user) {
-        if(isLogin(logged_user,httpsession)){
+        if(Session.isLogin(logged_user,httpsession)){
             Staffs staffs = staffService.getStaffById(id);
             model.addAttribute("staffsObject", staffs);
 
@@ -96,7 +88,7 @@ public class StaffsController {
     // view delete Staff
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user) {
-        if(isLogin(logged_user,httpsession)){
+        if(Session.isLogin(logged_user,httpsession)){
             Staffs staffs = staffService.getStaffById(id);
             model.addAttribute("staffsObject", staffs);
 
@@ -114,6 +106,4 @@ public class StaffsController {
         staffService.deleteStaff(staffs);
         return "redirect:/staff/index";
     }
-
-
 }
