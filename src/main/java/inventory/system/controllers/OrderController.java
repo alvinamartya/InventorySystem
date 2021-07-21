@@ -1,16 +1,17 @@
 package inventory.system.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import inventory.system.entity.*;
 import inventory.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,7 +33,6 @@ public class OrderController {
     @Autowired
     ProductService productService;
 
-
     // view index
     @RequestMapping("/index")
     public String index(Model model) {
@@ -48,67 +48,32 @@ public class OrderController {
         //----Diambil dari Session
         int level = 3; // 1=Supplier-Pusat, 2=Pusat-Cabang, 3=Cabang-Toko
         //----Diambil dari Session
+       String orderInput = "";
+        List<Warehouses> warehouseOriginList = new ArrayList<>();
+        List<Warehouses> warehouseDestList = new ArrayList<>();
+        List<Product> productList = productService.getAllProduct();
+        List<Shelf> shelfList = shelfService.getAllShelfRO();
 
-
-
-        if(level == 1){
-            List<Warehouses> warehouseListOr = warehouseService.getAllWarehousesPusat();
-            model.addAttribute("listWarehouseOr", warehouseListOr);
-
-            List<Warehouses> warehouseListDest = warehouseService.getAllWarehousesPusat();
-            model.addAttribute("listWarehouseDest", warehouseListDest);
-
-            List<Product> productList = productService.getAllProduct();
-            model.addAttribute("listProduct", productList);
-
-            List<Shelf> shelfList = shelfService.getAllShelfRO();
-            model.addAttribute("listShelf", shelfList);
-
-            model.addAttribute("level", 1);
-
-            model.addAttribute("orderObject", new OrderInput("Gudang"));
-        }
-        else if(level == 2){
-            List<Warehouses> warehouseListOr = warehouseService.getAllWarehousesPusat();
-            model.addAttribute("listWarehouseOr", warehouseListOr);
-
-            List<Warehouses> warehouseListDest = warehouseService.getAllWarehousesCabang();
-            model.addAttribute("listWarehouseDest", warehouseListDest);
-
-            List<Driver> driverList = driverService.getAllDriver();
-            model.addAttribute("listDriver", driverList);
-
-            List<Product> productList = productService.getAllProduct();
-            model.addAttribute("listProduct", productList);
-
-            List<Shelf> shelfList = shelfService.getAllShelfRO();
-            model.addAttribute("listShelf", shelfList);
-
-            model.addAttribute("level", 2);
-
-            model.addAttribute("orderObject", new OrderInput("Gudang"));
-        }
-        else if(level == 3){
-            List<Warehouses> warehouseListOr = warehouseService.getAllWarehousesCabang();
-            model.addAttribute("listWarehouseOr", warehouseListOr);
-
-            List<Warehouses> warehouseListDest = warehouseService.getAllWarehousesCabang();
-            model.addAttribute("listWarehouseDest", warehouseListDest);
-
-            List<Driver> driverList = driverService.getAllDriver();
-            model.addAttribute("listDriver", driverList);
-
-            List<Product> productList = productService.getAllProduct();
-            model.addAttribute("listProduct", productList);
-
-            List<Shelf> shelfList = shelfService.getAllShelfRO();
-            model.addAttribute("listShelf", shelfList);
-
-            model.addAttribute("level", 3);
-
-            model.addAttribute("orderObject", new OrderInput("Toko"));
+        if (level == 1) {
+            warehouseOriginList = warehouseService.getAllWarehousesPusat();
+            warehouseDestList = warehouseService.getAllWarehousesPusat();
+            orderInput = "Gudang";
+        } else if (level == 2) {
+            warehouseOriginList = warehouseService.getAllWarehousesPusat();
+            warehouseDestList = warehouseService.getAllWarehousesCabang();
+            orderInput = "Gudang";
+        } else if (level == 3) {
+            warehouseOriginList = warehouseService.getAllWarehousesCabang();
+            warehouseDestList = warehouseService.getAllWarehousesCabang();
+            orderInput = "Toko";
         }
 
+        model.addAttribute("listWarehouseOr", warehouseOriginList);
+        model.addAttribute("listWarehouseDest", warehouseDestList);
+        model.addAttribute("listProduct", productList);
+        model.addAttribute("listShelf", shelfList);
+        model.addAttribute("level", level);
+        model.addAttribute("orderObject", new OrderInput(orderInput));
 
         return "Order/Create";
     }
@@ -120,7 +85,6 @@ public class OrderController {
         redirectAttrs.addFlashAttribute("success_create", "Order Successfully Added!");
         return "redirect:/order/index";
     }
-
 
     // view detail order
     @GetMapping("/detail/{id}")
@@ -146,8 +110,9 @@ public class OrderController {
         model.addAttribute("state", "check");
         return "Order/Confirmation";
     }
+
     @RequestMapping("/check-confirmed/{id}")
-    public String checkconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
+    public String checkConfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
         //**----Dari Session
         String staffName = "Admin Gudang";
 
@@ -171,7 +136,7 @@ public class OrderController {
     }
 
     @RequestMapping("/approve-confirmed/{id}")
-    public String approveconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
+    public String approveConfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
         //**----Dari Session
         String staffName = "Admin Transaksi";
 
@@ -194,7 +159,7 @@ public class OrderController {
     }
 
     @RequestMapping("/reject-confirmed/{id}")
-    public String rejectconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
+    public String rejectConfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
         //**----Dari Session
         String staffName = "Admin Gudang";
 
@@ -203,6 +168,4 @@ public class OrderController {
         redirectAttrs.addFlashAttribute("success_checked", "Order Successfully Rejected!");
         return "redirect:/order/index";
     }
-
-
 }

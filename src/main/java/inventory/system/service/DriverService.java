@@ -6,7 +6,6 @@ import inventory.system.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Convert;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -29,14 +28,13 @@ public class DriverService {
         return driversList;
     }
 
-    public List<Driver> saveDriver(Driver driver, LoggedUser loggedUser) {
+    public void saveDriver(Driver driver, LoggedUser loggedUser) {
         driver.setStatus("A");
         driver.setCreated_at(new Date());
         driver.setCreated_by(loggedUser.getName());
         driver.setUpdated_at(new Date());
         driver.setUpdated_by(loggedUser.getName());
         driversRepository.save(driver);
-        return getAllDriver();
     }
 
     public int update(int id, Driver driver) {
@@ -73,7 +71,6 @@ public class DriverService {
         return 1;
     }
 
-
     public int activate(Driver driver) {
         driver.setStatus("A");
         driver.setUpdated_at(new Date());
@@ -82,6 +79,4 @@ public class DriverService {
 
         return 1;
     }
-
-
 }

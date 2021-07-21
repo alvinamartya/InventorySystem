@@ -5,6 +5,7 @@ import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Warehouses;
 import inventory.system.service.DriverService;
 import inventory.system.service.WarehousesService;
+import inventory.system.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -26,16 +26,10 @@ public class DriversController {
     @Autowired
     WarehousesService warehouseService;
 
-    public boolean isLogin(LoggedUser logged_user, HttpSession httpsession){
-        if(httpsession.getAttribute("logged_user")==null || logged_user.getId()==null){
-            return false;
-        }
-        return true;
-    }
     // view index
     @RequestMapping("/index")
     public String index(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user) {
-        if(isLogin(logged_user,httpsession)){
+        if(Session.isLogin(logged_user,httpsession)){
             List<Driver> driversList = driverService.getAllDriver();
             model.addAttribute("listDriver", driversList);
             return "Driver/Index";
@@ -126,7 +120,6 @@ public class DriversController {
 
         return "Driver/Delete";
     }
-
 
     // activated driver
     @GetMapping("/activate/{id}")

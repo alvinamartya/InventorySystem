@@ -27,7 +27,7 @@ public class ProductCategoryService {
         return productCategoryList;
     }
 
-    public List<ProductCategory> saveProductCategory(ProductCategory productCategory) {
+    public void saveProductCategory(ProductCategory productCategory) {
         productCategory.setId(GeneratorId.generateMasterId(getLastCounter()));
         productCategory.setStatus("A");
         productCategory.setCreated_at(new Date());
@@ -35,7 +35,6 @@ public class ProductCategoryService {
         productCategory.setUpdated_by("Admin");
         productCategory.setUpdated_at(new Date());
         productCategoryRepository.save(productCategory);
-        return getAllProductCategory();
     }
 
     private int getLastCounter() {

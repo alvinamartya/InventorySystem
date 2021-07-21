@@ -6,7 +6,6 @@ import java.util.Date;
 @Entity
 @Table(name = "orders")
 public class Order {
-
     @Id
     private String id;
     private String origin_id;
@@ -41,14 +40,6 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "driver_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Driver driverList;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getOrigin_id() {
         return origin_id;
@@ -192,5 +183,13 @@ public class Order {
 
     public void setDriverList(Driver driverList) {
         this.driverList = driverList;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 }

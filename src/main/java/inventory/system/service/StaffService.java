@@ -19,20 +19,14 @@ public class StaffService {
 
     public boolean isEmailExist(String email){
         Optional<Staffs> optional = staffsRepository.findByEmail(email);
-        Staffs staff = null;
-        if (optional.isPresent()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !optional.isPresent();
     }
 
     public List<Staffs> getAllStaff(){
-        List<Staffs> staffsList = (List<Staffs>) staffsRepository.findAll();
-        return staffsList;
+        return (List<Staffs>) staffsRepository.findAll();
     }
 
-    public List<Staffs> saveStaff(Staffs staffs){
+    public void saveStaff(Staffs staffs){
         staffs.setPassword(encodePassword(staffs.getPassword()));
         staffs.setStatus("A");
         staffs.setCreated_at(new Date());
@@ -40,11 +34,10 @@ public class StaffService {
         staffs.setUpdated_at(new Date());
         staffs.setUpdated_by("Admin");
         staffsRepository.save(staffs);
-        return getAllStaff();
     }
 
     public String encodePassword(String inputPassword){
-        int strength = 10; // work factor of bcrypt
+        int strength = 10;
         BCryptPasswordEncoder bCryptPasswordEncoder =
                 new BCryptPasswordEncoder(strength, new SecureRandom());
         return bCryptPasswordEncoder.encode(inputPassword);
@@ -61,13 +54,10 @@ public class StaffService {
         return staffs;
     }
 
-    public List<Staffs> deleteStaff(Staffs staffs){
+    public void deleteStaff(Staffs staffs){
         staffs.setStatus("D");
         staffs.setUpdated_at(new Date());
         staffs.setUpdated_by("Admin");
         staffsRepository.save(staffs);
-        return getAllStaff();
     }
-
-
 }

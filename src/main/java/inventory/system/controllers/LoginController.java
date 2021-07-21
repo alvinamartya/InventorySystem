@@ -1,21 +1,21 @@
 package inventory.system.controllers;
 
-import inventory.system.entity.Driver;
 import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Staffs;
-import inventory.system.service.DriverService;
 import inventory.system.service.LoginService;
 import inventory.system.service.StaffService;
+import inventory.system.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @SessionAttributes("logged_user")
@@ -26,16 +26,9 @@ public class LoginController {
     @Autowired
     LoginService loginService;
 
-    public boolean isLogin(LoggedUser logged_user, HttpSession httpsession){
-        if(httpsession.getAttribute("logged_user")==null || logged_user.getId()==null){
-            return false;
-        }
-        return true;
-    }
-
     @RequestMapping("/login")
-    public String login(Model model, HttpSession httpsession, @ModelAttribute LoggedUser logged_user) {
-        if(isLogin(logged_user,httpsession)){
+    public String login(HttpSession httpsession, @ModelAttribute LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
             if(logged_user.getRole_id().equals(1)){
                 return "redirect:/";
             }
@@ -77,9 +70,6 @@ public class LoginController {
             redirectAttrs.addFlashAttribute("wrong_email", "Email Not Found!");
             return "redirect:/login";
         }
-
-
-
     }
 
     @ModelAttribute("logged_user")

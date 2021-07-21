@@ -1,10 +1,10 @@
 package inventory.system.controllers;
 
 import inventory.system.entity.LoggedUser;
-import inventory.system.entity.Staffs;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class HomeController {

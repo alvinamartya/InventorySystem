@@ -31,15 +31,11 @@ public class WarehousesService {
     }
 
     public List<Warehouses> getAllWarehousesPusat(){
-        List<Warehouses> warehousesList = warehousesRepository.findAllPusat();
-
-        return warehousesList;
+        return warehousesRepository.findAllPusat();
     }
 
     public List<Warehouses> getAllWarehousesCabang(){
-        List<Warehouses> warehousesList = warehousesRepository.findAllCabang();
-
-        return warehousesList;
+        return warehousesRepository.findAllCabang();
     }
 
     public List<Warehouses> getCabangByPusat(String id) {
@@ -56,7 +52,7 @@ public class WarehousesService {
         return storesList;
     }
 
-    public List<Warehouses> saveWarehouses(Warehouses warehouses) {
+    public void saveWarehouses(Warehouses warehouses) {
         warehouses.setId(GeneratorId.generateMasterId(getLastCounter()));
         warehouses.setStatus("A");
         warehouses.setCreated_at(new Date());
@@ -64,7 +60,6 @@ public class WarehousesService {
         warehouses.setCreated_by("Admin");
         warehouses.setUpdated_by("Admin");
         warehousesRepository.save(warehouses);
-        return getAllWarehouses();
     }
 
     private int getLastCounter() {
@@ -102,12 +97,11 @@ public class WarehousesService {
         return warehouses;
     }
 
-    public List<Warehouses> deleteWarehouses(Warehouses warehouses) {
+    public void deleteWarehouses(Warehouses warehouses) {
         warehouses.setStatus("D");
         warehouses.setUpdated_at(new Date());
         warehouses.setUpdated_by("Admin");
         warehousesRepository.save(warehouses);
-        return getAllWarehouses();
     }
 
     public int activate(Warehouses warehouses) {
@@ -118,6 +112,4 @@ public class WarehousesService {
 
         return 1;
     }
-
-
 }
