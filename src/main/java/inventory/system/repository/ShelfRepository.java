@@ -2,9 +2,12 @@ package inventory.system.repository;
 
 import inventory.system.entity.Driver;
 import inventory.system.entity.Shelf;
+
 import inventory.system.entity.Warehouses;
 import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.data.repository.CrudRepository;
+
 
 import java.util.List;
 

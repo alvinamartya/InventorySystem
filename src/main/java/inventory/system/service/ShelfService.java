@@ -24,7 +24,6 @@ public class ShelfService {
     public List<Shelf> getAllShelf() {
         return (List<Shelf>) shelfRepository.findAll();
     }
-
     public List<Shelf> getAllShelfRO(){
         return shelfRepository.findAllRO();
     }
@@ -32,13 +31,15 @@ public class ShelfService {
         return shelfRepository.findAllRR();
     }
 
-    public void saveShelf(Shelf shelf) {
+
+
+    public List<Shelf> saveShelf(Shelf shelf) {
         Shelf newShelf = new Shelf();
-        String shelfId = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
+        String shelfid = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
         int row = shelf.getRows_shelf();
         int col = shelf.getColumns_shelf();
         int quantity = shelf.getQuantity_shelf();
-        newShelf.setId(shelfId);
+        newShelf.setId(shelfid);
         newShelf.setWarehouse_id(shelf.getWarehouse_id());
         newShelf.setType_shelf(shelf.getType_shelf());
         newShelf.setProduct_category_id(shelf.getProduct_category_id());
@@ -52,9 +53,9 @@ public class ShelfService {
         newShelf.setIs_empty(1);
 
         shelfRepository.save(newShelf);
-        insertDetail(shelfId, row, col, quantity);
+        insertDetail(shelfid, row, col, quantity);
 
-        getAllShelf();
+        return getAllShelf();
     }
 
     public void insertDetail(String shelfId, int row, int col, int quantity){
