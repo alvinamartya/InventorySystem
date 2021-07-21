@@ -28,6 +28,12 @@ public class DriverService {
         return driversList;
     }
 
+    public List<Driver> getDriverByWarehouse(String id) {
+        List<Driver> driversList = driversRepository.findDriverByWarehouse(id);
+
+        return driversList;
+    }
+
     public void saveDriver(Driver driver, LoggedUser loggedUser) {
         driver.setStatus("A");
         driver.setCreated_at(new Date());

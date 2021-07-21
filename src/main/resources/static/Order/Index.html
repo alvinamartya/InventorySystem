@@ -33,7 +33,7 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered datatable">
-                            <thead>
+                            <thead class="thead-default">
                             <tr>
                                 <th>No</th>
                                 <th>ID</th>
@@ -47,7 +47,7 @@
                                 <th>Last Modified</th>
                                 <th>Last Modified By</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th width="15%">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -57,7 +57,7 @@
                                 <td th:text="${order.origin_id}"></td>
                                 <td th:text="${order.dest_id}"></td>
                                 <td th:text="${order.origin_type}"></td>
-                                <td th:text="${order.driver_id}"></td>
+                                <td th:text="${order.driver_id.equals(0)?'-':order.driver_id}"></td>
                                 <td th:text="${order.created_by}"></td>
                                 <td th:text="${order.approved_by}"></td>
                                 <td th:text="${order.checked_by}"></td>
@@ -71,7 +71,7 @@
                                         <span th:case="4" class="tag tag-pill tag-success">Approved</span>
                                     </div>
                                 </td>
-                                <td width="30%">
+                                <td>
                                     <div>
                                         <a title="See Detail" th:href="@{detail/{id}(id=${order.id})}" class="btn btn-info custom-icon-btn">
                                             <i class="material-icons text-white">info</i></a>

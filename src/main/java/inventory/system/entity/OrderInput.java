@@ -11,7 +11,7 @@ public class OrderInput {
     private String dest_warehouse_id;
     private String origin_type;
     private String dest_type;
-    private Integer driver_id;
+    private Integer driver_id = 0;
     private String detailJSON;
 
     public OrderInput() {
@@ -19,6 +19,7 @@ public class OrderInput {
 
     public OrderInput(String dest_type) {
         this.dest_type = dest_type;
+        this.driver_id = 0;
     }
 
     public String getDest_type() {

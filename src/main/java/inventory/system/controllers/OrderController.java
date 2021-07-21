@@ -48,32 +48,36 @@ public class OrderController {
         //----Diambil dari Session
         int level = 3; // 1=Supplier-Pusat, 2=Pusat-Cabang, 3=Cabang-Toko
         //----Diambil dari Session
-       String orderInput = "";
+        String destType = "";
         List<Warehouses> warehouseOriginList = new ArrayList<>();
         List<Warehouses> warehouseDestList = new ArrayList<>();
         List<Product> productList = productService.getAllProduct();
         List<Shelf> shelfList = shelfService.getAllShelfRO();
+        List<Driver> driverList = driverService.getAllDriver();
 
         if (level == 1) {
             warehouseOriginList = warehouseService.getAllWarehousesPusat();
             warehouseDestList = warehouseService.getAllWarehousesPusat();
-            orderInput = "Gudang";
+            destType = "Gudang";
         } else if (level == 2) {
             warehouseOriginList = warehouseService.getAllWarehousesPusat();
             warehouseDestList = warehouseService.getAllWarehousesCabang();
-            orderInput = "Gudang";
+
+            destType = "Gudang";
         } else if (level == 3) {
             warehouseOriginList = warehouseService.getAllWarehousesCabang();
             warehouseDestList = warehouseService.getAllWarehousesCabang();
-            orderInput = "Toko";
+            destType = "Toko";
         }
 
+        model.addAttribute("listDriver", driverList);
         model.addAttribute("listWarehouseOr", warehouseOriginList);
         model.addAttribute("listWarehouseDest", warehouseDestList);
         model.addAttribute("listProduct", productList);
         model.addAttribute("listShelf", shelfList);
         model.addAttribute("level", level);
-        model.addAttribute("orderObject", new OrderInput(orderInput));
+
+        model.addAttribute("orderObject", new OrderInput(destType));
 
         return "Order/Create";
     }

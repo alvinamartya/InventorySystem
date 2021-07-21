@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group">
                             <label for="txtTypeDest">Destination Type<span style="color: red;">*</span></label>
-                            <select class="form-control"  id="txtTypeDest" th:field="*{dest_type}" disabled>
+                            <select class="form-control"  id="txtTypeDest" th:field="*{dest_type}" readonly>
                                 <option value=""> -Select Type- </option>
                                 <option th:selected="*{dest_type.equals('Gudang')}" value="Gudang">Warehouse</option>
                                 <option th:selected="*{dest_type.equals('Toko')}" value="Toko">Store</option>
@@ -48,7 +48,7 @@
                         <div class="form-group">
                             <label for="txtIdWarehouse">
                                 <span th:text="${!level.equals(3)} ? 'Destination Warehouse':'Destination Store'"></span> <span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}" disabled>
+                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}" th:readonly="${level.equals(1)}">
                                 <option value="" th:text="${!level.equals(3)} ? ' -Select Warehouse- ':' -Select Store- '"></option>
                                 <option th:each="warehouse : ${listWarehouseDest}"
                                         th:value="${warehouse.id}"
@@ -59,7 +59,7 @@
 
                         <div th:if='${!level.equals(1)}' class="form-group">
                             <label for="txtIdDriver">Driver<span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdDriver" th:field="*{driver_id}">
+                            <select class="form-control txtiddriver" id="txtIdDriver" th:field="*{driver_id}">
                                 <option value=""> -Select Driver- </option>
                                 <option th:each="driver : ${listDriver}"
                                         th:value="${driver.id}"
@@ -227,12 +227,19 @@
                 setClearFor($(txtType));
                 validate[2] = 1;
             }
-            if ($(txtIdDriver).val() === '') {
-                setErrorFor($(txtIdDriver), 'Driver ID Cannot Be Empty');
-            } else {
-                setClearFor($(txtIdDriver));
+
+            if ( $('.txtIdDriver').length ) {
+                if ($('.txtIdDriver').val() === '') {
+                    setErrorFor($('.txtIdDriver'), 'Driver ID Cannot Be Empty');
+                } else {
+                    setClearFor($('.txtIdDriver'));
+                    validate[3] = 1;
+                }
+            }
+            else{
                 validate[3] = 1;
             }
+
 
 
             if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {

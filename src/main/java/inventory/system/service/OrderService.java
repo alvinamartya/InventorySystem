@@ -41,7 +41,10 @@ public class OrderService {
         orders.setDest_id(orderinput.getDest_warehouse_id());
         orders.setDest_type(orderinput.getDest_type());
         orders.setDate(new Date());
-        orders.setDriver_id(orderinput.getDriver_id());
+        if(!orderinput.getDriver_id().equals(0)){
+            orders.setDriver_id(orderinput.getDriver_id());
+        }
+
         orders.setCreated_at(new Date());
         orders.setCreated_by("Admin Transaksi");
         orders.setChecked_at(new Date());

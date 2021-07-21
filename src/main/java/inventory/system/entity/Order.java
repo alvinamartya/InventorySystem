@@ -37,9 +37,13 @@ public class Order {
     @JoinColumn(name = "dest_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Warehouses destList;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "driver_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Driver driverList;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrigin_id() {
         return origin_id;
@@ -175,21 +179,5 @@ public class Order {
 
     public void setDestList(Warehouses destList) {
         this.destList = destList;
-    }
-
-    public Driver getDriverList() {
-        return driverList;
-    }
-
-    public void setDriverList(Driver driverList) {
-        this.driverList = driverList;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 }
