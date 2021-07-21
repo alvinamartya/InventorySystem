@@ -141,5 +141,4 @@ public class ProductController {
         redirectAttrs.addFlashAttribute("success_active", "Product Successfully Activated!");
         return "redirect:/product/index";
     }
-
 }

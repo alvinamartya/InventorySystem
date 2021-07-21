@@ -111,7 +111,7 @@ public class WarehousesController {
         return "Warehouse/Delete";
     }
 
-    // confirm to activate status warehous
+    // confirm to activate status warehouse
     @PostMapping("/activate-confirmed/{id}")
     public String activateConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs) {
         Warehouses warehouse = warehousesService.getWarehousesById(id);

@@ -13,7 +13,6 @@ public class ProductService {
 
     @Autowired
     ProductRepository productRepository;
-    ProductCategoryService productCategoryService;
 
     public List<Product> getAllProduct() {
         List<Product> productList = (List<Product>) productRepository.findAll();
@@ -26,14 +25,13 @@ public class ProductService {
         return productList;
     }
 
-    public List<Product> saveProduct(Product product) {
+    public void saveProduct(Product product) {
         product.setStatus("A");
         product.setCreated_at(new Date());
         product.setCreated_by("Admin");
         product.setUpdated_at(new Date());
         product.setUpdated_by("Admin");
         productRepository.save(product);
-        return getAllProduct();
     }
 
     public int update(int id, Product product) {
