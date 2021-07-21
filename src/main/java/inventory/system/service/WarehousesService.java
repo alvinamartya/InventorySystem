@@ -28,6 +28,18 @@ public class WarehousesService {
         return warehousesList;
     }
 
+    public List<Warehouses> getAllWarehousesPusat(){
+        List<Warehouses> warehousesList = warehousesRepository.findAllPusat();
+
+        return warehousesList;
+    }
+
+    public List<Warehouses> getAllWarehousesCabang(){
+        List<Warehouses> warehousesList = warehousesRepository.findAllCabang();
+
+        return warehousesList;
+    }
+
     public List<Warehouses> saveWarehouses(Warehouses warehouses) {
         warehouses.setId(GeneratorId.generateMasterId(getLastCounter()));
         warehouses.setStatus("A");

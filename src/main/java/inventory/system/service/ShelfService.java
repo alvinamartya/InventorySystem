@@ -33,6 +33,17 @@ public class ShelfService {
         return shelfsList;
     }
 
+    public List<Shelf> getAllShelfRO(){
+        List<Shelf> shelfList = shelfsRepository.findAllRO();
+
+        return shelfList;
+    }
+    public List<Shelf> getAllShelfRR(){
+        List<Shelf> shelfList = shelfsRepository.findAllRR();
+
+        return shelfList;
+    }
+
 //    public List<Shelf> saveShelf(Shelf shelf) {
 //        shelf.setCreated_at(new Date());
 //        shelf.setCreated_by("Admin");
