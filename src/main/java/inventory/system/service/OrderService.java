@@ -31,12 +31,10 @@ public class OrderService {
 
     public void saveOrder(OrderInput orderinput) {
         Order orders = new Order();
-        String orderId = generateId(
-                orderinput.getOrigin_warehouse_id(),
-                orderinput.getDest_warehouse_id(),
-                orderinput.getOrigin_type()
-        );
-
+        String orderid = generateId(orderinput.getOrigin_warehouse_id()
+                , orderinput.getDest_warehouse_id()
+                , orderinput.getOrigin_type()
+                , orderinput.getDest_type());
         orders.setId(orderId);
         orders.setOrigin_id(orderinput.getOrigin_warehouse_id());
         orders.setOrigin_type(orderinput.getOrigin_type());
@@ -101,12 +99,14 @@ public class OrderService {
         return order;
     }
 
-    private String generateId(String originId, String destId, String originType) {
+    private String generateId(String originId, String destId, String originType, String destType) {
         int lastCounter = getLastCounter(originType);
+        String typeOrId = originType.equals("Gudang") ? "W" : "S";
+        String typeDestId = destType.equals("Gudang") ? "W" : "T";
 
-        String typeId = originType.equals("Gudang") ? "W" : "S";
-        String dateId = LocalDate.now().toString().replace("-", "");
-        return "FO" + "-" + typeId + originId + "-" + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
+        String dateId = LocalDate.now().toString().replace("-","");
+        return "FO" + "-" + typeOrId + originId + "-" + typeDestId + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
+
     }
 
     private int getLastCounter(String originType) {
