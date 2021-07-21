@@ -35,7 +35,7 @@ public class OrderService {
                 , orderinput.getDest_warehouse_id()
                 , orderinput.getOrigin_type()
                 , orderinput.getDest_type());
-        orders.setId(orderId);
+        orders.setId(orderid);
         orders.setOrigin_id(orderinput.getOrigin_warehouse_id());
         orders.setOrigin_type(orderinput.getOrigin_type());
         orders.setDest_id(orderinput.getDest_warehouse_id());
@@ -65,7 +65,7 @@ public class OrderService {
             System.out.println(e.getMessage());
         }
 
-        insertDetail(orderId, Objects.requireNonNull(detailList));
+        insertDetail(orderid, Objects.requireNonNull(detailList));
         getAllOrder();
     }
 
