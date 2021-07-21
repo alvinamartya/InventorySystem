@@ -70,6 +70,8 @@ public class OrderController {
             destType = "Toko";
         }
 
+        model.addAttribute("orderObject", new OrderInput(destType));
+
         model.addAttribute("listDriver", driverList);
         model.addAttribute("listWarehouseOr", warehouseOriginList);
         model.addAttribute("listWarehouseDest", warehouseDestList);
@@ -77,7 +79,7 @@ public class OrderController {
         model.addAttribute("listShelf", shelfList);
         model.addAttribute("level", level);
 
-        model.addAttribute("orderObject", new OrderInput(destType));
+
 
         return "Order/Create";
     }

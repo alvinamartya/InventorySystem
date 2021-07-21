@@ -33,10 +33,6 @@ public class Order {
     @JoinColumn(name = "origin_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Warehouses originList;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "dest_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Warehouses destList;
-
     public String getId() {
         return id;
     }
@@ -173,11 +169,4 @@ public class Order {
         this.originList = originList;
     }
 
-    public Warehouses getDestList() {
-        return destList;
-    }
-
-    public void setDestList(Warehouses destList) {
-        this.destList = destList;
-    }
 }
