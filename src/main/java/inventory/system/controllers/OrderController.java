@@ -33,6 +33,7 @@ public class OrderController {
     @Autowired
     ProductService productService;
 
+
     // view index
     @RequestMapping("/index")
     public String index(Model model) {

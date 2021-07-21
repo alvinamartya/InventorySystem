@@ -20,16 +20,19 @@ public class StaffsController {
     @Autowired
     StaffService staffService;
 
+    Session session = new Session();
     //index
     @RequestMapping("/index")
-    public String getStaff(Model model, HttpSession httpsession, @SessionAttribute LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
+    public String getStaff(Model model){
+        /*System.out.println("asdad");
+        if(session.isLogin(logged_user,httpsession)){
             List<Staffs> staffsList = staffService.getAllStaff();
 
             model.addAttribute("listStaff", staffsList);
             return "Staff/Index";
         }
-        return "redirect:/login";
+        return "redirect:/login";*/
+        return "Staff/Index";
     }
 
     //view create

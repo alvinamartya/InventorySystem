@@ -64,16 +64,6 @@
                             <div class="validate-alert hide">Message Here</div>
                             <div th:if="${email_exist}" th:text="${email_exist}" class="validate-alert">Message Here</div>
                         </div>
-                        <div class="form-group">
-                            <label for="txtPassword">Password<span style="color: red;">*</span></label>
-                            <input th:field="*{password}" type="password" class="form-control" id="txtPassword" name="password" placeholder="Input Password">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtPassword2">Confirm Password<span style="color: red;">*</span></label>
-                            <input type="password" class="form-control" id="txtPassword2" placeholder="Re-type Password">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
 
                         <div style="margin-top:50px;float:left">
                             <a th:href="@{'/staff/index'}">Back To List</a>
@@ -114,26 +104,6 @@
                 validate[2] = 1;
             }
 
-            if ($(txtPassword).val() === '') {
-                setErrorFor($(txtPassword), 'Password Cannot Be Empty');
-            } else {
-                setClearFor($(txtPassword));
-                validate[3] = 1;
-            }
-
-            if ($(txtPassword2).val() === '') {
-                setErrorFor($(txtPassword2), 'Confirm Password Cannot Be Empty');
-            } else {
-                if ($(txtPassword).val() != $(txtPassword2).val()) {
-                    setErrorFor($(txtPassword2), 'Password Not Match!');
-                } else {
-                    setClearFor($(txtPassword2));
-                    validate[4] = 1;
-                }
-            }
-
-
-
             if ($(txtPhone).val() === '') {
                 setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
             } else if (!isDigit($(txtPhone).val())) {
@@ -157,8 +127,7 @@
                 validate[7] = 1;
             }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1
-                && validate[4] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
                 return true;
             } else {
                 return false;
@@ -217,7 +186,6 @@
             if (ValidateInput() == true) {
                 return true;
             } else {
-
                 return false;
             }
         })
