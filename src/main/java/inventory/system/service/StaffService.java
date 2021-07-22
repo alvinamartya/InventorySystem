@@ -1,6 +1,8 @@
 package inventory.system.service;
 
 import inventory.system.entity.Staffs;
+import inventory.system.entity.Staffs;
+import inventory.system.entity.Warehouses;
 import inventory.system.repository.StaffsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,9 +25,9 @@ public class StaffService {
     @Autowired
     JavaMailSender mailSender;
 
-    public void sendEmailStaff(String recipient, Staffs staff) {
+    public void sendEmailStaff(Staffs staff) {
         String from = "djadjan@use-narwhal.com";
-        String to = recipient;
+        String to = staff.getEmail();
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -61,7 +63,7 @@ public class StaffService {
     }
 
     public List<Staffs> getAllStaff(){
-        return (List<Staffs>) staffsRepository.findAll();
+        return (List<Staffs>) staffsRepository.findAllByRole();
     }
 
     public void saveStaff(Staffs staffs){
@@ -72,6 +74,7 @@ public class StaffService {
         staffs.setUpdated_at(new Date());
         staffs.setUpdated_by("Admin");
         staffsRepository.save(staffs);
+        sendEmailStaff(staffs);
     }
 
     public String encodePassword(String inputPassword){
@@ -91,7 +94,24 @@ public class StaffService {
         }
         return staffs;
     }
+    
+    public int update(int id, Staffs staff) {
+        Staffs staffs = staffsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
+        staffs.setName(staff.getName());
+        staffs.setPhone(staff.getPhone());
+        staffs.setAddress(staff.getAddress());
+        staffs.setGender(staff.getGender());
+        staffs.setRole_id(staff.getRole_id());
+        staffs.setWarehouse_id(staff.getWarehouse_id());
 
+        staffs.setUpdated_at(new Date());
+        staffs.setUpdated_by("Admin");
+
+        staffsRepository.save(staffs);
+
+        return 1;
+    }
     public void deleteStaff(Staffs staffs){
         staffs.setStatus("D");
         staffs.setUpdated_at(new Date());

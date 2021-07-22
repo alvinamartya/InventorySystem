@@ -10,16 +10,46 @@ public class LoggedUser {
     private Integer id;
     private String name;
     private Integer role_id;
+    private String role_name;
+    private String warehouse_id;
+    private String warehouse_name;
     private String status;
 
     public LoggedUser() {
     }
 
-    public LoggedUser(Integer id, String name, Integer role_id, String status) {
+    public LoggedUser(Integer id, String name, Integer role_id, String role_name, String warehouse_id, String warehouse_name, String status) {
         this.id = id;
         this.name = name;
         this.role_id = role_id;
+        this.role_name = role_name;
+        this.warehouse_id = warehouse_id;
+        this.warehouse_name = warehouse_name;
         this.status = status;
+    }
+
+    public String getRole_name() {
+        return role_name;
+    }
+
+    public void setRole_name(String role_name) {
+        this.role_name = role_name;
+    }
+
+    public String getWarehouse_id() {
+        return warehouse_id;
+    }
+
+    public void setWarehouse_id(String warehouse_id) {
+        this.warehouse_id = warehouse_id;
+    }
+
+    public String getWarehouse_name() {
+        return warehouse_name;
+    }
+
+    public void setWarehouse_name(String warehouse_name) {
+        this.warehouse_name = warehouse_name;
     }
 
     public Integer getId() {

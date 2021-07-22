@@ -27,11 +27,22 @@ public class Order {
     private String updated_by;
     private Date updated_at;
 
+    private String warehouse_at;
+
     private int status_order_id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "origin_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Warehouses originList;
+
+
+    public String getWarehouse_at() {
+        return warehouse_at;
+    }
+
+    public void setWarehouse_at(String warehouse_at) {
+        this.warehouse_at = warehouse_at;
+    }
 
     public String getId() {
         return id;

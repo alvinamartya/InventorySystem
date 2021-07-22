@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layout}">
+      layout:decorate="~{_layoutSuperAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -59,6 +59,16 @@
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
+                            <label for="txtIdWarehouse">Warehouse<span style="color: red;">*</span></label>
+                            <select class="form-control" th:field="*{warehouse_id}" id="txtIdWarehouse">
+                                <option value=""> -Select Warehouse- </option>
+                                <option th:each="warehouse : ${listWarehouse}"
+                                        th:value="${warehouse.id}"
+                                        th:utext="${warehouse.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
                             <label for="txtEmail">Email<span style="color: red;">*</span></label>
                             <input th:field="*{email}" th:classappend="${email_exist} ? 'input-invalid' : ''" type="text" class="form-control" id="txtEmail" name="email" placeholder="Input Email Address">
                             <div class="validate-alert hide">Message Here</div>
@@ -104,6 +114,13 @@
                 validate[2] = 1;
             }
 
+            if ($(txtIdWarehouse).val() == '0') {
+                setErrorFor($(txtIdWarehouse), 'Warehouse Cannot Be Empty');
+            } else {
+                setClearFor($(txtIdWarehouse));
+                validate[3] = 1;
+            }
+
             if ($(txtPhone).val() === '') {
                 setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
             } else if (!isDigit($(txtPhone).val())) {
@@ -127,7 +144,7 @@
                 validate[7] = 1;
             }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
                 return true;
             } else {
                 return false;

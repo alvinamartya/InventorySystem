@@ -2,15 +2,14 @@ package inventory.system.controllers;
 
 import inventory.system.entity.*;
 import inventory.system.service.*;
+import inventory.system.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +35,24 @@ public class OrderController {
 
     // view index
     @RequestMapping("/index")
-    public String index(Model model) {
-        List<Order> ordersList = orderService.getAllOrder();
-        model.addAttribute("listOrder", ordersList);
-        return "Order/Index";
+    public String index(Model model,  HttpSession httpsession,
+                        @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            List<Order> ordersList = null;
+            if(logged_user.getRole_id()==1){
+                ordersList = orderService.getAllOrderByWarehouse(logged_user.getWarehouse_id());
+            }
+            else if(logged_user.getRole_id()==2){
+                ordersList = orderService.getAllOrderByWarehouse(logged_user.getWarehouse_id());
+            }
+
+
+            model.addAttribute("listOrder", ordersList);
+
+            return "Order/Index";
+        }
+        return "redirect:/login";
+
     }
 
     // view create

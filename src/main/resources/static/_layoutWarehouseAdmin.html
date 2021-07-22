@@ -64,8 +64,8 @@
                     <img th:src="@{'/assets/images/avatar.jpg'}" class="avatar img-circle" alt="user" title="user" />
                 </div>
                 <div class="user-info expanding-hidden">
-
-                    <small class="bold">Administrator</small>
+                    <span th:text="${session.logged_user.name}"></span>
+                    <small th:text="${session.logged_user.role_name}" class="bold"></small>
                 </div>
             </a>
             <div class="dropdown-menu">
@@ -78,7 +78,7 @@
             <ul class="nav">
                 <!-- dashboard -->
                 <li>
-                    <a th:href="@{/dashboard}">
+                    <a th:href="@{/}">
                         <i class="material-icons text-cyan">dashboard</i>
                         <span>Dashboard</span>
                     </a>
@@ -86,37 +86,7 @@
                 <p class="nav-title">MASTER</p>
                 <!-- /dashboard -->
                 <!-- apps -->
-                <li>
-                    <a th:href="@{/warehouse/index}">
-                        <i class="material-icons text-primary">home</i>
-                        <span>Warehouses</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/store/index}">
-                        <i class="material-icons text-green">store</i>
 
-                        <span>Stores</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/staff/index}">
-                        <i class="material-icons text-info">people</i>
-                        <span>Staffs</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/driver/index}">
-                        <i class="material-icons text-primary">directions_car</i>
-                        <span>Driver</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/supplier/index}">
-                        <i class="material-icons text-danger">extension</i>
-                        <span>Supplier</span>
-                    </a>
-                </li>
                 <li>
                     <a th:href="@{/product/index}">
                         <i class="material-icons text-bluegrey">view_module</i>
@@ -133,6 +103,21 @@
                     <a th:href="@{/shelf/index}">
                         <i class="material-icons text-deeppurple">view_agenda</i>
                         <span>Shelf</span>
+                    </a>
+                </li>
+                <p class="nav-title">TRANSACTION</p>
+                <!-- /dashboard -->
+                <!-- apps -->
+                <li>
+                    <a th:href="@{/warehouse/index}">
+                        <i class="material-icons text-primary">home</i>
+                        <span>Order</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/warehouse/index}">
+                        <i class="material-icons text-primary">home</i>
+                        <span>Retur</span>
                     </a>
                 </li>
 

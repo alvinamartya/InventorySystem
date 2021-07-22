@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layout}">
+      layout:decorate="~{_layoutSuperAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -27,11 +27,18 @@
                     </div>
                     <div class="form-group">
                         <label>Gender</label>
-                        <p th:text="*{gender}"></p>
+                        <p th:if="*{gender.equals('M')}">Male</p>
+                        <p th:if="*{gender.equals('F')}">Female</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Warehouse</label>
+                        <p th:text="*{warehousesList.name}"></p>
                     </div>
                     <div class="form-group">
                         <label>Role</label>
-                        <p th:text="*{role_id}"></p>
+                        <p th:if="*{role_id.equals(1)}">Transaction Admin</p>
+                        <p th:if="*{role_id.equals(2)}">Warehouse Admin</p>
+                        <p th:if="*{role_id.equals(3)}">Master Data Admin</p>
                     </div>
                     <div class="form-group">
                         <label>Email</label>

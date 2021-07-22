@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layout}">
+      layout:decorate="~{_layoutSuperAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{staff/edit/{id}(id=${staffObject.id})}" th:object="${staffObject}"
+                    <form th:action="@{/staff/update/{id}(id=${staffObject.id})}" th:object="${staffObject}"
                           method="post">
 
                         <input type="hidden" th:field="*{id}" />
@@ -60,6 +60,18 @@
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
+                        <div class="form-group">
+                            <label for="txtIdWarehouse">Warehouse<span style="color: red;">*</span></label>
+                            <select class="form-control" th:field="*{warehouse_id}" id="txtIdWarehouse">
+                                <option value=""> -Select Warehouse- </option>
+                                <option th:each="warehouse : ${listWarehouse}"
+                                        th:value="${warehouse.id}"
+                                        th:utext="${warehouse.name}"
+                                        th:selected="${warehouse.id == staffObject.warehouse_id}"
+                                />
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
 
                         <div style="margin-top:50px;float:left">
                             <a th:href="@{'/staff/index'}">Back To List</a>
@@ -77,7 +89,7 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0];
+            const validate = [0, 0, 0, 0, 0];
 
             if ($(txtName).val() === '') {
                 setErrorFor($(txtName), 'Name Cannot Be Empty');
@@ -100,20 +112,6 @@
                 validate[2] = 1;
             }
 
-            if ($(password).val() === '') {
-                setErrorFor($(password), 'Password Cannot Be Empty');
-            } else {
-                setClearFor($(password));
-                validate[2] = 1;
-            }
-
-            if ($(password2).val() === '') {
-                setErrorFor($(password2), 'Confirm Password Cannot Be Empty');
-            } else {
-                setClearFor($(password2));
-                validate[2] = 1;
-            }
-
             if ($(txtPhone).val() === '') {
                 setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
             } else if (!isDigit($(txtPhone).val())) {
@@ -123,8 +121,16 @@
                 validate[3] = 1;
             }
 
+            if ($(txtIdWarehouse).val() == '0') {
+                setErrorFor($(txtIdWarehouse), 'Warehouse Cannot Be Empty');
+            } else {
+                setClearFor($(txtIdWarehouse));
+                validate[4] = 1;
+            }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1
+                && validate[4] == 1) {
                 return true;
             } else {
                 return false;

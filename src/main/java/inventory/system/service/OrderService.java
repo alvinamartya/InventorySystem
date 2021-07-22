@@ -29,6 +29,10 @@ public class OrderService {
         return (List<Order>) ordersRepository.findAll();
     }
 
+    public List<Order> getAllOrderByWarehouse(String warehouse_id) {
+            return (List<Order>) ordersRepository.findByWarehouse(warehouse_id);
+    }
+
     public void saveOrder(OrderInput orderinput) {
         Order orders = new Order();
         String orderid = generateId(orderinput.getOrigin_warehouse_id()
@@ -170,6 +174,7 @@ public class OrderService {
     public void delete(Order order) {
         ordersRepository.delete(order);
     }
+
 
 
 }

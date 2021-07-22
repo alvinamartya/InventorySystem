@@ -57,7 +57,23 @@ public class LoginController {
                 data.setId(staffData.getId());
                 data.setName(staffData.getName());
                 data.setRole_id(staffData.getRole_id());
+                switch(staffData.getRole_id()) {
+                    case 1:
+                        data.setRole_name("Transaction Admin");
+                        break;
+                    case 2:
+                        data.setRole_name("Warehouse Admin");
+                        break;
+                    case 3:
+                        data.setRole_name("Master Data Admin");
+                        break;
+                    case 4:
+                        data.setRole_name("*Super Admin*");
+                        break;
+                }
                 data.setStatus(staffData.getStatus());
+                data.setWarehouse_id(staffData.getWarehouse_id());
+                data.setWarehouse_name(staffData.getWarehousesList().getName());
                 model.addAttribute("logged_user", data);
                 return "redirect:/";
             }

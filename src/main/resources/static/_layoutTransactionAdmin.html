@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Milestone">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Milestone">
+
+    <meta name="theme-color" content="#4C7FF0">
+
+    <title>Djadjan Inventory System Application </title>
+
+    <!-- page icon -->
+    <link rel="icon" type="image/png" href="../assets/images/icon_djadjan.png"/>
+
+    <!-- page stylesheets -->
+    <link rel="stylesheet" href="../assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.css" />
+    <!-- end page stylesheets -->
+
+    <!-- build:css({.tmp,app}) styles/app.min.css -->
+    <link rel="stylesheet" th:href="@{'/assets/vendor/bootstrap/dist/css/bootstrap.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/pace/themes/blue/pace-theme-minimal.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/font-awesome/css/font-awesome.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/animate.css/animate.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/styles/app.css'}"  id="load_styles_before" />
+    <link rel="stylesheet" th:href="@{'/assets/styles/shortcodes.css'}" />
+    <link rel="stylesheet" th:href="@{'/assets/styles/app.skins.css'}"  />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/select2/select2.css'}">
+    <!-- endbuild -->
+</head>
+
+<body>
+
+<div class="app">
+    <!--sidebar panel-->
+    <div class="off-canvas-overlay" data-toggle="sidebar"></div>
+    <div class="sidebar-panel">
+        <div class="brand">
+            <!-- toggle offscreen menu -->
+            <a href="javascript:;" data-toggle="sidebar" class="toggle-offscreen hidden-lg-up">
+                <i class="material-icons">menu</i>
+            </a>
+            <!-- /toggle offscreen menu -->
+            <!-- logo -->
+            <a class="brand-logo">
+                <img class="expanding-hidden" th:src="@{'/assets/images/logo_djajan_horizontal.png'}" alt="" />
+            </a>
+            <!-- /logo -->
+        </div>
+        <div class="nav-profile dropdown">
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                <div class="user-image">
+                    <img th:src="@{'/assets/images/avatar.jpg'}" class="avatar img-circle" alt="user" title="user" />
+                </div>
+                <div class="user-info expanding-hidden">
+                    <span th:text="${session.logged_user.name}"></span>
+                    <small th:text="${session.logged_user.role_name}" class="bold"></small>
+                </div>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:;">Settings</a>
+                <a class="dropdown-item" th:href="@{/logout}" onclick="return confirm('Are You Sure Want To Log Out?')">Logout</a>
+            </div>
+        </div>
+        <!-- main navigation -->
+        <nav>
+            <ul class="nav">
+                <!-- dashboard -->
+                <li>
+                    <a th:href="@{/}">
+                        <i class="material-icons text-cyan">dashboard</i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <p class="nav-title">TRANSACTION</p>
+                <!-- /dashboard -->
+                <!-- apps -->
+                <li>
+                    <a th:href="@{/order/index}">
+                        <i class="material-icons text-green">call_made</i>
+                        <span>Order</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/retur/index}">
+                        <i class="material-icons text-red">call_received</i>
+                        <span>Retur</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+        <!-- /main navigation -->
+    </div>
+    <!-- /sidebar panel -->
+    <!-- content panel -->
+    <div class="main-panel">
+        <!--######### top header -->
+        <nav class="header navbar">
+            <div class="header-inner">
+                <div class="navbar-item navbar-spacer-right brand hidden-lg-up">
+                    <!-- toggle offscreen menu -->
+                    <a href="javascript:;" data-toggle="sidebar" class="toggle-offscreen">
+                        <i class="material-icons">menu</i>
+                    </a>
+                    <!-- /toggle offscreen menu -->
+                    <!-- logo -->
+                    <a class="brand-logo hidden-xs-down">
+                        <img src="images/logo_white.png" alt="logo" />
+                    </a>
+                    <!-- /logo -->
+                </div>
+                <a class="navbar-item navbar-spacer-right navbar-heading hidden-md-down" href="#">
+                    <span>Dashboard</span>
+                </a>
+                <div class="navbar-item nav navbar-nav">
+                    <div class="nav-item nav-link dropdown">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="material-icons">notifications</i>
+                            <span class="tag tag-danger">4</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- /top header -->
+
+        <!-- main area -->
+        <div class="main-content">
+            <div class="content-view" layout:fragment="content">
+                <!--######### INSERT SECTION HEREEE ################ -->
+
+                <!--######### END OF SECTION HEREEE ################ -->
+            </div>
+            <!-- bottom footer -->
+            <div class="content-footer">
+                <nav class="footer-right">
+                    <ul class="nav">
+                    </ul>
+                </nav>
+                <nav class="footer-left">
+                    <ul class="nav">
+                        <li>
+                            <a href="javascript:;">
+                                <span>Copyright</span>
+                                &copy; 2021 Djadjan Inventory Management System
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- /bottom footer -->
+        </div>
+        <!-- /main area -->
+    </div>
+    <!-- /content panel -->
+
+    <!--/Chat panel-->
+
+</div>
+
+<!-- build:js({.tmp,app}) scripts/app.min.js -->
+<script th:src="@{'/assets/vendor/jquery/dist/jquery.js'}" ></script>
+<script th:src="@{'/assets/vendor/pace/pace.js'}"></script>
+<script th:src="@{'/assets/vendor/tether/dist/js/tether.js'}"></script>
+<script th:src="@{'/assets/vendor/bootstrap/dist/js/bootstrap.js'}"></script>
+<script th:src="@{'/assets/vendor/fastclick/lib/fastclick.js'}"></script>
+<script th:src="@{'/assets/scripts/constants.js'}"></script>
+<script th:src="@{'/assets/scripts/main.js'}"></script>
+<!-- endbuild -->
+
+<!-- page scripts -->
+<script th:src="@{'/assets/vendor/flot/jquery.flot.js'}"></script>
+<script th:src="@{'/assets/vendor/flot/jquery.flot.resize.js'}"></script>
+<script th:src="@{'/assets/vendor/flot/jquery.flot.stack.js'}"></script>
+<script th:src="@{'/assets/vendor/flot-spline/js/jquery.flot.spline.js'}"></script>
+<script th:src="@{'/assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.min.js'}"></script>
+<script th:src="@{'/assets/data/maps/jquery-jvectormap-us-aea.js'}"></script>
+<script th:src="@{'/assets/vendor/jquery.easy-pie-chart/dist/jquery.easypiechart.js'}"></script>
+<script th:src="@{'/assets/vendor/noty/js/noty/packaged/jquery.noty.packaged.min.js'}"></script>
+<script th:src="@{'/assets/scripts/helpers/noty-defaults.js'}"></script>
+<!-- end page scripts -->
+
+<!-- initialize page scripts -->
+<script th:src="@{'/assets/scripts/dashboard/dashboard.js'}"></script>
+<script th:src="@{'/assets/vendor/sweetalert/dist/sweetalert.min.js'}" ></script>
+<script th:src="@{'/assets/scripts/ui/alert.js'}" ></script>
+<script th:src="@{'/assets/vendor/datatables/media/js/jquery.dataTables.js'}" ></script>
+<script th:src="@{'/assets/vendor/datatables/media/js/dataTables.bootstrap4.js'}" ></script>
+<script th:src="@{'/assets/scripts/forms/plugins.js'}" ></script>
+<!-- end initialize page scripts -->
+
+<script>
+    $(document).ready(function () {
+        $('.datatable').DataTable({
+            "processing": true,
+            "serverSide": false
+        });
+    });
+</script>
+
+</body>
+
+</html>

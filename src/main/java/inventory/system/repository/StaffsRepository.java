@@ -15,4 +15,7 @@ public interface StaffsRepository extends CrudRepository<Staffs, Integer> {
 
     @Query("select a from Staffs a where a.email=:email")
     public Optional<Staffs> findByEmail(@Param("email") String email);
+
+    @Query("select a from Staffs a where a.role_id <> 4")
+    public List<Staffs> findAllByRole();
 }
