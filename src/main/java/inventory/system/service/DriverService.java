@@ -25,6 +25,7 @@ public class DriverService {
                         .thenComparing(Driver::getName)
         );
 
+
         return driversList;
     }
 
@@ -43,7 +44,7 @@ public class DriverService {
         driversRepository.save(driver);
     }
 
-    public int update(int id, Driver driver) {
+    public int update(int id, Driver driver, LoggedUser loggedUser) {
         Driver drivers = driversRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
         drivers.setName(driver.getName());
@@ -51,7 +52,7 @@ public class DriverService {
         drivers.setWarehouse_id(driver.getWarehouse_id());
         drivers.setPhone(driver.getPhone());
         drivers.setUpdated_at(new Date());
-        drivers.setUpdated_by("Admin");
+        drivers.setUpdated_by(loggedUser.getName());
         driversRepository.save(drivers);
 
         return 1;
@@ -68,19 +69,19 @@ public class DriverService {
         return driver;
     }
 
-    public int delete(Driver driver) {
+    public int delete(Driver driver, LoggedUser loggedUser) {
         driver.setStatus("D");
         driver.setUpdated_at(new Date());
-        driver.setUpdated_by("Admin");
+        driver.setUpdated_by(loggedUser.getName());
         driversRepository.save(driver);
 
         return 1;
     }
 
-    public int activate(Driver driver) {
+    public int activate(Driver driver, LoggedUser loggedUser) {
         driver.setStatus("A");
         driver.setUpdated_at(new Date());
-        driver.setUpdated_by("Admin");
+        driver.setUpdated_by(loggedUser.getName());
         driversRepository.save(driver);
 
         return 1;

@@ -1,0 +1,44 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layoutTransactionAdmin}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-md-12 col-lg-12" th:if="${success_create}">
+            <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span th:text="${success_create}"></span>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Settings</h2>
+                </div>
+
+                <div class="card-block">
+                    <P>Change Account Password</P>
+                    <form th:action="@{/requestupdatepassword}" th:object="${staffObject}" method="post">
+                        <div class="form-group">
+                            <input th:field="*{id}" type="hidden" class="form-control">
+                            <div>
+                                <button type="submit" id="btnSave" class="btn btn-primary m-b3">Change Password</button>
+                                <small>We'll send password change link to your email</small>
+                            </div>
+                        </div>
+                    </form>
+                    <div style="margin-top:50px;float:left">
+                        <a th:href="@{'/'}">Back To Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

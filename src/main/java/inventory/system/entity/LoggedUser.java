@@ -13,6 +13,7 @@ public class LoggedUser {
     private String role_name;
     private String warehouse_id;
     private String warehouse_name;
+    private Integer is_branch;
     private String status;
 
     public LoggedUser() {
@@ -26,6 +27,14 @@ public class LoggedUser {
         this.warehouse_id = warehouse_id;
         this.warehouse_name = warehouse_name;
         this.status = status;
+    }
+
+    public Integer getIs_branch() {
+        return is_branch;
+    }
+
+    public void setIs_branch(Integer is_branch) {
+        this.is_branch = is_branch;
     }
 
     public String getRole_name() {

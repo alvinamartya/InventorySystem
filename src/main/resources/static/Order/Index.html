@@ -28,26 +28,27 @@
                         </div>
                         <!--                        -->
                         <div class="col-md-4" style="padding-bottom:30px">
-                            <a href="create" class="btn btn-primary">+ Add New</a>
+                            <a th:if="${level.equals(1)}" href="/order/create/1" class="btn btn-primary">+ Add New</a>
+                            <a th:if="${level.equals(2)}" href="/order/create/2" class="btn btn-primary">+ Add New</a>
+                            <a th:if="${level.equals(3)}" href="/order/create/3" class="btn btn-primary">+ Add New</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered datatable">
                             <thead class="thead-default">
-                            <tr>
+                            <tr style="vertical-align: top;">
                                 <th>No</th>
                                 <th>ID</th>
                                 <th>Origin ID</th>
                                 <th>Dest ID</th>
                                 <th>Origin Type</th>
-                                <th>Driver ID</th>
                                 <th>Created By</th>
-                                <th>Approved By</th>
                                 <th>Checked By</th>
+                                <th>Approved By</th>
                                 <th>Last Modified</th>
                                 <th>Last Modified By</th>
                                 <th>Status</th>
-                                <th width="15%">Action</th>
+                                <th width="10%">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -57,32 +58,39 @@
                                 <td th:text="${order.origin_id}"></td>
                                 <td th:text="${order.dest_id}"></td>
                                 <td th:text="${order.origin_type}"></td>
-                                <td th:text="${order.driver_id.equals(0)?'-':order.driver_id}"></td>
                                 <td th:text="${order.created_by}"></td>
-                                <td th:text="${order.approved_by}"></td>
                                 <td th:text="${order.checked_by}"></td>
+                                <td th:text="${order.approved_by}"></td>
                                 <td th:text="${order.updated_at}"></td>
                                 <td th:text="${order.updated_by}"></td>
                                 <td>
                                     <div th:switch="${order.status_order_id}">
-                                        <span th:case="1" class="tag tag-pill tag-default">Delivering</span>
-                                        <span th:case="2" class="tag tag-pill tag-info">Checking</span>
+                                        <span th:case="1" class="tag tag-pill tag-default">Waiting For Checking</span>
+                                        <span th:case="2" class="tag tag-pill tag-info">Waiting For Approving</span>
                                         <span th:case="3" class="tag tag-pill tag-danger">Rejected</span>
                                         <span th:case="4" class="tag tag-pill tag-success">Approved</span>
                                     </div>
                                 </td>
-                                <td>
-                                    <div>
-                                        <a title="See Detail" th:href="@{detail/{id}(id=${order.id})}" class="btn btn-info custom-icon-btn">
+                                <td class="action-col">
+                                    <span>
+                                        <a title="See Detail" th:href="@{/order/detail/{id}/{level}(id=${order.id},level=${level})}" class="btn btn-info custom-icon-btn">
                                             <i class="material-icons text-white">info</i></a>
                                         </a>
-                                        <a title="Check Order" th:if="${order.status_order_id.equals(1)}" th:href="@{check/{id}(id=${order.id})}" class="btn btn-success custom-icon-btn">
-                                            <i class="material-icons text-white">assignment</i></a>
-                                        </a>
-                                        <a title="Approve Order" th:if="${order.status_order_id.equals(2)}" th:href="@{approve/{id}(id=${order.id})}" class="btn btn-success custom-icon-btn">
-                                            <i class="material-icons text-white">assignment_turned_in</i></a>
-                                        </a>
-                                    </div>
+                                    </span>
+                                    <span>
+                                        <div th:if="${is_trans_admin.equals(0)}">
+                                            <a title="Check Order" th:if="${order.status_order_id.equals(1)}" th:href="@{/order/check/{id}/{level}(id=${order.id},level=${level})}" class="btn btn-success custom-icon-btn">
+                                                <i class="material-icons text-white">assignment</i></a>
+                                            </a>
+                                        </div>
+                                    </span>
+                                    <span>
+                                        <div th:if="${is_trans_admin.equals(1)}">
+                                            <a title="Approve Order" th:if="${order.status_order_id.equals(2)}" th:href="@{/order/approve/{id}/{level}(id=${order.id},level=${level})}" class="btn btn-success custom-icon-btn">
+                                                <i class="material-icons text-white">assignment_turned_in</i></a>
+                                            </a>
+                                        </div>
+                                    </span>
                                 </td>
                             </tr>
                             </tbody>

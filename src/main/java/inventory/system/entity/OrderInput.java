@@ -17,8 +17,12 @@ public class OrderInput {
     public OrderInput() {
     }
 
-    public OrderInput(String dest_type) {
+    public OrderInput(String origin_type, String dest_type,
+                      String origin_warehouse_id, String dest_warehouse_id) {
+        this.origin_type = origin_type;
         this.dest_type = dest_type;
+        this.origin_warehouse_id = origin_warehouse_id;
+        this.dest_warehouse_id = dest_warehouse_id;
         this.driver_id = 0;
     }
 

@@ -35,9 +35,9 @@
                         <label>Destination Warehouse</label>
                         <p th:text="*{dest_id}"></p>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" th:if='*{!origin_type.equals("Pemasok")}'>
                         <label>Driver</label>
-                        <p><b th:text="*{driver_id}"></b></span></p>
+                        <p><b th:text="${drivername}"></b></span></p>
                     </div>
                     <div class="form-group">
                         <label>Created By</label>
@@ -59,7 +59,14 @@
                     </div>
                     <div class="form-group">
                         <label>Order Status</label>
-                        <p th:text="*{status_order_id}"></p>
+                        <p>
+                        <div th:switch="*{status_order_id}">
+                            <span th:case="1" class="tag tag-pill tag-default">Waiting For Checking</span>
+                            <span th:case="2" class="tag tag-pill tag-info">Waiting For Approving</span>
+                            <span th:case="3" class="tag tag-pill tag-danger">Rejected</span>
+                            <span th:case="4" class="tag tag-pill tag-success">Approved</span>
+                        </div>
+                        </p>
                     </div>
 
 
@@ -92,7 +99,7 @@
                     </div>
 
                     <div style="margin-top:50px;float:left">
-                        <a th:href="@{'/order/index'}">Back To List</a>
+                        <a th:href="@{/order/index/{level}(level=${level})}">Back To List</a>
                     </div>
                 </div>
             </div>

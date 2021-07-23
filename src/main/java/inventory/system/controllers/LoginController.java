@@ -74,6 +74,7 @@ public class LoginController {
                 data.setStatus(staffData.getStatus());
                 data.setWarehouse_id(staffData.getWarehouse_id());
                 data.setWarehouse_name(staffData.getWarehousesList().getName());
+                data.setIs_branch(staffData.getWarehousesList().getIs_branch());
                 model.addAttribute("logged_user", data);
                 return "redirect:/";
             }

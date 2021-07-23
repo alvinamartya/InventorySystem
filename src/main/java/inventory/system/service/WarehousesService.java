@@ -1,5 +1,6 @@
 package inventory.system.service;
 
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Staffs;
 import inventory.system.entity.Stores;
 import inventory.system.entity.Warehouses;
@@ -52,13 +53,13 @@ public class WarehousesService {
         return storesList;
     }
 
-    public void saveWarehouses(Warehouses warehouses) {
+    public void saveWarehouses(Warehouses warehouses, LoggedUser loggedUser) {
         warehouses.setId(GeneratorId.generateMasterId(getLastCounter()));
         warehouses.setStatus("A");
         warehouses.setCreated_at(new Date());
         warehouses.setUpdated_at(new Date());
-        warehouses.setCreated_by("Admin");
-        warehouses.setUpdated_by("Admin");
+        warehouses.setCreated_by(loggedUser.getName());
+        warehouses.setUpdated_by(loggedUser.getName());
         warehousesRepository.save(warehouses);
     }
 
@@ -72,7 +73,7 @@ public class WarehousesService {
         return 0;
     }
 
-    public int update(String id, Warehouses warehouse) {
+    public int update(String id, Warehouses warehouse, LoggedUser loggedUser) {
         Warehouses warehouses = warehousesRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid warehouse Id:" + id));
         warehouses.setName(warehouse.getName());
@@ -80,7 +81,7 @@ public class WarehousesService {
         warehouses.setProvince(warehouse.getProvince());
         warehouses.setIs_branch(warehouse.getIs_branch());
         warehouses.setUpdated_at(new Date());
-        warehouses.setUpdated_by("Admin");
+        warehouses.setUpdated_by(loggedUser.getName());
         warehousesRepository.save(warehouses);
 
         return 1;
@@ -97,17 +98,17 @@ public class WarehousesService {
         return warehouses;
     }
 
-    public void deleteWarehouses(Warehouses warehouses) {
+    public void deleteWarehouses(Warehouses warehouses, LoggedUser loggedUser) {
         warehouses.setStatus("D");
         warehouses.setUpdated_at(new Date());
-        warehouses.setUpdated_by("Admin");
+        warehouses.setUpdated_by(loggedUser.getName());
         warehousesRepository.save(warehouses);
     }
 
-    public int activate(Warehouses warehouses) {
+    public int activate(Warehouses warehouses, LoggedUser loggedUser) {
         warehouses.setStatus("A");
         warehouses.setUpdated_at(new Date());
-        warehouses.setUpdated_by("Admin");
+        warehouses.setUpdated_by(loggedUser.getName());
         warehousesRepository.save(warehouses);
 
         return 1;

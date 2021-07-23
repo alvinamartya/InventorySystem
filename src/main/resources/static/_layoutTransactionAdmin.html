@@ -66,11 +66,12 @@
                 <div class="user-info expanding-hidden">
                     <span th:text="${session.logged_user.name}"></span>
                     <small th:text="${session.logged_user.role_name}" class="bold"></small>
+                    <small class="bold"><i th:text="${session.logged_user.warehouse_name}"></i></small>
                 </div>
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:;">Settings</a>
-                <a class="dropdown-item" th:href="@{/logout}" onclick="return confirm('Are You Sure Want To Log Out?')">Logout</a>
+                <a class="dropdown-item" th:href="@{'/settings'}">Settings</a>
+                <a class="dropdown-item" data-toggle="modal" data-target=".logout-modal">Logout</a>
             </div>
         </div>
         <!-- main navigation -->
@@ -87,11 +88,32 @@
                 <!-- /dashboard -->
                 <!-- apps -->
                 <li>
-                    <a th:href="@{/order/index}">
+                    <a href="javascript:;">
+                <span class="menu-caret">
+                  <i class="material-icons">arrow_drop_down</i>
+                </span>
                         <i class="material-icons text-green">call_made</i>
                         <span>Order</span>
                     </a>
+                    <ul class="sub-menu">
+                        <li th:if="${!session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/order/index/1}">
+                                <span>Level 1</span>
+                            </a>
+                        </li>
+                        <li th:if="${!session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/order/index/2}">
+                                <span>Level 2</span>
+                            </a>
+                        </li>
+                        <li th:if="${session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/order/index/3}">
+                                <span>Level 3</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
+
                 <li>
                     <a th:href="@{/retur/index}">
                         <i class="material-icons text-red">call_received</i>
@@ -167,7 +189,27 @@
     </div>
     <!-- /content panel -->
 
-    <!--/Chat panel-->
+    <!--/Log Out Modal-->
+    <div class="modal fade logout-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to log out from system?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a th:href="@{/logout}" class="btn btn-danger">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/Log Out Modal-->
 
 </div>
 

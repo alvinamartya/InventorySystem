@@ -1,5 +1,6 @@
 package inventory.system.service;
 
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Shelf;
 import inventory.system.entity.ShelfDetail;
 import inventory.system.repository.ShelfDetailRepository;
@@ -33,7 +34,7 @@ public class ShelfService {
 
 
 
-    public List<Shelf> saveShelf(Shelf shelf) {
+    public List<Shelf> saveShelf(Shelf shelf, LoggedUser loggedUser) {
         Shelf newShelf = new Shelf();
         String shelfid = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
         int row = shelf.getRows_shelf();
@@ -47,9 +48,9 @@ public class ShelfService {
         newShelf.setColumns_shelf(col);
         newShelf.setQuantity_shelf(quantity);
         newShelf.setCreated_at(new Date());
-        newShelf.setCreated_by("Admin");
+        newShelf.setCreated_by(loggedUser.getName());
         newShelf.setUpdated_at(new Date());
-        newShelf.setUpdated_by("Admin");
+        newShelf.setUpdated_by(loggedUser.getName());
         newShelf.setIs_empty(1);
 
         shelfRepository.save(newShelf);
@@ -86,12 +87,12 @@ public class ShelfService {
         return shelfDetailRepository.findAllByShelf(id);
     }
 
-    public void update(String id) {
+    public void update(String id, LoggedUser loggedUser) {
         Shelf shelf = shelfRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid shelf Id:" + id));
 
         shelf.setUpdated_at(new Date());
-        shelf.setUpdated_by("Admin");
+        shelf.setUpdated_by(loggedUser.getName());
         shelfRepository.save(shelf);
     }
 

@@ -61,8 +61,9 @@ public class StaffsController {
     public String addStaff(@ModelAttribute("current_staff") Staffs currstaff, Staffs staffs, Model model,
                            RedirectAttributes redirectAttrs, HttpSession httpsession,
                            @SessionAttribute(required=false) LoggedUser logged_user){
+        if(Session.isLogin(logged_user,httpsession)){
         if(staffService.isEmailExist(staffs.getEmail())){
-            staffService.saveStaff(staffs);
+            staffService.saveStaff(staffs, logged_user);
 
             redirectAttrs.addFlashAttribute("success_create", "Staff Successfully Added!");
             return "redirect:/staff/index";
@@ -72,6 +73,8 @@ public class StaffsController {
         model.addAttribute("email_exist", "Email Exist! Try Another One");
 
         return "Staff/Create";
+        }
+        return "redirect:/login";
     }
 
     //view edit staff
@@ -91,16 +94,38 @@ public class StaffsController {
 
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") int id, Staffs staff,
-                         BindingResult result, RedirectAttributes redirectAttrs) {
+                         BindingResult result, RedirectAttributes redirectAttrs
+            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
         if (result.hasErrors()) {
             staff.setId(id);
             return "Staff/Edit";
         }
 
-        staffService.update(id, staff);
+        staffService.update(id, staff, logged_user);
 
         redirectAttrs.addFlashAttribute("success_update", "Staff Successfully Updated!");
         return "redirect:/staff/index";
+        }
+        return "redirect:/login";
+    }
+
+
+
+    @RequestMapping("/update-password/{id}")
+    public String updatepasswordview(@PathVariable("id") int id, Staffs staff, Model model) {
+        Staffs staffs = new Staffs();
+        staffs.setId(id);
+        model.addAttribute("staffObject", staffs);
+        return "Staff/UpdatePassword";
+    }
+
+    @PostMapping("/update-password-save/{id}")
+    public String updatepassword(@PathVariable("id") int id, Staffs staff,
+                         BindingResult result, RedirectAttributes redirectAttrs) {
+        staffService.updatepassword(id, staff);
+
+        return "redirect:/logout";
     }
 
     // view detail Staff
@@ -133,10 +158,14 @@ public class StaffsController {
 
     // confirm to delete Staff
     @PostMapping("/delete-confirmed/{id}")
-    public String deleteConfirmed(@PathVariable("id") int id) {
+    public String deleteConfirmed(@PathVariable("id") int id
+            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
         Staffs staffs = staffService.getStaffById(id);
 
-        staffService.deleteStaff(staffs);
+        staffService.deleteStaff(staffs, logged_user);
         return "redirect:/staff/index";
+        }
+        return "redirect:/login";
     }
 }
