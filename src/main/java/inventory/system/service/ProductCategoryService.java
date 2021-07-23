@@ -1,5 +1,6 @@
 package inventory.system.service;
 
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.ProductCategory;
 import inventory.system.repository.ProductCategoryRepository;
 import inventory.system.utils.GeneratorId;
@@ -27,12 +28,12 @@ public class ProductCategoryService {
         return productCategoryList;
     }
 
-    public void saveProductCategory(ProductCategory productCategory) {
+    public void saveProductCategory(ProductCategory productCategory, LoggedUser loggedUser) {
         productCategory.setId(GeneratorId.generateMasterId(getLastCounter()));
         productCategory.setStatus("A");
         productCategory.setCreated_at(new Date());
-        productCategory.setCreated_by("Admin");
-        productCategory.setUpdated_by("Admin");
+        productCategory.setCreated_by(loggedUser.getName());
+        productCategory.setUpdated_by(loggedUser.getName());
         productCategory.setUpdated_at(new Date());
         productCategoryRepository.save(productCategory);
     }
@@ -71,19 +72,19 @@ public class ProductCategoryService {
         return productCategory;
     }
 
-    public int delete(ProductCategory productCategory) {
+    public int delete(ProductCategory productCategory, LoggedUser loggedUser) {
         productCategory.setStatus("D");
         productCategory.setUpdated_at(new Date());
-        productCategory.setUpdated_by("Admin");
+        productCategory.setUpdated_by(loggedUser.getName());
         productCategoryRepository.save(productCategory);
 
         return 1;
     }
 
-    public int activate(ProductCategory productCategory) {
+    public int activate(ProductCategory productCategory, LoggedUser loggedUser) {
         productCategory.setStatus("A");
         productCategory.setUpdated_at(new Date());
-        productCategory.setUpdated_by("Admin");
+        productCategory.setUpdated_by(loggedUser.getName());
         productCategoryRepository.save(productCategory);
 
         return 1;

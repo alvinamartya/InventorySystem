@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layout}">
+      layout:decorate="~{_layoutSuperAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -59,20 +59,20 @@
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
+                            <label for="txtIdWarehouse">Warehouse<span style="color: red;">*</span></label>
+                            <select class="form-control" th:field="*{warehouse_id}" id="txtIdWarehouse">
+                                <option value=""> -Select Warehouse- </option>
+                                <option th:each="warehouse : ${listWarehouse}"
+                                        th:value="${warehouse.id}"
+                                        th:utext="${warehouse.name}"/>
+                            </select>
+                            <div class="validate-alert hide">Message Here</div>
+                        </div>
+                        <div class="form-group">
                             <label for="txtEmail">Email<span style="color: red;">*</span></label>
                             <input th:field="*{email}" th:classappend="${email_exist} ? 'input-invalid' : ''" type="text" class="form-control" id="txtEmail" name="email" placeholder="Input Email Address">
                             <div class="validate-alert hide">Message Here</div>
                             <div th:if="${email_exist}" th:text="${email_exist}" class="validate-alert">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtPassword">Password<span style="color: red;">*</span></label>
-                            <input th:field="*{password}" type="password" class="form-control" id="txtPassword" name="password" placeholder="Input Password">
-                            <div class="validate-alert hide">Message Here</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtPassword2">Confirm Password<span style="color: red;">*</span></label>
-                            <input type="password" class="form-control" id="txtPassword2" placeholder="Re-type Password">
-                            <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
@@ -114,25 +114,12 @@
                 validate[2] = 1;
             }
 
-            if ($(txtPassword).val() === '') {
-                setErrorFor($(txtPassword), 'Password Cannot Be Empty');
+            if ($(txtIdWarehouse).val() == '0') {
+                setErrorFor($(txtIdWarehouse), 'Warehouse Cannot Be Empty');
             } else {
-                setClearFor($(txtPassword));
+                setClearFor($(txtIdWarehouse));
                 validate[3] = 1;
             }
-
-            if ($(txtPassword2).val() === '') {
-                setErrorFor($(txtPassword2), 'Confirm Password Cannot Be Empty');
-            } else {
-                if ($(txtPassword).val() != $(txtPassword2).val()) {
-                    setErrorFor($(txtPassword2), 'Password Not Match!');
-                } else {
-                    setClearFor($(txtPassword2));
-                    validate[4] = 1;
-                }
-            }
-
-
 
             if ($(txtPhone).val() === '') {
                 setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
@@ -157,8 +144,7 @@
                 validate[7] = 1;
             }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1
-                && validate[4] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
                 return true;
             } else {
                 return false;
@@ -217,7 +203,6 @@
             if (ValidateInput() == true) {
                 return true;
             } else {
-
                 return false;
             }
         })

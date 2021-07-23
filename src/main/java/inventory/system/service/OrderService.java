@@ -29,28 +29,45 @@ public class OrderService {
         return (List<Order>) ordersRepository.findAll();
     }
 
-    public void saveOrder(OrderInput orderinput) {
+    public List<Order> getAllOrderByWarehouse(String warehouse_id, int level) {
+        if(level==1){
+            return ordersRepository.findByWarehouseLv1(warehouse_id);
+        }
+        else if(level==2){
+            return ordersRepository.findByWarehouseLv2(warehouse_id);
+        }
+        else if(level==3){
+            return ordersRepository.findByWarehouseLv3(warehouse_id);
+        }
+        return (List<Order>) ordersRepository.findAll();
+    }
+
+    public void saveOrder(OrderInput orderinput, LoggedUser loggedUser) {
         Order orders = new Order();
         String orderid = generateId(orderinput.getOrigin_warehouse_id()
                 , orderinput.getDest_warehouse_id()
                 , orderinput.getOrigin_type()
                 , orderinput.getDest_type());
-        orders.setId(orderId);
+        orders.setId(orderid);
         orders.setOrigin_id(orderinput.getOrigin_warehouse_id());
         orders.setOrigin_type(orderinput.getOrigin_type());
         orders.setDest_id(orderinput.getDest_warehouse_id());
         orders.setDest_type(orderinput.getDest_type());
         orders.setDate(new Date());
-        orders.setDriver_id(orderinput.getDriver_id());
+        if(!orderinput.getDriver_id().equals(0)){
+            orders.setDriver_id(orderinput.getDriver_id());
+        }
+
         orders.setCreated_at(new Date());
-        orders.setCreated_by("Admin Transaksi");
+        orders.setCreated_by(loggedUser.getName());
         orders.setChecked_at(new Date());
         orders.setChecked_by("-");
         orders.setApproved_at(new Date());
         orders.setApproved_by("-");
         orders.setUpdated_at(new Date());
-        orders.setUpdated_by("Admin Transaksi");
+        orders.setUpdated_by(loggedUser.getName());
         orders.setStatus_order_id(1);
+        orders.setWarehouse_at(loggedUser.getWarehouse_id());
         ordersRepository.save(orders);
 
 
@@ -65,7 +82,7 @@ public class OrderService {
             System.out.println(e.getMessage());
         }
 
-        insertDetail(orderId, Objects.requireNonNull(detailList));
+        insertDetail(orderid, Objects.requireNonNull(detailList));
         getAllOrder();
     }
 
@@ -167,6 +184,7 @@ public class OrderService {
     public void delete(Order order) {
         ordersRepository.delete(order);
     }
+
 
 
 }

@@ -1,3 +1,14 @@
+.action-col {
+  padding-right: 0px;
+}
+.action-col span {
+  position: relative;
+  display: inline-block;
+}
+.relative {
+  position: relative;
+  display: inline-block;
+}
 .loaderElement {
   position: absolute;
   top: 0px;

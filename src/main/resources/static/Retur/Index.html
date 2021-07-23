@@ -1,0 +1,90 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layoutSuperAdmin}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Retur List
+                </div>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12" th:if="${success_create}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_create}"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="padding-bottom:30px">
+                            <a href="create" class="btn btn-primary">+ Add New</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered datatable">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>ID</th>
+                                <th>Retur ID</th>
+                                <th>Retur Type</th>
+                                <th>Destination</th>
+                                <th>Dest Type</th>
+                                <th>Date</th>
+                                <th>Driver</th>
+                                <th>Checked By</th>
+                                <th>Approved By</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="retur, counter: ${listRetur}">
+                                <th th:text="${counter.count}"></th>
+                                <td th:text="${retur.id}"></td>
+                                <td th:text="${retur.origin_id}"></td>
+                                <td>
+                                    <div th:switch="${retur.order_type}">
+                                        <span th:case="'T'" class="tag tag-pill tag-success">Store</span>
+                                        <span th:case="'W'" class="tag tag-pill tag-danger">Warehouse</span>
+                                    </div>
+                                </td>
+                                <td th:text="${retur.dest_id}"></td>
+                                <td>
+                                    <div th:switch="${retur.dest_type}">
+                                        <span th:case="'S'" class="tag tag-pill tag-success">Supplier</span>
+                                        <span th:case="'W'" class="tag tag-pill tag-danger">Warehouse</span>
+                                    </div>
+                                </td>
+                                <td th:text="${retur.date}"></td>
+                                <td th:text="${retur.driver_id}"></td>
+                                <td th:text="${retur.checked_by}"></td>
+                                <td th:text="${retur.approved_by}"></td>
+
+                                <td width="20%">
+                                    <div>
+                                        <a title="See Detail" th:href="@{detail/{id}(id=${retur.id})}" class="btn btn-info custom-icon-btn">
+                                            <i class="material-icons text-white">info</i></a>
+                                        </a>
+                                        <a title="Check Retur" th:href="@{check/{id}(id=${retur.id})}" class="btn btn-success custom-icon-btn">
+                                            <i class="material-icons text-white">assignment</i></a>
+                                        </a>
+                                        <a title="Approve Retur" th:href="@{approve/{id}(id=${retur.id})}" class="btn btn-success custom-icon-btn">
+                                            <i class="material-icons text-white">assignment_turned_in</i></a>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--######### END OF SECTION HEREEE ################ -->
+    </div>
+
+</html>

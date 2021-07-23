@@ -4193,8 +4193,8 @@ button.list-group-item-danger.active:hover {
 }
 .table th,
 .table td {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  /*padding-left: 1rem;
+  padding-right: 1rem;*/
   border-color: rgba(0, 0, 0, 0.1);
 }
 .table thead th,

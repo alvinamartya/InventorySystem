@@ -1,9 +1,6 @@
 package inventory.system.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -15,6 +12,7 @@ public class Staffs {
     private String name;
     private String phone;
     private String address;
+    private String warehouse_id;
     private String gender;
     private Integer role_id;
     private String email;
@@ -24,6 +22,26 @@ public class Staffs {
     private Date created_at;
     private String updated_by;
     private Date updated_at;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Warehouses warehousesList;
+
+    public Warehouses getWarehousesList() {
+        return warehousesList;
+    }
+
+    public void setWarehousesList(Warehouses warehousesList) {
+        this.warehousesList = warehousesList;
+    }
+
+    public String getWarehouse_id() {
+        return warehouse_id;
+    }
+
+    public void setWarehouse_id(String warehouse_id) {
+        this.warehouse_id = warehouse_id;
+    }
 
     public String getEmail() {
         return email;

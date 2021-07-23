@@ -1,5 +1,6 @@
 package inventory.system.service;
 
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Stores;
 import inventory.system.repository.StoresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,17 @@ public class StoresService {
         return storesList;
     }
 
-    public List<Stores> saveStores(Stores stores) {
+    public List<Stores> saveStores(Stores stores, LoggedUser loggedUser) {
         stores.setStatus("A");
         stores.setCreated_at(new Date());
-        stores.setCreated_by("Admin");
+        stores.setCreated_by(loggedUser.getName());
         stores.setUpdated_at(new Date());
-        stores.setUpdated_by("Admin");
+        stores.setUpdated_by(loggedUser.getName());
         storesRepository.save(stores);
         return getAllStores();
     }
 
-    public int update(int id, Stores store) {
+    public int update(int id, Stores store, LoggedUser loggedUser) {
         Stores stores = storesRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid store Id:" + id));
         stores.setName(store.getName());
@@ -46,7 +47,7 @@ public class StoresService {
         stores.setHead_of_store_name(store.getHead_of_store_name());
         stores.setPhone(store.getPhone());
         stores.setUpdated_at(new Date());
-        stores.setUpdated_by("Admin");
+        stores.setUpdated_by(loggedUser.getName());
         storesRepository.save(stores);
 
         return 1;
@@ -63,18 +64,18 @@ public class StoresService {
         return stores;
     }
 
-    public List<Stores> deleteStores(Stores stores) {
+    public List<Stores> deleteStores(Stores stores, LoggedUser loggedUser) {
         stores.setStatus("D");
         stores.setUpdated_at(new Date());
-        stores.setUpdated_by("Admin");
+        stores.setUpdated_by(loggedUser.getName());
         storesRepository.save(stores);
         return getAllStores();
     }
 
-    public int activate(Stores stores) {
+    public int activate(Stores stores, LoggedUser loggedUser) {
         stores.setStatus("A");
         stores.setUpdated_at(new Date());
-        stores.setUpdated_by("Admin");
+        stores.setUpdated_by(loggedUser.getName());
         storesRepository.save(stores);
 
         return 1;

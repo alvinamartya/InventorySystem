@@ -1,5 +1,6 @@
 package inventory.system.service;
 
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Shelf;
 import inventory.system.entity.ShelfDetail;
 import inventory.system.repository.ShelfDetailRepository;
@@ -24,7 +25,6 @@ public class ShelfService {
     public List<Shelf> getAllShelf() {
         return (List<Shelf>) shelfRepository.findAll();
     }
-
     public List<Shelf> getAllShelfRO(){
         return shelfRepository.findAllRO();
     }
@@ -32,13 +32,15 @@ public class ShelfService {
         return shelfRepository.findAllRR();
     }
 
-    public void saveShelf(Shelf shelf) {
+
+
+    public List<Shelf> saveShelf(Shelf shelf, LoggedUser loggedUser) {
         Shelf newShelf = new Shelf();
-        String shelfId = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
+        String shelfid = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
         int row = shelf.getRows_shelf();
         int col = shelf.getColumns_shelf();
         int quantity = shelf.getQuantity_shelf();
-        newShelf.setId(shelfId);
+        newShelf.setId(shelfid);
         newShelf.setWarehouse_id(shelf.getWarehouse_id());
         newShelf.setType_shelf(shelf.getType_shelf());
         newShelf.setProduct_category_id(shelf.getProduct_category_id());
@@ -46,15 +48,15 @@ public class ShelfService {
         newShelf.setColumns_shelf(col);
         newShelf.setQuantity_shelf(quantity);
         newShelf.setCreated_at(new Date());
-        newShelf.setCreated_by("Admin");
+        newShelf.setCreated_by(loggedUser.getName());
         newShelf.setUpdated_at(new Date());
-        newShelf.setUpdated_by("Admin");
+        newShelf.setUpdated_by(loggedUser.getName());
         newShelf.setIs_empty(1);
 
         shelfRepository.save(newShelf);
-        insertDetail(shelfId, row, col, quantity);
+        insertDetail(shelfid, row, col, quantity);
 
-        getAllShelf();
+        return getAllShelf();
     }
 
     public void insertDetail(String shelfId, int row, int col, int quantity){
@@ -85,12 +87,12 @@ public class ShelfService {
         return shelfDetailRepository.findAllByShelf(id);
     }
 
-    public void update(String id) {
+    public void update(String id, LoggedUser loggedUser) {
         Shelf shelf = shelfRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid shelf Id:" + id));
 
         shelf.setUpdated_at(new Date());
-        shelf.setUpdated_by("Admin");
+        shelf.setUpdated_by(loggedUser.getName());
         shelfRepository.save(shelf);
     }
 

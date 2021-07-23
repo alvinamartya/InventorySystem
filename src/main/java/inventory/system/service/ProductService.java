@@ -1,5 +1,6 @@
 package inventory.system.service;
 
+import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Product;
 import inventory.system.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,16 @@ public class ProductService {
         return productList;
     }
 
-    public void saveProduct(Product product) {
+    public void saveProduct(Product product, LoggedUser loggedUser) {
         product.setStatus("A");
         product.setCreated_at(new Date());
-        product.setCreated_by("Admin");
+        product.setCreated_by(loggedUser.getName());
         product.setUpdated_at(new Date());
-        product.setUpdated_by("Admin");
+        product.setUpdated_by(loggedUser.getName());
         productRepository.save(product);
     }
 
-    public int update(int id, Product product) {
+    public int update(int id, Product product, LoggedUser loggedUser) {
         Product p = productRepository
                 .findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product Id: " + id));
@@ -43,7 +44,7 @@ public class ProductService {
         p.setProduct_category_id(product.getProduct_category_id());
         p.setUnits(product.getUnits());
         p.setUpdated_at(new Date());
-        p.setUpdated_by("Admin");
+        p.setUpdated_by(loggedUser.getName());
 
         productRepository.save(p);
         return 1;
@@ -61,19 +62,19 @@ public class ProductService {
         return product;
     }
 
-    public int delete(Product product) {
+    public int delete(Product product, LoggedUser loggedUser) {
         product.setStatus("D");
         product.setUpdated_at(new Date());
-        product.setUpdated_by("Admin");
+        product.setUpdated_by(loggedUser.getName());
         productRepository.save(product);
 
         return 1;
     }
 
-    public int activate(Product product) {
+    public int activate(Product product, LoggedUser loggedUser) {
         product.setStatus("A");
         product.setUpdated_at(new Date());
-        product.setUpdated_by("Admin");
+        product.setUpdated_by(loggedUser.getName());
         productRepository.save(product);
 
         return 1;

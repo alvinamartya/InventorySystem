@@ -27,19 +27,30 @@ public class Order {
     private String updated_by;
     private Date updated_at;
 
+    private String warehouse_at;
+
     private int status_order_id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "origin_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Warehouses originList;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "dest_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Warehouses destList;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "driver_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Driver driverList;
+    public String getWarehouse_at() {
+        return warehouse_at;
+    }
+
+    public void setWarehouse_at(String warehouse_at) {
+        this.warehouse_at = warehouse_at;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrigin_id() {
         return origin_id;
@@ -169,27 +180,4 @@ public class Order {
         this.originList = originList;
     }
 
-    public Warehouses getDestList() {
-        return destList;
-    }
-
-    public void setDestList(Warehouses destList) {
-        this.destList = destList;
-    }
-
-    public Driver getDriverList() {
-        return driverList;
-    }
-
-    public void setDriverList(Driver driverList) {
-        this.driverList = driverList;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
 }

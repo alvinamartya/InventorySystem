@@ -36,6 +36,7 @@
     <link rel="stylesheet" th:href="@{'/assets/styles/app.css'}"  id="load_styles_before" />
     <link rel="stylesheet" th:href="@{'/assets/styles/shortcodes.css'}" />
     <link rel="stylesheet" th:href="@{'/assets/styles/app.skins.css'}"  />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/select2/select2.css'}">
     <!-- endbuild -->
 </head>
 
@@ -63,13 +64,14 @@
                     <img th:src="@{'/assets/images/avatar.jpg'}" class="avatar img-circle" alt="user" title="user" />
                 </div>
                 <div class="user-info expanding-hidden">
-
-                    <small class="bold">Administrator</small>
+                    <span th:text="${session.logged_user.name}"></span>
+                    <small th:text="${session.logged_user.role_name}" class="bold"></small>
+                    <small class="bold"><i th:text="${session.logged_user.warehouse_name}"></i></small>
                 </div>
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:;">Settings</a>
-                <a class="dropdown-item" th:href="@{/logout}" onclick="return confirm('Are You Sure Want To Log Out?')">Logout</a>
+                <a class="dropdown-item" th:href="@{'/settings'}">Settings</a>
+                <a class="dropdown-item" data-toggle="modal" data-target=".logout-modal">Logout</a>
             </div>
         </div>
         <!-- main navigation -->
@@ -77,7 +79,7 @@
             <ul class="nav">
                 <!-- dashboard -->
                 <li>
-                    <a th:href="@{/dashboard}">
+                    <a th:href="@{/}">
                         <i class="material-icons text-cyan">dashboard</i>
                         <span>Dashboard</span>
                     </a>
@@ -85,37 +87,7 @@
                 <p class="nav-title">MASTER</p>
                 <!-- /dashboard -->
                 <!-- apps -->
-                <li>
-                    <a th:href="@{/warehouse/index}">
-                        <i class="material-icons text-primary">home</i>
-                        <span>Warehouses</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/store/index}">
-                        <i class="material-icons text-green">store</i>
 
-                        <span>Stores</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/staff/index}">
-                        <i class="material-icons text-info">people</i>
-                        <span>Staffs</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/driver/index}">
-                        <i class="material-icons text-primary">directions_car</i>
-                        <span>Driver</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/supplier/index}">
-                        <i class="material-icons text-danger">extension</i>
-                        <span>Supplier</span>
-                    </a>
-                </li>
                 <li>
                     <a th:href="@{/product/index}">
                         <i class="material-icons text-bluegrey">view_module</i>
@@ -132,6 +104,42 @@
                     <a th:href="@{/shelf/index}">
                         <i class="material-icons text-deeppurple">view_agenda</i>
                         <span>Shelf</span>
+                    </a>
+                </li>
+                <p class="nav-title">TRANSACTION</p>
+                <!-- /dashboard -->
+                <!-- apps -->
+                <li>
+                    <a href="javascript:;">
+                <span class="menu-caret">
+                  <i class="material-icons">arrow_drop_down</i>
+                </span>
+                        <i class="material-icons text-green">call_made</i>
+                        <span>Order</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li th:if="${!session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/order/index/1}">
+                                <span>Level 1</span>
+                            </a>
+                        </li>
+                        <li th:if="${!session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/order/index/2}">
+                                <span>Level 2</span>
+                            </a>
+                        </li>
+                        <li th:if="${session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/order/index/3}">
+                                <span>Level 3</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a th:href="@{/retur/index}">
+                        <i class="material-icons text-red">call_received</i>
+                        <span>Retur</span>
                     </a>
                 </li>
 
@@ -203,7 +211,27 @@
     </div>
     <!-- /content panel -->
 
-    <!--/Chat panel-->
+    <!--/Log Out Modal-->
+    <div class="modal fade logout-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to log out from system?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a th:href="@{/logout}" class="btn btn-danger">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/Log Out Modal-->
 
 </div>
 
@@ -235,6 +263,7 @@
 <script th:src="@{'/assets/scripts/ui/alert.js'}" ></script>
 <script th:src="@{'/assets/vendor/datatables/media/js/jquery.dataTables.js'}" ></script>
 <script th:src="@{'/assets/vendor/datatables/media/js/dataTables.bootstrap4.js'}" ></script>
+<script th:src="@{'/assets/scripts/forms/plugins.js'}" ></script>
 <!-- end initialize page scripts -->
 
 <script>
