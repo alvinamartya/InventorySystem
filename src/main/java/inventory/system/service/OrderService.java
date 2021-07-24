@@ -30,13 +30,11 @@ public class OrderService {
     }
 
     public List<Order> getAllOrderByWarehouse(String warehouse_id, int level) {
-        if(level==1){
+        if (level == 1) {
             return ordersRepository.findByWarehouseLv1(warehouse_id);
-        }
-        else if(level==2){
+        } else if (level == 2) {
             return ordersRepository.findByWarehouseLv2(warehouse_id);
-        }
-        else if(level==3){
+        } else if (level == 3) {
             return ordersRepository.findByWarehouseLv3(warehouse_id);
         }
         return (List<Order>) ordersRepository.findAll();
@@ -44,17 +42,17 @@ public class OrderService {
 
     public void saveOrder(OrderInput orderinput, LoggedUser loggedUser) {
         Order orders = new Order();
-        String orderid = generateId(orderinput.getOrigin_warehouse_id()
+        String orderId = generateId(orderinput.getOrigin_warehouse_id()
                 , orderinput.getDest_warehouse_id()
                 , orderinput.getOrigin_type()
                 , orderinput.getDest_type());
-        orders.setId(orderid);
+        orders.setId(orderId);
         orders.setOrigin_id(orderinput.getOrigin_warehouse_id());
         orders.setOrigin_type(orderinput.getOrigin_type());
         orders.setDest_id(orderinput.getDest_warehouse_id());
         orders.setDest_type(orderinput.getDest_type());
         orders.setDate(new Date());
-        if(!orderinput.getDriver_id().equals(0)){
+        if (!orderinput.getDriver_id().equals(0)) {
             orders.setDriver_id(orderinput.getDriver_id());
         }
 
@@ -70,7 +68,6 @@ public class OrderService {
         orders.setWarehouse_at(loggedUser.getWarehouse_id());
         ordersRepository.save(orders);
 
-
         ObjectMapper objectMapper = new ObjectMapper();
         List<OrderDetailInput> detailList = null;
         try {
@@ -82,7 +79,7 @@ public class OrderService {
             System.out.println(e.getMessage());
         }
 
-        insertDetail(orderid, Objects.requireNonNull(detailList));
+        insertDetail(orderId, Objects.requireNonNull(detailList));
         getAllOrder();
     }
 
@@ -121,7 +118,7 @@ public class OrderService {
         String typeOrId = originType.equals("Gudang") ? "W" : "S";
         String typeDestId = destType.equals("Gudang") ? "W" : "T";
 
-        String dateId = LocalDate.now().toString().replace("-","");
+        String dateId = LocalDate.now().toString().replace("-", "");
         return "FO" + "-" + typeOrId + originId + "-" + typeDestId + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
 
     }
@@ -184,7 +181,6 @@ public class OrderService {
     public void delete(Order order) {
         ordersRepository.delete(order);
     }
-
 
 
 }

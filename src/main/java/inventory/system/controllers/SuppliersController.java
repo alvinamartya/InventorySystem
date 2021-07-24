@@ -56,7 +56,7 @@ public class SuppliersController {
     // update supplier
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") String id, Supplier supplier, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             supplier.setId(id);
             return "Supplier/Edit";
         }

@@ -24,10 +24,10 @@ public class StoresController {
     // view index
     @RequestMapping("/index")
     public String index(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        List<Stores> storesList = storesService.getAllStores();
-        model.addAttribute("listStore", storesList);
-        return "Store/Index";
+        if (Session.isLogin(logged_user, httpsession)) {
+            List<Stores> storesList = storesService.getAllStores();
+            model.addAttribute("listStore", storesList);
+            return "Store/Index";
         }
         return "redirect:/login";
     }
@@ -35,9 +35,9 @@ public class StoresController {
     // view create
     @RequestMapping("/create")
     public String create(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        model.addAttribute("storeObject", new Stores());
-        return "Store/Create";
+        if (Session.isLogin(logged_user, httpsession)) {
+            model.addAttribute("storeObject", new Stores());
+            return "Store/Create";
         }
         return "redirect:/login";
     }
@@ -45,9 +45,9 @@ public class StoresController {
     // save store
     @PostMapping("/save")
     public String save(Stores stores, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        storesService.saveStores(stores, logged_user);
-        return "redirect:/store/index";
+        if (Session.isLogin(logged_user, httpsession)) {
+            storesService.saveStores(stores, logged_user);
+            return "redirect:/store/index";
         }
         return "redirect:/login";
     }
@@ -56,11 +56,11 @@ public class StoresController {
     @GetMapping("/edit/{id}")
     public String update(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Stores stores = storesService.getStoresById(id);
-        model.addAttribute("storeObject", stores);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Stores stores = storesService.getStoresById(id);
+            model.addAttribute("storeObject", stores);
 
-        return "Store/Edit";
+            return "Store/Edit";
         }
         return "redirect:/login";
     }
@@ -69,14 +69,14 @@ public class StoresController {
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") int id, Stores store,
                          BindingResult result, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        if (result.hasErrors()) {
-            store.setId(id);
-            return "Store/Edit";
-        }
+        if (Session.isLogin(logged_user, httpsession)) {
+            if (result.hasErrors()) {
+                store.setId(id);
+                return "Store/Edit";
+            }
 
-        storesService.update(id, store, logged_user);
-        return "redirect:/store/index";
+            storesService.update(id, store, logged_user);
+            return "redirect:/store/index";
         }
         return "redirect:/login";
     }
@@ -85,11 +85,11 @@ public class StoresController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Stores stores = storesService.getStoresById(id);
-        model.addAttribute("storeObject", stores);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Stores stores = storesService.getStoresById(id);
+            model.addAttribute("storeObject", stores);
 
-        return "Store/Detail";
+            return "Store/Detail";
         }
         return "redirect:/login";
     }
@@ -98,11 +98,11 @@ public class StoresController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Stores stores = storesService.getStoresById(id);
-        model.addAttribute("storeObject", stores);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Stores stores = storesService.getStoresById(id);
+            model.addAttribute("storeObject", stores);
 
-        return "Store/Delete";
+            return "Store/Delete";
         }
         return "redirect:/login";
     }
@@ -111,11 +111,11 @@ public class StoresController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") int id,
                                   HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Stores stores = storesService.getStoresById(id);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Stores stores = storesService.getStoresById(id);
 
-        storesService.deleteStores(stores, logged_user);
-        return "redirect:/store/index";
+            storesService.deleteStores(stores, logged_user);
+            return "redirect:/store/index";
         }
         return "redirect:/login";
     }
@@ -123,12 +123,12 @@ public class StoresController {
     // deactivate store
     @GetMapping("/deactivate/{id}")
     public String deactivate(@PathVariable(value = "id") Integer id, Model model
-            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
-        Stores stores = storesService.getStoresById(id);
-        model.addAttribute("storeObject", stores);
+            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
+            Stores stores = storesService.getStoresById(id);
+            model.addAttribute("storeObject", stores);
 
-        return "Store/Delete";
+            return "Store/Delete";
         }
         return "redirect:/login";
     }
@@ -136,12 +136,12 @@ public class StoresController {
     // activated store
     @GetMapping("/activate/{id}")
     public String active(@PathVariable(value = "id") Integer id, Model model
-            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
-        Stores stores = storesService.getStoresById(id);
-        model.addAttribute("storeObject", stores);
+            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
+            Stores stores = storesService.getStoresById(id);
+            model.addAttribute("storeObject", stores);
 
-        return "Store/Delete";
+            return "Store/Delete";
         }
         return "redirect:/login";
     }
@@ -150,12 +150,12 @@ public class StoresController {
     @PostMapping("/activate-confirmed/{id}")
     public String activateConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Stores stores = storesService.getStoresById(id);
-        storesService.activate(stores, logged_user);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Stores stores = storesService.getStoresById(id);
+            storesService.activate(stores, logged_user);
 
-        redirectAttrs.addFlashAttribute("success_active", "Store Successfully Activated!");
-        return "redirect:/store/index";
+            redirectAttrs.addFlashAttribute("success_active", "Store Successfully Activated!");
+            return "redirect:/store/index";
         }
         return "redirect:/login";
     }

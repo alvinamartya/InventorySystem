@@ -30,9 +30,7 @@ public class DriverService {
     }
 
     public List<Driver> getDriverByWarehouse(String id) {
-        List<Driver> driversList = driversRepository.findDriverByWarehouse(id);
-
-        return driversList;
+        return driversRepository.findDriverByWarehouse(id);
     }
 
     public void saveDriver(Driver driver, LoggedUser loggedUser) {

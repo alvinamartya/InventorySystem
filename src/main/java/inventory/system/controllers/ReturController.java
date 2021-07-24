@@ -53,7 +53,7 @@ public class ReturController {
         int level = 2; // 1=Supplier-Pusat, 2=Pusat-Cabang, 3=Cabang-Toko
         //----Diambil dari Session
 
-        if(level == 1){
+        if (level == 1) {
             List<Stores> storeListRetur = storesService.getAllStores();
             model.addAttribute("listStoreRetur", storeListRetur);
 
@@ -67,8 +67,7 @@ public class ReturController {
             model.addAttribute("listShelf", shelfList);
 
             model.addAttribute("level", 1);
-        }
-        else if(level == 2){
+        } else if (level == 2) {
             List<Stores> storeListRetur = storesService.getAllStores();
             model.addAttribute("listStoreRetur", storeListRetur);
 
@@ -85,8 +84,7 @@ public class ReturController {
             model.addAttribute("listShelf", shelfList);
 
             model.addAttribute("level", 2);
-        }
-        else if(level == 3){
+        } else if (level == 3) {
             List<Stores> storeListRetur = storesService.getAllStores();
             model.addAttribute("listStoreRetur", storeListRetur);
 

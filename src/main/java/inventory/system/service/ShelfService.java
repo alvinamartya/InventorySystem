@@ -25,22 +25,22 @@ public class ShelfService {
     public List<Shelf> getAllShelf() {
         return (List<Shelf>) shelfRepository.findAll();
     }
-    public List<Shelf> getAllShelfRO(){
+
+    public List<Shelf> getAllShelfRO() {
         return shelfRepository.findAllRO();
     }
-    public List<Shelf> getAllShelfRR(){
+
+    public List<Shelf> getAllShelfRR() {
         return shelfRepository.findAllRR();
     }
 
-
-
-    public List<Shelf> saveShelf(Shelf shelf, LoggedUser loggedUser) {
+    public void saveShelf(Shelf shelf, LoggedUser loggedUser) {
         Shelf newShelf = new Shelf();
-        String shelfid = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
+        String shelfId = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
         int row = shelf.getRows_shelf();
         int col = shelf.getColumns_shelf();
         int quantity = shelf.getQuantity_shelf();
-        newShelf.setId(shelfid);
+        newShelf.setId(shelfId);
         newShelf.setWarehouse_id(shelf.getWarehouse_id());
         newShelf.setType_shelf(shelf.getType_shelf());
         newShelf.setProduct_category_id(shelf.getProduct_category_id());
@@ -54,22 +54,22 @@ public class ShelfService {
         newShelf.setIs_empty(1);
 
         shelfRepository.save(newShelf);
-        insertDetail(shelfid, row, col, quantity);
+        insertDetail(shelfId, row, col, quantity);
 
-        return getAllShelf();
+        getAllShelf();
     }
 
-    public void insertDetail(String shelfId, int row, int col, int quantity){
+    public void insertDetail(String shelfId, int row, int col, int quantity) {
         List<ShelfDetail> arrayShelfDetail = new ArrayList<ShelfDetail>();
 
         int rowCounter, colCounter;
-        for(int i = 1; i<=row; i++){
+        for (int i = 1; i <= row; i++) {
             rowCounter = i;
 
-            for(int j = 1; j<=col; j++){
+            for (int j = 1; j <= col; j++) {
                 colCounter = j;
 
-                for(int k = 1; k<=quantity; k++){
+                for (int k = 1; k <= quantity; k++) {
                     ShelfDetail shelfdetail = new ShelfDetail();
                     shelfdetail.setShelf_id(shelfId);
                     shelfdetail.setRow_shelf(rowCounter);

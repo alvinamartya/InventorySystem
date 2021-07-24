@@ -32,10 +32,10 @@ public class ShelfController {
     @RequestMapping("/index")
     public String index(Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        List<Shelf> shelfsList = shelfService.getAllShelf();
-        model.addAttribute("listShelf", shelfsList);
-        return "Shelf/Index";
+        if (Session.isLogin(logged_user, httpsession)) {
+            List<Shelf> shelfsList = shelfService.getAllShelf();
+            model.addAttribute("listShelf", shelfsList);
+            return "Shelf/Index";
         }
         return "redirect:/login";
     }
@@ -44,16 +44,16 @@ public class ShelfController {
     @RequestMapping("/create")
     public String create(Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        model.addAttribute("shelfObject", new Shelf());
+        if (Session.isLogin(logged_user, httpsession)) {
+            model.addAttribute("shelfObject", new Shelf());
 
-        List<ProductCategory> categoryList = categoryService.getAllProductCategory();
-        model.addAttribute("listCategory", categoryList);
+            List<ProductCategory> categoryList = categoryService.getAllProductCategory();
+            model.addAttribute("listCategory", categoryList);
 
-        List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
-        model.addAttribute("listWarehouse", warehouseList);
+            List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
+            model.addAttribute("listWarehouse", warehouseList);
 
-        return "Shelf/Create";
+            return "Shelf/Create";
         }
         return "redirect:/login";
     }
@@ -62,11 +62,11 @@ public class ShelfController {
     @PostMapping("/save")
     public String save(Shelf shelf, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        shelfService.saveShelf(shelf, logged_user);
-        redirectAttrs.addFlashAttribute("success_create", "Shelf Successfully Added!");
+        if (Session.isLogin(logged_user, httpsession)) {
+            shelfService.saveShelf(shelf, logged_user);
+            redirectAttrs.addFlashAttribute("success_create", "Shelf Successfully Added!");
 
-        return "redirect:/shelf/index";
+            return "redirect:/shelf/index";
         }
         return "redirect:/login";
     }
@@ -75,14 +75,14 @@ public class ShelfController {
     @GetMapping("/edit/{id}")
     public String update(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Shelf shelfs = shelfService.getShelfById(id);
-        model.addAttribute("shelfObject", shelfs);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Shelf shelfs = shelfService.getShelfById(id);
+            model.addAttribute("shelfObject", shelfs);
 
-        List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
-        model.addAttribute("listWarehouse", warehouseList);
+            List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
+            model.addAttribute("listWarehouse", warehouseList);
 
-        return "Shelf/Edit";
+            return "Shelf/Edit";
         }
         return "redirect:/login";
     }
@@ -92,15 +92,15 @@ public class ShelfController {
     public String update(@PathVariable("id") String id, Shelf shelf,
                          BindingResult result, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        if (result.hasErrors()) {
-            shelf.setId(id);
-            return "Shelf/Edit";
-        }
+        if (Session.isLogin(logged_user, httpsession)) {
+            if (result.hasErrors()) {
+                shelf.setId(id);
+                return "Shelf/Edit";
+            }
 
-        shelfService.update(id, logged_user);
-        redirectAttrs.addFlashAttribute("success_update", "Shelf Successfully Updated!");
-        return "redirect:/shelf/index";
+            shelfService.update(id, logged_user);
+            redirectAttrs.addFlashAttribute("success_update", "Shelf Successfully Updated!");
+            return "redirect:/shelf/index";
         }
         return "redirect:/login";
     }
@@ -109,14 +109,14 @@ public class ShelfController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Shelf shelfs = shelfService.getShelfById(id);
-        model.addAttribute("shelfObject", shelfs);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Shelf shelfs = shelfService.getShelfById(id);
+            model.addAttribute("shelfObject", shelfs);
 
-        List<ShelfDetail> listDetail = shelfService.getShelfDetail(id);
-        model.addAttribute("detailshelfObject", listDetail);
+            List<ShelfDetail> listDetail = shelfService.getShelfDetail(id);
+            model.addAttribute("detailshelfObject", listDetail);
 
-        return "Shelf/Detail";
+            return "Shelf/Detail";
         }
         return "redirect:/login";
     }
@@ -125,14 +125,14 @@ public class ShelfController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Shelf shelfs = shelfService.getShelfById(id);
-        model.addAttribute("shelfObject", shelfs);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Shelf shelfs = shelfService.getShelfById(id);
+            model.addAttribute("shelfObject", shelfs);
 
-        List<ShelfDetail> listDetail = shelfService.getShelfDetail(id);
-        model.addAttribute("detailshelfObject", listDetail);
+            List<ShelfDetail> listDetail = shelfService.getShelfDetail(id);
+            model.addAttribute("detailshelfObject", listDetail);
 
-        return "Shelf/Delete";
+            return "Shelf/Delete";
         }
         return "redirect:/login";
     }
@@ -141,12 +141,12 @@ public class ShelfController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Shelf shelf = shelfService.getShelfById(id);
-        shelfService.delete(shelf);
+        if (Session.isLogin(logged_user, httpsession)) {
+            Shelf shelf = shelfService.getShelfById(id);
+            shelfService.delete(shelf);
 
-        redirectAttrs.addFlashAttribute("success_delete", "Shelf Successfully Deleted!");
-        return "redirect:/shelf/index";
+            redirectAttrs.addFlashAttribute("success_delete", "Shelf Successfully Deleted!");
+            return "redirect:/shelf/index";
         }
         return "redirect:/login";
     }

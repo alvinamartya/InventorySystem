@@ -27,18 +27,11 @@ public class ReturService {
     @Autowired
     ReturDetailRepository returDetailRepository;
 
-    public List<Retur> getAllRetur(){
-        List<Retur> returList = (List<Retur>) returRepository.findAll();
-//        returList.sort(
-//                Comparator
-//                        .comparing(Retur::getDate)
-//                        .thenComparing(Retur::getId)
-//
-//        );
-        return returList;
+    public List<Retur> getAllRetur() {
+        return (List<Retur>) returRepository.findAll();
     }
 
-    public List<Retur> saveRetur(ReturInput returInput){
+    public List<Retur> saveRetur(ReturInput returInput) {
         Retur retur = new Retur();
         String returId = generateId(returInput.getOrigin_warehouse_id(),
                 returInput.getDest_warehouse_id(),
@@ -73,37 +66,36 @@ public class ReturService {
 
         List<ReturDetailInput> detailList = null;
         try {
-            detailList = objectMapper.readValue(returInput.getDetailJSON(), new TypeReference<List<ReturDetailInput>>() {});
+            detailList = objectMapper.readValue(returInput.getDetailJSON(), new TypeReference<List<ReturDetailInput>>() {
+            });
+            insertDetail(returId, detailList);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        insertDetail(returId, detailList);
 
         return getAllRetur();
     }
 
-    public int insertDetail(String returId, List<ReturDetailInput> detailList){
+    public void insertDetail(String returId, List<ReturDetailInput> detailList) {
 
         List<ReturDetail> arrayReturDetail = new ArrayList<ReturDetail>();
 
-        for(int k = 0; k<detailList.size(); k++){
+        for (ReturDetailInput returDetailInput : detailList) {
             ReturDetail returDetail = new ReturDetail();
             returDetail.setRetur_id(returId);
-            returDetail.setProduct_id(detailList.get(k).getProductID());
-            returDetail.setOrigin_shelf_id(detailList.get(k).getProductOrigin());
-            returDetail.setDest_shelf_id(detailList.get(k).getProductDest());
-            returDetail.setQty(detailList.get(k).getProductQty());
+            returDetail.setProduct_id(returDetailInput.getProductID());
+            returDetail.setOrigin_shelf_id(returDetailInput.getProductOrigin());
+            returDetail.setDest_shelf_id(returDetailInput.getProductDest());
+            returDetail.setQty(returDetailInput.getProductQty());
             arrayReturDetail.add(returDetail);
         }
 
         returDetailRepository.saveAll(arrayReturDetail);
 
-        return 1;
     }
 
     public List<ReturDetail> getReturDetail(String id) {
-        List<ReturDetail> listDetail = returDetailRepository.findReturDetailByReturId(id);
-        return listDetail;
+        return returDetailRepository.findReturDetailByReturId(id);
     }
 
     public Retur getReturById(String id) {
@@ -119,12 +111,12 @@ public class ReturService {
     }
 
     //ID Retur Origin Otomatis
-    private String generateId(String originId, String destId, String destType,String originType) {
+    private String generateId(String originId, String destId, String destType, String originType) {
         int lastCounter = getLastCounter(originType);
 
         String typeId = originType.equals("W") ? "W" : "T";
         String typeDest = destType.equals("W") ? "W" : "S";
-        String dateId = LocalDate.now().toString().replace("-","");
+        String dateId = LocalDate.now().toString().replace("-", "");
         return "FR" + "-" + typeId + originId + "-" + typeDest + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
     }
 
@@ -175,7 +167,6 @@ public class ReturService {
 
     @Transactional
     public void delete(Retur retur) {
-        //orderdetailsRepository.deleteDetail(order.getId());
         returRepository.delete(retur);
     }
 }

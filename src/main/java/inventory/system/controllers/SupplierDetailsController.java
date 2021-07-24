@@ -9,7 +9,6 @@ import inventory.system.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +58,7 @@ public class SupplierDetailsController {
     // save SupplierDetail
     @PostMapping("/save")
     public String save(SupplierDetail supplierDetail, String supplier_id, RedirectAttributes redirectAttrs) {
-        supplierDetailService.saveSupplierDetail(supplierDetail, supplier_id);
+        supplierDetailService.saveSupplierDetail(supplierDetail);
 
         redirectAttrs.addFlashAttribute("success_create", "Supplier Detail Successfully Added!");
         return "SupplierDetail/Index";
@@ -87,7 +86,7 @@ public class SupplierDetailsController {
     //delete without view
     @RequestMapping("/deleteSupDet/{id}")
     public String deleteSupDet(@PathVariable(value = "id") Integer id,
-                         RedirectAttributes redirectAttrs) {
+                               RedirectAttributes redirectAttrs) {
         this.supplierDetailService.deleteSupplierDetailById(id);
 
         redirectAttrs.addFlashAttribute("success_deactive", "Supplier Detail Successfully Deactivated!");

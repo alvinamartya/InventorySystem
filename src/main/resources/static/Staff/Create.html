@@ -17,7 +17,8 @@
 
                         <div class="form-group">
                             <label for="txtName">Name<span style="color: red;">*</span></label>
-                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name" placeholder="Input Name">
+                            <input th:field="*{name}" type="text" class="form-control" id="txtName" name="name"
+                                   placeholder="Input Name">
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
@@ -28,30 +29,33 @@
                         </div>
                         <div class="form-group">
                             <label for="txtAddress">Address<span style="color: red;">*</span></label>
-                            <textarea th:text="*{address}" type="text" class="form-control" id="txtAddress" name="address"
+                            <textarea th:text="*{address}" type="text" class="form-control" id="txtAddress"
+                                      name="address"
                                       placeholder="Input Address"></textarea>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="gender">Gender<span style="color: red;">*</span></label>
-                                <div class="custom-controls-stacked">
-                                    <label class="custom-control custom-radio">
-                                        <input th:checked='*{gender=="M"}' name="gender" id="gender" value="M"  type="radio" class="custom-control-input">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Male</span>
-                                    </label>
-                                    <label class="custom-control custom-radio">
-                                        <input th:checked='*{gender=="F"}' name="gender" id="gender1" value="F" type="radio" class="custom-control-input">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Female</span>
-                                    </label>
-                                </div>
+                            <div class="custom-controls-stacked">
+                                <label class="custom-control custom-radio">
+                                    <input th:checked='*{gender=="M"}' name="gender" id="gender" value="M" type="radio"
+                                           class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Male</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input th:checked='*{gender=="F"}' name="gender" id="gender1" value="F" type="radio"
+                                           class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Female</span>
+                                </label>
+                            </div>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="role_id">Role<span style="color: red;">*</span></label>
                             <select th:field="*{role_id}" class="form-control" name="role_id" id="role_id" t>
-                                <option value="0"> -Select Role- </option>
+                                <option value="0"> -Select Role-</option>
                                 <option value="1">Transaction Admin</option>
                                 <option value="2">Warehouse Admin</option>
                                 <option value="3">Master Data Admin</option>
@@ -61,18 +65,21 @@
                         <div class="form-group">
                             <label for="txtIdWarehouse">Warehouse<span style="color: red;">*</span></label>
                             <select class="form-control" th:field="*{warehouse_id}" id="txtIdWarehouse">
-                                <option value=""> -Select Warehouse- </option>
+                                <option value=""> -Select Warehouse-</option>
                                 <option th:each="warehouse : ${listWarehouse}"
                                         th:value="${warehouse.id}"
-                                        th:utext="${warehouse.name}"/>
+                                        th:utext="${warehouse.name}"></option>
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
                         <div class="form-group">
                             <label for="txtEmail">Email<span style="color: red;">*</span></label>
-                            <input th:field="*{email}" th:classappend="${email_exist} ? 'input-invalid' : ''" type="text" class="form-control" id="txtEmail" name="email" placeholder="Input Email Address">
+                            <input th:field="*{email}" th:classappend="${email_exist} ? 'input-invalid' : ''"
+                                   type="text" class="form-control" id="txtEmail" name="email"
+                                   placeholder="Input Email Address">
                             <div class="validate-alert hide">Message Here</div>
-                            <div th:if="${email_exist}" th:text="${email_exist}" class="validate-alert">Message Here</div>
+                            <div th:if="${email_exist}" th:text="${email_exist}" class="validate-alert">Message Here
+                            </div>
                         </div>
 
                         <div style="margin-top:50px;float:left">
@@ -91,7 +98,7 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0, 0, 0, 0,0];
+            const validate = [0, 0, 0, 0, 0, 0, 0, 0];
 
             if ($(txtName).val() === '') {
                 setErrorFor($(txtName), 'Name Cannot Be Empty');
@@ -144,7 +151,7 @@
                 validate[7] = 1;
             }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[5] == 1 && validate[6] == 1&& validate[7] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[5] == 1 && validate[6] == 1 && validate[7] == 1) {
                 return true;
             } else {
                 return false;
@@ -178,12 +185,11 @@
             }
         }
 
-
         $(document).ready(function () {
-            $(gender).change(function(){
+            $(gender).change(function () {
                 setClearFor(this);
             });
-            $(gender1).change(function(){
+            $(gender1).change(function () {
                 setClearFor(this);
             });
             $('select').change(function () {

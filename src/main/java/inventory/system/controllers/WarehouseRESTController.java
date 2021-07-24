@@ -30,14 +30,13 @@ public class WarehouseRESTController {
 
         List<WarehouseCustomJSON> data = new ArrayList<>();
 
-        for(int k = 0; k<warehouseList.size(); k++){
+        for (Warehouses warehouses : warehouseList) {
             WarehouseCustomJSON warehouse = new WarehouseCustomJSON();
-            warehouse.setId(warehouseList.get(k).getId());
-            warehouse.setName(warehouseList.get(k).getName());
+            warehouse.setId(warehouses.getId());
+            warehouse.setName(warehouses.getName());
             data.add(warehouse);
         }
-        ResponseCustomJSON response = new ResponseCustomJSON("Done", data);
-        return response;
+        return new ResponseCustomJSON("Done", data);
     }
 
     /*Level 3 Cabang - Toko*/
@@ -47,14 +46,13 @@ public class WarehouseRESTController {
 
         List<WarehouseCustomJSON> data = new ArrayList<>();
 
-        for(int k = 0; k<warehouseList.size(); k++){
+        for (Stores stores : warehouseList) {
             WarehouseCustomJSON warehouse = new WarehouseCustomJSON();
-            warehouse.setId(Integer.toString(warehouseList.get(k).getId()));
-            warehouse.setName(warehouseList.get(k).getName());
+            warehouse.setId(Integer.toString(stores.getId()));
+            warehouse.setName(stores.getName());
             data.add(warehouse);
         }
-        ResponseCustomJSON response = new ResponseCustomJSON("Done", data);
-        return response;
+        return new ResponseCustomJSON("Done", data);
     }
 
     /*Level 2,3 Get Driver*/
@@ -64,13 +62,12 @@ public class WarehouseRESTController {
 
         List<DriverCustomJSON> data = new ArrayList<>();
 
-        for(int k = 0; k<driverList.size(); k++){
+        for (Driver value : driverList) {
             DriverCustomJSON driver = new DriverCustomJSON();
-            driver.setId(Integer.toString(driverList.get(k).getId()));
-            driver.setName(driverList.get(k).getName());
+            driver.setId(Integer.toString(value.getId()));
+            driver.setName(value.getName());
             data.add(driver);
         }
-        ResponseCustomJSON response = new ResponseCustomJSON("Done", data);
-        return response;
+        return new ResponseCustomJSON("Done", data);
     }
 }
