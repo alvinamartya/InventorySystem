@@ -137,10 +137,30 @@
                 </li>
 
                 <li>
-                    <a th:href="@{/retur/index}">
+                    <a href="javascript:;">
+                        <span class="menu-caret">
+                          <i class="material-icons">arrow_drop_down</i>
+                        </span>
                         <i class="material-icons text-red">call_received</i>
                         <span>Retur</span>
                     </a>
+                    <ul class="sub-menu">
+                        <li th:if="${!session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/retur/index/3}">
+                                <span>Level 3</span>
+                            </a>
+                        </li>
+                        <li th:if="${session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/retur/index/1}">
+                                <span>Level 1</span>
+                            </a>
+                        </li>
+                        <li th:if="${session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/retur/index/2}">
+                                <span>Level 2</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
             </ul>
