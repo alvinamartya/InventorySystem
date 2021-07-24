@@ -1,9 +1,6 @@
 package inventory.system.service;
 
-import inventory.system.entity.LoggedUser;
-import inventory.system.entity.Staffs;
-import inventory.system.entity.Stores;
-import inventory.system.entity.Warehouses;
+import inventory.system.entity.*;
 import inventory.system.repository.WarehousesRepository;
 import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +36,27 @@ public class WarehousesService {
         return warehousesRepository.findAllCabang();
     }
 
+    public List<Warehouses> getWarehousesPusatById(String id){
+        return warehousesRepository.findPusatById(id);
+    }
+
     public List<Warehouses> getCabangByPusat(String id) {
         Warehouses selected = getWarehousesById(id);
         List<Warehouses> warehousesList = warehousesRepository.findCabangByPusat(selected.getProvince());
+
+        return warehousesList;
+    }
+
+    public List<Warehouses> getPusatByCabang(String id) {
+        Warehouses selected = getWarehousesById(id);
+        List<Warehouses> warehousesList = warehousesRepository.findPusatByCabang(selected.getProvince());
+
+        return warehousesList;
+    }
+
+    public List<Warehouses> getCabangByStore(String id) {
+        Warehouses selected = getWarehousesById(id);
+        List<Warehouses> warehousesList = warehousesRepository.findCabangByStore(selected.getCity());
 
         return warehousesList;
     }
@@ -51,6 +66,13 @@ public class WarehousesService {
         List<Stores> storesList = warehousesRepository.findStoreByCabang(selected.getCity());
 
         return storesList;
+    }
+
+    public List<Driver> getDriverByWarehouse(String id) {
+        Warehouses selected = getWarehousesById(id);
+        List<Driver> driverList = warehousesRepository.findDriverByCabang(selected.getId());
+
+        return driverList;
     }
 
     public void saveWarehouses(Warehouses warehouses, LoggedUser loggedUser) {

@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layoutSuperAdmin}">
+      layout:decorate="~{_layoutTransactionAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -9,29 +9,33 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add New Retur</h2>
+                    <h2>Add New Retur | <i>Level <span th:text="${level}"></span></i></h2>
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/retur/save}" th:object="${returObject}" method="post">
+                    <form th:action="@{/retur/save/{id}(id=${level})}" th:object="${returObject}" method="post">
 
                         <div class="form-group">
-                            <label for="txtType">Origin Type<span style="color: red;">*</span></label>
+                            <label for="txtType">Origin Type<span style="color: #ff0000;">*</span></label>
                             <select class="form-control"  id="txtType" th:field="*{origin_type}">
                                 <option value=""> -Select Type- </option>
-                                <option value="W">Warehouse</option>
-                                <option value="T">Store</option>
+                                <option th:selected="*{origin_type.equals('W')}" value="W">Warehouse</option>
+                                <option th:selected="*{origin_type.equals('T')}" value="T">Store</option>
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div class="form-group">
-                            <label for="txtIdWarehouseRetur">Origin ID<span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdWarehouseRetur" th:field="*{origin_warehouse_id}">
-                                <option value=""> -Select Warehouse- </option>
-                                <option th:each="store : ${listStoreRetur}"
-                                        th:value="${store.id}"
-                                        th:utext="${store.name}"/>
+                            <span th:text="${!level.equals(1)} ? 'Origin Warehouse':'Store'"></span> <span style="color: red;">*</span></label>
+                            <select class="form-control" id="txtIdWarehouseRetur" th:field="*{origin_warehouse_id}"
+                                    th:classappend="${level.equals(1)} ? 'ddlOriginLevel1':
+                                                    (${level.equals(2)} ? 'ddlOriginLevel2':
+                                                    (${level.equals(3)} ? 'ddlOriginLevel3':''))" >
+                                <option value="" th:text="${!level.equals(1)} ? ' -Select Warehouse- ':' -Select Store- '"></option>
+                                <option th:each="warehouse : ${listOriginRe}"
+                                        th:value="${warehouse.id}"
+                                        th:utext="${warehouse.name}"
+                                        th:selected="${warehouse.id == returObject.origin_warehouse_id}"/>
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
@@ -40,19 +44,21 @@
                             <label for="txtTypeDest">Destination Type<span style="color: red;">*</span></label>
                             <select class="form-control"  id="txtTypeDest" th:field="*{dest_type}">
                                 <option value=""> -Select Type- </option>
-                                <option value="W">Warehouse</option>
-                                <option value="S">Supplier</option>
+                                <option th:selected="*{dest_type.equals('W')}" value="W">Warehouse</option>
+                                <option th:selected="*{dest_type.equals('S')}" value="S">Supplier</option>
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
 
                         <div class="form-group">
-                            <label for="txtIdWarehouse">Dest Warehouse<span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}">
-                                <option value=""> -Select Warehouse- </option>
-                                <option th:each="warehouse : ${listWarehouseDest}"
+                            <label for="txtIdWarehouse">
+                                <span th:text="${!level.equals(3)} ? 'Destination Warehouse':'Destination Supplier'"></span> <span style="color: red;">*</span></label>
+                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}" th:readonly="${level.equals(1)}">
+                                <option value="" th:text="${!level.equals(3)} ? ' -Select Warehouse- ':' -Select Supplier- '"></option>
+                                <option th:each="warehouse : ${listWarehouseRe}"
                                         th:value="${warehouse.id}"
-                                        th:utext="${warehouse.name}"/>
+                                        th:utext="${warehouse.name}"
+                                        th:selected="${warehouse.id == returObject.dest_warehouse_id}"/>
                             </select>
                             <div class="validate-alert hide">Message Here</div>
                         </div>
@@ -226,10 +232,16 @@
                 setClearFor($(txtType));
                 validate[2] = 1;
             }
-            if ($(txtIdDriver).val() === '') {
-                setErrorFor($(txtIdDriver), 'Driver ID Cannot Be Empty');
-            } else {
-                setClearFor($(txtIdDriver));
+
+            if ( $('.txtIdDriver').length ) {
+                if ($('.txtIdDriver').val() === '') {
+                    setErrorFor($('.txtIdDriver'), 'Driver ID Cannot Be Empty');
+                } else {
+                    setClearFor($('.txtIdDriver'));
+                    validate[3] = 1;
+                }
+            }
+            else{
                 validate[3] = 1;
             }
 
@@ -433,6 +445,63 @@
 
 
         $(document).ready(function() {
+            if ( $('.ddlOriginLevel2').length ) {
+                var id = $(".ddlOriginLevel2").val();
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getPusat',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $('#txtIdWarehouse').find('option').not(':first').remove();
+                        $('#txtIdWarehouse').attr('disabled', false);
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $('#txtIdWarehouse').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getDriver',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $('#txtIdDriver').find('option').not(':first').remove();
+                        $('#txtIdDriver').attr('disabled', false);
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $('#txtIdDriver').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+            }
+
+
             $('select').change(function() {
                 Clear(this);
             });
@@ -453,6 +522,29 @@
 
             $('.product_dest').on('input', function() {
                 $('#alertDetailDiv').addClass('hide');
+            })
+
+
+            function loadStart() {
+                $('#divForm').addClass('loaderElement');
+                $('#divForm').addClass('loaderElement');
+            }
+
+            function loadComplete() {
+                $('#divForm').removeClass('loaderElement');
+                $('#divForm').removeClass('loaderElement');
+            }
+
+            $(".ddlOriginLevel1").change(function () {
+                var id = $(this).val();
+            })
+
+            $(".ddlOriginLevel2").change(function () {
+                var id = $(this).val();
+            })
+
+            $(".ddlOriginLevel3").change(function () {
+                var id = $(this).val();
             })
 
         });

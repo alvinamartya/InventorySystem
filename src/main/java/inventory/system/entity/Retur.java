@@ -23,6 +23,7 @@ public class Retur {
     private String checked_by;
     private Date updated_at;
     private String updated_by;
+    private String warehouse_at;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "origin_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -43,7 +44,7 @@ public class Retur {
     public Retur(String id, String origin_id, String order_type, String dest_id, String dest_type,
                  Date date, Integer driver_id, Date created_at, String created_by,
                  Date approved_at, String approved_by, Date checked_at, String checked_by,
-                 Date updated_at, String updated_by){
+                 Date updated_at, String updated_by, String warehouse_at){
         this.id = id;
         this.origin_id = origin_id;
         this.order_type = order_type;
@@ -59,6 +60,7 @@ public class Retur {
         this.checked_by = checked_by;
         this.updated_at = updated_at;
         this.updated_by = updated_by;
+        this.warehouse_at = warehouse_at;
 
     }
 
@@ -204,5 +206,13 @@ public class Retur {
 
     public void setDriverList(Driver driverList) {
         this.driverList = driverList;
+    }
+
+    public String getWarehouse_at() {
+        return warehouse_at;
+    }
+
+    public void setWarehouse_at(String warehouse_at) {
+        this.warehouse_at = warehouse_at;
     }
 }

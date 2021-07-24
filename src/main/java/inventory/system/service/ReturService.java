@@ -3,10 +3,7 @@ package inventory.system.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import inventory.system.entity.Retur;
-import inventory.system.entity.ReturDetail;
-import inventory.system.entity.ReturDetailInput;
-import inventory.system.entity.ReturInput;
+import inventory.system.entity.*;
 import inventory.system.repository.ReturDetailRepository;
 import inventory.system.repository.ReturRepository;
 import inventory.system.utils.GeneratorId;
@@ -29,16 +26,23 @@ public class ReturService {
 
     public List<Retur> getAllRetur(){
         List<Retur> returList = (List<Retur>) returRepository.findAll();
-//        returList.sort(
-//                Comparator
-//                        .comparing(Retur::getDate)
-//                        .thenComparing(Retur::getId)
-//
-//        );
         return returList;
     }
 
-    public List<Retur> saveRetur(ReturInput returInput){
+    public List<Retur> getAllReturByWarehouse(String warehouse_id, int level) {
+        if(level==1){
+            return returRepository.findByWarehouseLv1(warehouse_id);
+        }
+        else if(level==2){
+            return returRepository.findByWarehouseLv2(warehouse_id);
+        }
+        else if(level==3){
+            return returRepository.findByWarehouseLv3(warehouse_id);
+        }
+        return (List<Retur>) returRepository.findAll();
+    }
+
+    public List<Retur> saveRetur(ReturInput returInput, LoggedUser loggedUser){
         Retur retur = new Retur();
         String returId = generateId(returInput.getOrigin_warehouse_id(),
                 returInput.getDest_warehouse_id(),
@@ -53,7 +57,10 @@ public class ReturService {
         retur.setDest_type(returInput.getDest_type());
 
         retur.setDate(new Date());
-        retur.setDriver_id(returInput.getDriver_id());
+
+        if(!returInput.getDriver_id().equals(0)){
+            retur.setDriver_id(returInput.getDriver_id());
+        }
 
         retur.setChecked_at(new Date());
         retur.setChecked_by("-");
@@ -62,10 +69,12 @@ public class ReturService {
         retur.setApproved_by("-");
 
         retur.setCreated_at(new Date());
-        retur.setCreated_by("Admin Transaksi");
+        retur.setCreated_by(loggedUser.getName());
 
         retur.setUpdated_at(new Date());
-        retur.setUpdated_by("Admin Transaksi");
+        retur.setUpdated_by(loggedUser.getName());
+
+        retur.setWarehouse_at(loggedUser.getWarehouse_id());
 
         returRepository.save(retur);
 
@@ -73,11 +82,13 @@ public class ReturService {
 
         List<ReturDetailInput> detailList = null;
         try {
-            detailList = objectMapper.readValue(returInput.getDetailJSON(), new TypeReference<List<ReturDetailInput>>() {});
+            detailList = objectMapper.readValue(returInput.getDetailJSON(),
+                    new TypeReference<List<ReturDetailInput>>() {
+                    });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        insertDetail(returId, detailList);
+        insertDetail(returId, Objects.requireNonNull(detailList));
 
         return getAllRetur();
     }

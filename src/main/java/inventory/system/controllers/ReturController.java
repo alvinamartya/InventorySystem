@@ -2,16 +2,16 @@ package inventory.system.controllers;
 
 import inventory.system.entity.*;
 import inventory.system.service.*;
+import inventory.system.utils.Session;
 import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,6 +23,9 @@ public class ReturController {
 
     @Autowired
     WarehousesService warehousesService;
+
+    @Autowired
+    SupplierService supplierService;
 
     @Autowired
     StoresService storesService;
@@ -37,142 +40,197 @@ public class ReturController {
     ProductService productService;
 
     //view Index
-    @RequestMapping("/index")
-    public String index(Model model) {
-        List<Retur> returList = returService.getAllRetur();
-        model.addAttribute("listRetur", returList);
-        return "Retur/Index";
+    @RequestMapping("/index/{level}")
+    public String index(@PathVariable(value = "level") int level, Model model,  HttpSession httpsession,
+                        @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            List<Retur> returList = returService.getAllReturByWarehouse(logged_user.getWarehouse_id(), level);
+            int is_trans_admin = (logged_user.getRole_id()==1)?1:0;
+            model.addAttribute("is_trans_admin", is_trans_admin);
+            model.addAttribute("level", level);
+            model.addAttribute("listRetur", returList);
+
+            return "Retur/Index";
+        }
+        return "redirect:/login";
     }
 
     // view create
-    @RequestMapping("/create")
-    public String create(Model model) {
+    @RequestMapping("/create/{level}")
+    public String create(@PathVariable(value = "level") int level, Model model,  HttpSession httpsession,
+                         @SessionAttribute(required=false) LoggedUser logged_user) {
         model.addAttribute("returObject", new ReturInput());
 
-        //----Diambil dari Session
-        int level = 2; // 1=Supplier-Pusat, 2=Pusat-Cabang, 3=Cabang-Toko
-        //----Diambil dari Session
-
-        if(level == 1){
-            List<Stores> storeListRetur = storesService.getAllStores();
-            model.addAttribute("listStoreRetur", storeListRetur);
-
-            List<Warehouses> warehouseListDest = warehousesService.getAllWarehousesCabang();
-            model.addAttribute("listWarehouseDest", warehouseListDest);
-
+        if(Session.isLogin(logged_user,httpsession)){
+            //----Diambil dari Session
+            //int level = 1; // 1=Pusat-Supplier, 2=Cabang-Pusat, 3=Toko-Cabang
+            //----Diambil dari Session
+            String destType = "";
+            String originType = "";
+            String destId = "";
+            String originId = "";
+            List<Supplier> supplierDestList = new ArrayList<>();
+            List<Warehouses> warehouseOriginList = new ArrayList<>();
+            List<Stores> storeOriginList = new ArrayList<>();
+            List<Driver> driverList = new ArrayList<>();
+            List<Warehouses> warehouseDestList = new ArrayList<>();
             List<Product> productList = productService.getAllProduct();
-            model.addAttribute("listProduct", productList);
-
             List<Shelf> shelfList = shelfService.getAllShelfRR();
-            model.addAttribute("listShelf", shelfList);
 
-            model.addAttribute("level", 1);
-        }
-        else if(level == 2){
-            List<Stores> storeListRetur = storesService.getAllStores();
-            model.addAttribute("listStoreRetur", storeListRetur);
+            if (level == 3) {
+                warehouseOriginList = warehousesService.getWarehousesPusatById(logged_user.getWarehouse_id());
+                model.addAttribute("listOriginRe", warehouseOriginList);
+                supplierDestList = supplierService.getAllSupplier();
+                model.addAttribute("listWarehouseRe", supplierDestList);
+                driverList = warehousesService.getDriverByWarehouse(logged_user.getWarehouse_id());
+                originType = "W";
+                destType = "S";
+                destId = logged_user.getWarehouse_id();
+            } else if (level == 2) {
+                warehouseOriginList = warehousesService.getAllWarehousesCabang();
+                model.addAttribute("listOriginRe", warehouseOriginList);
+                warehouseDestList = warehousesService.getAllWarehousesPusat();
+                model.addAttribute("listWarehouseRe", warehouseDestList);
+                originType = "W";
+                destType = "W";
+                originId = logged_user.getWarehouse_id();
+            } else if (level == 1) {
+                storeOriginList = warehousesService.getStoreByCabang(logged_user.getWarehouse_id());
+                model.addAttribute("listOriginRe", storeOriginList);
+                warehouseDestList = warehousesService.getCabangByStore(logged_user.getWarehouse_id());
+                model.addAttribute("listWarehouseRe", warehouseDestList);
+                originType = "T";
+                destType = "W";
+                originId = logged_user.getWarehouse_id();
+            }
 
-            List<Warehouses> warehouseListDest = warehousesService.getAllWarehousesCabang();
-            model.addAttribute("listWarehouseDest", warehouseListDest);
+            model.addAttribute("returObject", new ReturInput(originType, destType, originId, destId));
 
-            List<Driver> driverList = driverService.getAllDriver();
             model.addAttribute("listDriver", driverList);
-
-            List<Product> productList = productService.getAllProduct();
             model.addAttribute("listProduct", productList);
-
-            List<Shelf> shelfList = shelfService.getAllShelfRO();
             model.addAttribute("listShelf", shelfList);
+            model.addAttribute("level", level);
 
-            model.addAttribute("level", 2);
+            return "Retur/Create";
         }
-        else if(level == 3){
-            List<Stores> storeListRetur = storesService.getAllStores();
-            model.addAttribute("listStoreRetur", storeListRetur);
-
-            List<Warehouses> warehouseListDest = warehousesService.getAllWarehousesCabang();
-            model.addAttribute("listWarehouseDest", warehouseListDest);
-
-            List<Driver> driverList = driverService.getAllDriver();
-            model.addAttribute("listDriver", driverList);
-
-            List<Product> productList = productService.getAllProduct();
-            model.addAttribute("listProduct", productList);
-
-            List<Shelf> shelfList = shelfService.getAllShelfRO();
-            model.addAttribute("listShelf", shelfList);
-
-            model.addAttribute("level", 3);
-        }
-
-        return "Retur/Create";
+        return "redirect:/login";
     }
 
     // save retur
-    @PostMapping("/save")
-    public String save(ReturInput returInput, RedirectAttributes redirectAttrs) {
-        returService.saveRetur(returInput);
-        redirectAttrs.addFlashAttribute("success_create", "Retur Successfully Added!");
-        return "redirect:/retur/index";
+    @PostMapping("/save/{level}")
+    public String save(@PathVariable(value = "level") int level, ReturInput returInput, RedirectAttributes redirectAttrs
+            , HttpSession httpsession, @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            returService.saveRetur(returInput, logged_user);
+            redirectAttrs.addFlashAttribute("success_create", "Retur Successfully Added!");
+
+            String redirect= "redirect:/retur/index/"+level;
+            return redirect;
+
+        }
+        return "redirect:/login";
     }
 
     // view detail retur
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable(value = "id") String id, Model model) {
-        Retur retur = returService.getReturById(id);
-        model.addAttribute("returObject", retur);
+    @GetMapping("/detail/{id}/{level}")
+    public String detail(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
+                         @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            Retur retur = returService.getReturById(id);
+            model.addAttribute("returObject", retur);
 
-        List<ReturDetail> listDetail = returService.getReturDetail(id);
-        model.addAttribute("detailReturObject", listDetail);
-
-        return "Retur/Detail";
+            List<ReturDetail> listDetail = returService.getReturDetail(id);
+            model.addAttribute("detailReturObject", listDetail);
+            model.addAttribute("level", level);
+            if(!retur.getOrder_type().equals("T")){
+                Driver driver = driverService.getDriverById(retur.getDriver_id());
+                model.addAttribute("drivername", driver.getName());
+            }
+            return "Retur/Detail";
+        }
+        return "redirect:/login";
     }
 
     //Checked
-    @GetMapping("/check/{id}")
-    public String check(@PathVariable(value = "id") String id, Model model) {
-        Retur retur = returService.getReturById(id);
-        model.addAttribute("returObject", retur);
+    @GetMapping("/check/{id}/{level}")
+    public String check(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
+                        @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            Retur retur = returService.getReturById(id);
+            model.addAttribute("returObject", retur);
 
-        List<ReturDetail> listDetail = returService.getReturDetail(id);
-        model.addAttribute("detailReturObject", listDetail);
+            List<ReturDetail> listDetail = returService.getReturDetail(id);
+            model.addAttribute("detailReturObject", listDetail);
+            model.addAttribute("level", level);
 
-        model.addAttribute("state", "check");
-        return "Retur/Confirmation";
+            model.addAttribute("state", "check");
+
+            if(!retur.getOrder_type().equals("T")){
+                Driver driver = driverService.getDriverById(retur.getDriver_id());
+                model.addAttribute("drivername", driver.getName());
+            }
+
+            return "Retur/Confirmation";
+        }
+        return "redirect:/login";
     }
 
-    @RequestMapping("/check-confirmed/{id}")
-    public String checkconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
-        //**----Dari Session
-        String staffName = "Admin Gudang";
+    @RequestMapping("/check-confirmed/{id}/{level}")
+    public String checkconfirmed(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level,
+                                 RedirectAttributes redirectAttrs, HttpSession httpsession,
+                                 @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            //**----Dari Session
+            String staffName = logged_user.getName();
 
-        returService.check(id, staffName);
+            returService.check(id, staffName);
 
-        redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Checked!");
-        return "redirect:/retur/index";
+            redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Checked!");
+            String redirect= "redirect:/retur/index/"+level;
+            return redirect;
+        }
+        return "redirect:/login";
     }
 
     //Approved
-    @GetMapping("/approve/{id}")
-    public String approve(@PathVariable(value = "id") String id, Model model) {
-        Retur retur = returService.getReturById(id);
-        model.addAttribute("returObject", retur);
+    @GetMapping("/approve/{id}/{level}")
+    public String approve(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
+                          @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            Retur retur = returService.getReturById(id);
+            model.addAttribute("returObject", retur);
 
-        List<ReturDetail> listDetail = returService.getReturDetail(id);
-        model.addAttribute("detailReturObject", listDetail);
+            List<ReturDetail> listDetail = returService.getReturDetail(id);
+            model.addAttribute("detailReturObject", listDetail);
+            model.addAttribute("level", level);
 
-        model.addAttribute("state", "approve");
-        return "Retur/Confirmation";
+
+            model.addAttribute("state", "approve");
+
+            if(!retur.getOrder_type().equals("T")){
+                Driver driver = driverService.getDriverById(retur.getDriver_id());
+                model.addAttribute("drivername", driver.getName());
+            }
+
+            return "Retur/Confirmation";
+        }
+        return "redirect:/login";
     }
 
-    @RequestMapping("/approve-confirmed/{id}")
-    public String approveconfirmed(@PathVariable(value = "id") String id, RedirectAttributes redirectAttrs) {
-        //**----Dari Session
-        String staffName = "Admin Transaksi";
+    @RequestMapping("/approve-confirmed/{id}/{level}")
+    public String approveconfirmed(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level,
+                                   RedirectAttributes redirectAttrs, HttpSession httpsession,
+                                   @SessionAttribute(required=false) LoggedUser logged_user) {
+        if(Session.isLogin(logged_user,httpsession)){
+            //**----Dari Session
+            String staffName = logged_user.getName();
 
-        returService.approve(id, staffName);
+            returService.approve(id, staffName);
 
-        redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Approved!");
-        return "redirect:/retur/index";
+            redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Approved!");
+            String redirect= "redirect:/retur/index/"+level;
+            return redirect;
+        }
+        return "redirect:/login";
     }
 }

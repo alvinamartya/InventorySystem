@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layoutSuperAdmin}">
+      layout:decorate="~{_layoutTransactionAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -21,7 +21,9 @@
                         </div>
 
                         <div class="col-md-4" style="padding-bottom:30px">
-                            <a href="create" class="btn btn-primary">+ Add New</a>
+                            <a th:if="${level.equals(1)}" href="/retur/create/1" class="btn btn-primary">+ Add New</a>
+                            <a th:if="${level.equals(2)}" href="/retur/create/2" class="btn btn-primary">+ Add New</a>
+                            <a th:if="${level.equals(3)}" href="/retur/create/3" class="btn btn-primary">+ Add New</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -35,7 +37,6 @@
                                 <th>Destination</th>
                                 <th>Dest Type</th>
                                 <th>Date</th>
-                                <th>Driver</th>
                                 <th>Checked By</th>
                                 <th>Approved By</th>
                                 <th>Action</th>
@@ -60,22 +61,29 @@
                                     </div>
                                 </td>
                                 <td th:text="${retur.date}"></td>
-                                <td th:text="${retur.driver_id}"></td>
                                 <td th:text="${retur.checked_by}"></td>
                                 <td th:text="${retur.approved_by}"></td>
 
-                                <td width="20%">
-                                    <div>
-                                        <a title="See Detail" th:href="@{detail/{id}(id=${retur.id})}" class="btn btn-info custom-icon-btn">
+                                <td class="action-col">
+                                    <span>
+                                        <a title="See Detail" th:href="@{/retur/detail/{id}/{level}(id=${retur.id},level=${level})}" class="btn btn-info custom-icon-btn">
                                             <i class="material-icons text-white">info</i></a>
                                         </a>
-                                        <a title="Check Retur" th:href="@{check/{id}(id=${retur.id})}" class="btn btn-success custom-icon-btn">
-                                            <i class="material-icons text-white">assignment</i></a>
-                                        </a>
-                                        <a title="Approve Retur" th:href="@{approve/{id}(id=${retur.id})}" class="btn btn-success custom-icon-btn">
-                                            <i class="material-icons text-white">assignment_turned_in</i></a>
-                                        </a>
-                                    </div>
+                                    </span>
+                                    <span>
+                                        <div th:if="${is_trans_admin.equals(0)}">
+                                            <a title="Check Order" th:if="${retur.checked_by.equals('-')}" th:href="@{/retur/check/{id}/{level}(id=${retur.id},level=${level})}" class="btn btn-success custom-icon-btn">
+                                                <i class="material-icons text-white">assignment</i></a>
+                                            </a>
+                                        </div>
+                                    </span>
+                                    <span>
+                                        <div th:if="${is_trans_admin.equals(1) and !retur.checked_by.equals('-')}">
+                                            <a title="Approve Order" th:if="${retur.approved_by.equals('-')}" th:href="@{/retur/approve/{id}/{level}(id=${retur.id},level=${level})}" class="btn btn-success custom-icon-btn">
+                                                <i class="material-icons text-white">assignment_turned_in</i></a>
+                                            </a>
+                                        </div>
+                                    </span>
                                 </td>
                             </tr>
                             </tbody>

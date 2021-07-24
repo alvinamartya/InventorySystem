@@ -40,6 +40,23 @@ public class WarehouseRESTController {
         return response;
     }
 
+    /*Level 2 Retur Cabang - Pusat*/
+    @RequestMapping("/api/getPusat")
+    public ResponseCustomJSON getPusat(@RequestBody WarehouseCustomJSON datapost) {
+        List<Warehouses> warehouseList = warehouseService.getPusatByCabang(datapost.getId());
+
+        List<WarehouseCustomJSON> data = new ArrayList<>();
+
+        for(int k = 0; k<warehouseList.size(); k++){
+            WarehouseCustomJSON warehouse = new WarehouseCustomJSON();
+            warehouse.setId(warehouseList.get(k).getId());
+            warehouse.setName(warehouseList.get(k).getName());
+            data.add(warehouse);
+        }
+        ResponseCustomJSON response = new ResponseCustomJSON("Done", data);
+        return response;
+    }
+
     /*Level 3 Cabang - Toko*/
     @RequestMapping("/api/getStore")
     public ResponseCustomJSON getStore(@RequestBody WarehouseCustomJSON datapost) {
