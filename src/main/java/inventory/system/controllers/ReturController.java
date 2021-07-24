@@ -41,11 +41,11 @@ public class ReturController {
 
     //view Index
     @RequestMapping("/index/{level}")
-    public String index(@PathVariable(value = "level") int level, Model model,  HttpSession httpsession,
-                        @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+    public String index(@PathVariable(value = "level") int level, Model model, HttpSession httpsession,
+                        @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
             List<Retur> returList = returService.getAllReturByWarehouse(logged_user.getWarehouse_id(), level);
-            int is_trans_admin = (logged_user.getRole_id()==1)?1:0;
+            int is_trans_admin = (logged_user.getRole_id() == 1) ? 1 : 0;
             model.addAttribute("is_trans_admin", is_trans_admin);
             model.addAttribute("level", level);
             model.addAttribute("listRetur", returList);
@@ -57,23 +57,20 @@ public class ReturController {
 
     // view create
     @RequestMapping("/create/{level}")
-    public String create(@PathVariable(value = "level") int level, Model model,  HttpSession httpsession,
-                         @SessionAttribute(required=false) LoggedUser logged_user) {
+    public String create(@PathVariable(value = "level") int level, Model model, HttpSession httpsession,
+                         @SessionAttribute(required = false) LoggedUser logged_user) {
         model.addAttribute("returObject", new ReturInput());
 
-        if(Session.isLogin(logged_user,httpsession)){
-            //----Diambil dari Session
-            //int level = 1; // 1=Pusat-Supplier, 2=Cabang-Pusat, 3=Toko-Cabang
-            //----Diambil dari Session
+        if (Session.isLogin(logged_user, httpsession)) {
             String destType = "";
             String originType = "";
             String destId = "";
             String originId = "";
-            List<Supplier> supplierDestList = new ArrayList<>();
-            List<Warehouses> warehouseOriginList = new ArrayList<>();
-            List<Stores> storeOriginList = new ArrayList<>();
+            List<Supplier> supplierDestList;
+            List<Warehouses> warehouseOriginList;
+            List<Stores> storeOriginList;
             List<Driver> driverList = new ArrayList<>();
-            List<Warehouses> warehouseDestList = new ArrayList<>();
+            List<Warehouses> warehouseDestList;
             List<Product> productList = productService.getAllProduct();
             List<Shelf> shelfList = shelfService.getAllShelfRR();
 
@@ -119,13 +116,12 @@ public class ReturController {
     // save retur
     @PostMapping("/save/{level}")
     public String save(@PathVariable(value = "level") int level, ReturInput returInput, RedirectAttributes redirectAttrs
-            , HttpSession httpsession, @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
             returService.saveRetur(returInput, logged_user);
             redirectAttrs.addFlashAttribute("success_create", "Retur Successfully Added!");
 
-            String redirect= "redirect:/retur/index/"+level;
-            return redirect;
+            return "redirect:/retur/index/" + level;
 
         }
         return "redirect:/login";
@@ -134,15 +130,15 @@ public class ReturController {
     // view detail retur
     @GetMapping("/detail/{id}/{level}")
     public String detail(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
-                         @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+                         @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
             Retur retur = returService.getReturById(id);
             model.addAttribute("returObject", retur);
 
             List<ReturDetail> listDetail = returService.getReturDetail(id);
             model.addAttribute("detailReturObject", listDetail);
             model.addAttribute("level", level);
-            if(!retur.getOrder_type().equals("T")){
+            if (!retur.getOrder_type().equals("T")) {
                 Driver driver = driverService.getDriverById(retur.getDriver_id());
                 model.addAttribute("drivername", driver.getName());
             }
@@ -154,8 +150,8 @@ public class ReturController {
     //Checked
     @GetMapping("/check/{id}/{level}")
     public String check(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
-                        @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+                        @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
             Retur retur = returService.getReturById(id);
             model.addAttribute("returObject", retur);
 
@@ -165,7 +161,7 @@ public class ReturController {
 
             model.addAttribute("state", "check");
 
-            if(!retur.getOrder_type().equals("T")){
+            if (!retur.getOrder_type().equals("T")) {
                 Driver driver = driverService.getDriverById(retur.getDriver_id());
                 model.addAttribute("drivername", driver.getName());
             }
@@ -178,16 +174,15 @@ public class ReturController {
     @RequestMapping("/check-confirmed/{id}/{level}")
     public String checkconfirmed(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level,
                                  RedirectAttributes redirectAttrs, HttpSession httpsession,
-                                 @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+                                 @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
             //**----Dari Session
             String staffName = logged_user.getName();
 
             returService.check(id, staffName);
 
             redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Checked!");
-            String redirect= "redirect:/retur/index/"+level;
-            return redirect;
+            return "redirect:/retur/index/" + level;
         }
         return "redirect:/login";
     }
@@ -195,19 +190,17 @@ public class ReturController {
     //Approved
     @GetMapping("/approve/{id}/{level}")
     public String approve(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
-                          @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+                          @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
             Retur retur = returService.getReturById(id);
             model.addAttribute("returObject", retur);
 
             List<ReturDetail> listDetail = returService.getReturDetail(id);
             model.addAttribute("detailReturObject", listDetail);
             model.addAttribute("level", level);
-
-
             model.addAttribute("state", "approve");
 
-            if(!retur.getOrder_type().equals("T")){
+            if (!retur.getOrder_type().equals("T")) {
                 Driver driver = driverService.getDriverById(retur.getDriver_id());
                 model.addAttribute("drivername", driver.getName());
             }
@@ -220,16 +213,14 @@ public class ReturController {
     @RequestMapping("/approve-confirmed/{id}/{level}")
     public String approveconfirmed(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level,
                                    RedirectAttributes redirectAttrs, HttpSession httpsession,
-                                   @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-            //**----Dari Session
+                                   @SessionAttribute(required = false) LoggedUser logged_user) {
+        if (Session.isLogin(logged_user, httpsession)) {
             String staffName = logged_user.getName();
 
             returService.approve(id, staffName);
 
             redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Approved!");
-            String redirect= "redirect:/retur/index/"+level;
-            return redirect;
+            return "redirect:/retur/index/" + level;
         }
         return "redirect:/login";
     }
