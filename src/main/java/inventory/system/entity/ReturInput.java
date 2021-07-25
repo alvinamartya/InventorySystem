@@ -6,10 +6,19 @@ public class ReturInput {
     private String dest_warehouse_id;
     private String origin_type;
     private String dest_type;
-    private Integer driver_id;
+    private Integer driver_id=0;
     private String detailJSON;
 
     public ReturInput() {
+    }
+
+    public ReturInput(String origin_type, String dest_type,
+                      String origin_warehouse_id, String dest_warehouse_id) {
+        this.origin_type = origin_type;
+        this.dest_type = dest_type;
+        this.origin_warehouse_id = origin_warehouse_id;
+        this.dest_warehouse_id = dest_warehouse_id;
+        this.driver_id = 0;
     }
 
     public String getDest_type() {

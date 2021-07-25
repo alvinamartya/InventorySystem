@@ -14,12 +14,12 @@ public class LoginService {
     @Autowired
     StaffsRepository staffsRepository;
 
-    public boolean checkEmail(String email){
+    public boolean checkEmail(String email) {
         Optional<Staffs> optional = staffsRepository.findByEmail(email);
         return optional.isPresent();
     }
 
-    public Staffs getStaff(String email){
+    public Staffs getStaff(String email) {
         Optional<Staffs> optional = staffsRepository.findByEmail(email);
         Staffs staff = null;
         if (optional.isPresent()) {
@@ -29,7 +29,7 @@ public class LoginService {
         return staff;
     }
 
-    public boolean authentication(String password,String passwordInput){
+    public boolean authentication(String password, String passwordInput) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.matches(passwordInput, password);
     }

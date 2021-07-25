@@ -5,7 +5,6 @@ import inventory.system.repository.SupplierDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,27 +13,12 @@ public class SupplierDetailService {
     @Autowired
     SupplierDetailsRepository supplierDetailsRepository;
 
-    public List<SupplierDetail> getAllSupplierDetail() {
-        List<SupplierDetail> supplierDetailList = (List<SupplierDetail>) supplierDetailsRepository.findAll();
-        supplierDetailList.sort(
-                Comparator
-                        .comparing(SupplierDetail::getSupplier_id)
-                        .thenComparing(SupplierDetail::getProduct_category_id)
-        );
-        return supplierDetailList;
-    }
-
     public List<SupplierDetail> getSupplierDetailByIdSup(String supplier_id) {
-        List<SupplierDetail> supplierDetailList =
-                (List<SupplierDetail>) supplierDetailsRepository.findSupplierDetailBySupId(supplier_id);
-
-        return supplierDetailList;
+        return supplierDetailsRepository.findSupplierDetailBySupId(supplier_id);
     }
 
-    public List<SupplierDetail> saveSupplierDetail(SupplierDetail supplierDetail, String supplier_id) {
+    public void saveSupplierDetail(SupplierDetail supplierDetail) {
         supplierDetailsRepository.save(supplierDetail);
-
-        return getAllSupplierDetail();
     }
 
     public SupplierDetail getSupplierDetailById(Integer id) {

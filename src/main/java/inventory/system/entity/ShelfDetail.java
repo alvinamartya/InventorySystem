@@ -70,4 +70,13 @@ public class ShelfDetail {
     public void setCol_shelf(int col_shelf) {
         this.col_shelf = col_shelf;
     }
+
+    public ShelfDetail(Integer id, String shelf_id, String product_id, Date expired_at, int row_shelf, int col_shelf) {
+        this.id = id;
+        this.shelf_id = shelf_id;
+        this.product_id = product_id;
+        this.expired_at = expired_at;
+        this.row_shelf = row_shelf;
+        this.col_shelf = col_shelf;
+    }
 }

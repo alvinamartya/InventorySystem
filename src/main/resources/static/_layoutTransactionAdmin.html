@@ -89,9 +89,9 @@
                 <!-- apps -->
                 <li>
                     <a href="javascript:;">
-                <span class="menu-caret">
-                  <i class="material-icons">arrow_drop_down</i>
-                </span>
+                        <span class="menu-caret">
+                          <i class="material-icons">arrow_drop_down</i>
+                        </span>
                         <i class="material-icons text-green">call_made</i>
                         <span>Order</span>
                     </a>
@@ -115,10 +115,30 @@
                 </li>
 
                 <li>
-                    <a th:href="@{/retur/index}">
+                    <a href="javascript:;">
+                        <span class="menu-caret">
+                          <i class="material-icons">arrow_drop_down</i>
+                        </span>
                         <i class="material-icons text-red">call_received</i>
                         <span>Retur</span>
                     </a>
+                    <ul class="sub-menu">
+                        <li th:if="${!session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/retur/index/3}">
+                                <span>Level 3</span>
+                            </a>
+                        </li>
+                        <li th:if="${session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/retur/index/1}">
+                                <span>Level 1</span>
+                            </a>
+                        </li>
+                        <li th:if="${session.logged_user.is_branch.equals(1)}">
+                            <a th:href="@{/retur/index/2}">
+                                <span>Level 2</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
             </ul>
@@ -147,14 +167,6 @@
                 <a class="navbar-item navbar-spacer-right navbar-heading hidden-md-down" href="#">
                     <span>Dashboard</span>
                 </a>
-                <div class="navbar-item nav navbar-nav">
-                    <div class="nav-item nav-link dropdown">
-                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="material-icons">notifications</i>
-                            <span class="tag tag-danger">4</span>
-                        </a>
-                    </div>
-                </div>
             </div>
         </nav>
         <!-- /top header -->

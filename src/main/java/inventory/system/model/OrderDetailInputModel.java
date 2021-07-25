@@ -1,8 +1,6 @@
-package inventory.system.entity;
+package inventory.system.model;
 
-import javax.persistence.*;
-
-public class OrderDetailInput {
+public class OrderDetailInputModel {
 
     private Integer productID;
     private String productOrigin;

@@ -1,17 +1,17 @@
-package inventory.system.entity;
+package inventory.system.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 
-public class WarehouseCustomJSON {
+public class WarehouseCustomJSONModel {
     private String id;
     private String name;
 
-    public WarehouseCustomJSON() {
+    public WarehouseCustomJSONModel() {
     }
 
-    public WarehouseCustomJSON(String id, String name) {
+    public WarehouseCustomJSONModel(String id, String name) {
         this.id = id;
         this.name = name;
     }

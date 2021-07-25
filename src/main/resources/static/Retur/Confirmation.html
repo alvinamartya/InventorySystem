@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layoutSuperAdmin}">
+      layout:decorate="~{_layoutTransactionAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -37,9 +37,9 @@
                         <label>Destination Warehouse</label>
                         <p th:text="*{destList.name}"></p>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" th:if='*{!order_type.equals("T")}'>
                         <label>Driver</label>
-                        <p><b th:text="*{driver_id}"></b><span th:text="*{driverList.name}"></span></p>
+                        <p><b th:text="${drivername}"></b></span></p>
                     </div>
                     <div class="form-group">
                         <label>Created By</label>
@@ -102,7 +102,7 @@
                     </div>
 
                     <div style="margin-top:50px;float:left">
-                        <a th:href="@{'/retur/index'}">Back To List</a>
+                        <a th:href="@{/retur/index/{level}(level=${level})}">Back To List</a>
                     </div>
                 </div>
             </div>
@@ -123,12 +123,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <form th:if='${returObject.checked_by.equals("-")}' th:action="@{/retur/check-confirmed/{id}(id=${returObject.id})}" method="post">
+                    <form th:if='${returObject.checked_by.equals("-")}' th:action="@{/retur/check-confirmed/{id}/{level}(id=${returObject.id},level=${level})}" method="post">
                         <input th:field="${returObject.id}" type="hidden">
                         <button type="submit" class="btn btn-success">
                             <i class="material-icons text-white">check</i> Yes, Check!</button>
                     </form>
-                    <form th:if='${!returObject.checked_by.equals("-")}' th:action="@{/retur/approve-confirmed/{id}(id=${returObject.id})}" method="post">
+                    <form th:if='${!returObject.checked_by.equals("-")}' th:action="@{/retur/approve-confirmed/{id}/{level}(id=${returObject.id},level=${level})}" method="post">
                         <input th:field="${returObject.id}" type="hidden">
                         <button type="submit" class="btn btn-success">
                             <i class="material-icons text-white">check</i> Yes, Approve!</button>

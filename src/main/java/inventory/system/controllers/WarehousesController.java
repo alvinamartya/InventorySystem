@@ -24,10 +24,12 @@ public class WarehousesController {
     // view index
     @RequestMapping("/index")
     public String index(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        List<Warehouses> warehousesList = warehousesService.getAllWarehouses();
-        model.addAttribute("listWarehouse", warehousesList);
-        return "Warehouse/Index";
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            List<Warehouses> warehousesList = warehousesService.getAllWarehouses();
+            model.addAttribute("listWarehouse", warehousesList);
+            return "Warehouse/Index";
         }
         return "redirect:/login";
     }
@@ -35,9 +37,11 @@ public class WarehousesController {
     // view create
     @RequestMapping("/create")
     public String create(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        model.addAttribute("warehouseObject", new Warehouses());
-        return "Warehouse/Create";
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            model.addAttribute("warehouseObject", new Warehouses());
+            return "Warehouse/Create";
         }
         return "redirect:/login";
     }
@@ -45,9 +49,11 @@ public class WarehousesController {
     // save warehouse
     @PostMapping("/save")
     public String save(Warehouses warehouses, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        warehousesService.saveWarehouses(warehouses, logged_user);
-        return "redirect:/warehouse/index";
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            warehousesService.saveWarehouses(warehouses, logged_user);
+            return "redirect:/warehouse/index";
         }
         return "redirect:/login";
     }
@@ -56,11 +62,13 @@ public class WarehousesController {
     @GetMapping("/edit/{id}")
     public String update(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Warehouses warehouses = warehousesService.getWarehousesById(id);
-        model.addAttribute("warehouseObject", warehouses);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Warehouses warehouses = warehousesService.getWarehousesById(id);
+            model.addAttribute("warehouseObject", warehouses);
 
-        return "Warehouse/Edit";
+            return "Warehouse/Edit";
         }
         return "redirect:/login";
     }
@@ -69,14 +77,16 @@ public class WarehousesController {
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") String id, Warehouses warehouses,
                          BindingResult result, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        if (result.hasErrors()) {
-            warehouses.setId(id);
-            return "Warehouse/Edit";
-        }
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            if (result.hasErrors()) {
+                warehouses.setId(id);
+                return "Warehouse/Edit";
+            }
 
-        warehousesService.update(id, warehouses, logged_user);
-        return "redirect:/warehouse/index";
+            warehousesService.update(id, warehouses, logged_user);
+            return "redirect:/warehouse/index";
         }
         return "redirect:/login";
     }
@@ -85,11 +95,13 @@ public class WarehousesController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Warehouses warehouses = warehousesService.getWarehousesById(id);
-        model.addAttribute("warehouseObject", warehouses);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Warehouses warehouses = warehousesService.getWarehousesById(id);
+            model.addAttribute("warehouseObject", warehouses);
 
-        return "Warehouse/Detail";
+            return "Warehouse/Detail";
         }
         return "redirect:/login";
     }
@@ -98,11 +110,13 @@ public class WarehousesController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Warehouses warehouses = warehousesService.getWarehousesById(id);
-        model.addAttribute("warehouseObject", warehouses);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Warehouses warehouses = warehousesService.getWarehousesById(id);
+            model.addAttribute("warehouseObject", warehouses);
 
-        return "Warehouse/Delete";
+            return "Warehouse/Delete";
         }
         return "redirect:/login";
     }
@@ -111,11 +125,13 @@ public class WarehousesController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") String id
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Warehouses warehouses = warehousesService.getWarehousesById(id);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Warehouses warehouses = warehousesService.getWarehousesById(id);
 
-        warehousesService.deleteWarehouses(warehouses, logged_user);
-        return "redirect:/warehouse/index";
+            warehousesService.deleteWarehouses(warehouses, logged_user);
+            return "redirect:/warehouse/index";
         }
         return "redirect:/login";
     }
@@ -124,12 +140,14 @@ public class WarehousesController {
     // deactivate warehouse
     @GetMapping("/deactivate/{id}")
     public String deactivate(@PathVariable(value = "id") String id, Model model
-            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
-        Warehouses warehouse = warehousesService.getWarehousesById(id);
-        model.addAttribute("warehouseObject", warehouse);
+            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Warehouses warehouse = warehousesService.getWarehousesById(id);
+            model.addAttribute("warehouseObject", warehouse);
 
-        return "Warehouse/Delete";
+            return "Warehouse/Delete";
         }
         return "redirect:/login";
     }
@@ -137,12 +155,14 @@ public class WarehousesController {
     // activated warehouse
     @GetMapping("/activate/{id}")
     public String active(@PathVariable(value = "id") String id, Model model
-            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
-        Warehouses warehouse = warehousesService.getWarehousesById(id);
-        model.addAttribute("warehouseObject", warehouse);
+            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Warehouses warehouse = warehousesService.getWarehousesById(id);
+            model.addAttribute("warehouseObject", warehouse);
 
-        return "Warehouse/Delete";
+            return "Warehouse/Delete";
         }
         return "redirect:/login";
     }
@@ -151,12 +171,14 @@ public class WarehousesController {
     @PostMapping("/activate-confirmed/{id}")
     public String activateConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Warehouses warehouse = warehousesService.getWarehousesById(id);
-        warehousesService.activate(warehouse, logged_user);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Warehouses warehouse = warehousesService.getWarehousesById(id);
+            warehousesService.activate(warehouse, logged_user);
 
-        redirectAttrs.addFlashAttribute("success_active", "Warehouse Successfully Activated!");
-        return "redirect:/warehouse/index";
+            redirectAttrs.addFlashAttribute("success_active", "Warehouse Successfully Activated!");
+            return "redirect:/warehouse/index";
         }
         return "redirect:/login";
     }

@@ -31,10 +31,12 @@ public class ProductController {
     // view index
     @RequestMapping("/index")
     public String index(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        List<Product> productList = productService.getAllProduct();
-        model.addAttribute("listProduct", productList);
-        return "Product/Index";
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            List<Product> productList = productService.getAllProduct();
+            model.addAttribute("listProduct", productList);
+            return "Product/Index";
         }
         return "redirect:/login";
     }
@@ -42,15 +44,17 @@ public class ProductController {
     // view create
     @RequestMapping("/create")
     public String create(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        model.addAttribute("productObject", new Product());
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            model.addAttribute("productObject", new Product());
 
-        List<String> unitList = productService.getUnits();
-        List<ProductCategory> categoryList = productCategoryService.getAllProductCategory();
-        model.addAttribute("listUnit", unitList);
-        model.addAttribute("listCategory", categoryList);
+            List<String> unitList = productService.getUnits();
+            List<ProductCategory> categoryList = productCategoryService.getAllProductCategory();
+            model.addAttribute("listUnit", unitList);
+            model.addAttribute("listCategory", categoryList);
 
-        return "Product/Create";
+            return "Product/Create";
         }
         return "redirect:/login";
     }
@@ -59,11 +63,13 @@ public class ProductController {
     @PostMapping("/save")
     public String save(Product product, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        productService.saveProduct(product, logged_user);
-        redirectAttrs.addFlashAttribute("success_create", "Product Successfully Added!");
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            productService.saveProduct(product, logged_user);
+            redirectAttrs.addFlashAttribute("success_create", "Product Successfully Added!");
 
-        return "redirect:/product/index";
+            return "redirect:/product/index";
         }
         return "redirect:/login";
     }
@@ -72,16 +78,18 @@ public class ProductController {
     @GetMapping("/edit/{id}")
     public String update(@PathVariable(value = "id") int id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Product product = productService.getProductById(id);
-        model.addAttribute("productObject", product);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Product product = productService.getProductById(id);
+            model.addAttribute("productObject", product);
 
-        List<String> unitList = productService.getUnits();
-        List<ProductCategory> categoryList = productCategoryService.getAllProductCategory();
-        model.addAttribute("listUnit", unitList);
-        model.addAttribute("listCategory", categoryList);
+            List<String> unitList = productService.getUnits();
+            List<ProductCategory> categoryList = productCategoryService.getAllProductCategory();
+            model.addAttribute("listUnit", unitList);
+            model.addAttribute("listCategory", categoryList);
 
-        return "Product/Edit";
+            return "Product/Edit";
         }
         return "redirect:/login";
     }
@@ -91,16 +99,18 @@ public class ProductController {
     public String update(@PathVariable("id") int id, Product product, BindingResult result,
                          RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        if(result.hasErrors()) {
-            product.setId(id);
-            return "Product/Edit";
-        }
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            if (result.hasErrors()) {
+                product.setId(id);
+                return "Product/Edit";
+            }
 
-        productService.update(id, product, logged_user);
+            productService.update(id, product, logged_user);
 
-        redirectAttrs.addFlashAttribute("success_update", "Product Successfully Updated!");
-        return "redirect:/product/index";
+            redirectAttrs.addFlashAttribute("success_update", "Product Successfully Updated!");
+            return "redirect:/product/index";
         }
         return "redirect:/login";
     }
@@ -109,11 +119,13 @@ public class ProductController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") int id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Product product = productService.getProductById(id);
-        model.addAttribute("productObject", product);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Product product = productService.getProductById(id);
+            model.addAttribute("productObject", product);
 
-        return "Product/Detail";
+            return "Product/Detail";
         }
         return "redirect:/login";
     }
@@ -122,11 +134,13 @@ public class ProductController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") int id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Product product = productService.getProductById(id);
-        model.addAttribute("productObject", product);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Product product = productService.getProductById(id);
+            model.addAttribute("productObject", product);
 
-        return "Product/Delete";
+            return "Product/Delete";
         }
         return "redirect:/login";
     }
@@ -135,12 +149,14 @@ public class ProductController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Product product = productService.getProductById(id);
-        productService.delete(product, logged_user);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Product product = productService.getProductById(id);
+            productService.delete(product, logged_user);
 
-        redirectAttrs.addFlashAttribute("success_deactive", "Product Successfully Deactivated!");
-        return "redirect:/product/index";
+            redirectAttrs.addFlashAttribute("success_deactive", "Product Successfully Deactivated!");
+            return "redirect:/product/index";
         }
         return "redirect:/login";
     }
@@ -149,11 +165,13 @@ public class ProductController {
     @GetMapping("/deactivate/{id}")
     public String deactivate(@PathVariable(value = "id") int id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Product product = productService.getProductById(id);
-        model.addAttribute("productObject", product);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Product product = productService.getProductById(id);
+            model.addAttribute("productObject", product);
 
-        return "Product/Delete";
+            return "Product/Delete";
         }
         return "redirect:/login";
     }
@@ -162,11 +180,13 @@ public class ProductController {
     @GetMapping("/activate/{id}")
     public String active(@PathVariable(value = "id") int id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Product product = productService.getProductById(id);
-        model.addAttribute("productObject", product);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Product product = productService.getProductById(id);
+            model.addAttribute("productObject", product);
 
-        return "Product/Delete";
+            return "Product/Delete";
         }
         return "redirect:/login";
     }
@@ -175,12 +195,14 @@ public class ProductController {
     @PostMapping("/activate-confirmed/{id}")
     public String activateConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Product product = productService.getProductById(id);
-        productService.activate(product, logged_user);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Product product = productService.getProductById(id);
+            productService.activate(product, logged_user);
 
-        redirectAttrs.addFlashAttribute("success_active", "Product Successfully Activated!");
-        return "redirect:/product/index";
+            redirectAttrs.addFlashAttribute("success_active", "Product Successfully Activated!");
+            return "redirect:/product/index";
         }
         return "redirect:/login";
     }

@@ -1,6 +1,5 @@
 package inventory.system.controllers;
 
-import inventory.system.entity.Driver;
 import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Staffs;
 import inventory.system.entity.Warehouses;
@@ -30,8 +29,10 @@ public class StaffsController {
     //index
     @RequestMapping("/index")
     public String getStaff(Model model, HttpSession httpsession,
-                           @SessionAttribute(required=false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
+                           @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Staffs> staffsList = staffService.getAllStaff();
 
             model.addAttribute("listStaff", staffsList);
@@ -43,8 +44,10 @@ public class StaffsController {
     //view create
     @RequestMapping("/create")
     public String viewAddStaff(Model model, HttpSession httpsession,
-                               @SessionAttribute(required=false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
+                               @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
             model.addAttribute("listWarehouse", warehouseList);
             model.addAttribute("staffObject", new Staffs());
@@ -55,24 +58,25 @@ public class StaffsController {
 
     }
 
-
     //save staff
     @PostMapping("/save")
-    public String addStaff(@ModelAttribute("current_staff") Staffs currstaff, Staffs staffs, Model model,
+    public String addStaff(@ModelAttribute("current_staff") Staffs currStaff, Staffs staffs, Model model,
                            RedirectAttributes redirectAttrs, HttpSession httpsession,
-                           @SessionAttribute(required=false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
-        if(staffService.isEmailExist(staffs.getEmail())){
-            staffService.saveStaff(staffs, logged_user);
+                           @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            if (staffService.isEmailExist(staffs.getEmail())) {
+                staffService.saveStaff(staffs, logged_user);
 
-            redirectAttrs.addFlashAttribute("success_create", "Staff Successfully Added!");
-            return "redirect:/staff/index";
-        }
+                redirectAttrs.addFlashAttribute("success_create", "Staff Successfully Added!");
+                return "redirect:/staff/index";
+            }
 
-        model.addAttribute("staffObject", staffs);
-        model.addAttribute("email_exist", "Email Exist! Try Another One");
+            model.addAttribute("staffObject", staffs);
+            model.addAttribute("email_exist", "Email Exist! Try Another One");
 
-        return "Staff/Create";
+            return "Staff/Create";
         }
         return "redirect:/login";
     }
@@ -80,8 +84,10 @@ public class StaffsController {
     //view edit staff
     @GetMapping("/edit/{id}")
     public String Update(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession,
-                         @SessionAttribute(required=false) LoggedUser logged_user){
-        if(Session.isLogin(logged_user,httpsession)){
+                         @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Staffs staffs = staffService.getStaffById(id);
             List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
             model.addAttribute("listWarehouse", warehouseList);
@@ -96,24 +102,24 @@ public class StaffsController {
     public String update(@PathVariable("id") int id, Staffs staff,
                          BindingResult result, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        if (result.hasErrors()) {
-            staff.setId(id);
-            return "Staff/Edit";
-        }
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            if (result.hasErrors()) {
+                staff.setId(id);
+                return "Staff/Edit";
+            }
 
-        staffService.update(id, staff, logged_user);
+            staffService.update(id, staff, logged_user);
 
-        redirectAttrs.addFlashAttribute("success_update", "Staff Successfully Updated!");
-        return "redirect:/staff/index";
+            redirectAttrs.addFlashAttribute("success_update", "Staff Successfully Updated!");
+            return "redirect:/staff/index";
         }
         return "redirect:/login";
     }
 
-
-
     @RequestMapping("/update-password/{id}")
-    public String updatepasswordview(@PathVariable("id") int id, Staffs staff, Model model) {
+    public String updatepasswordview(@PathVariable("id") int id, Model model) {
         Staffs staffs = new Staffs();
         staffs.setId(id);
         model.addAttribute("staffObject", staffs);
@@ -121,9 +127,8 @@ public class StaffsController {
     }
 
     @PostMapping("/update-password-save/{id}")
-    public String updatepassword(@PathVariable("id") int id, Staffs staff,
-                         BindingResult result, RedirectAttributes redirectAttrs) {
-        staffService.updatepassword(id, staff);
+    public String updatepassword(@PathVariable("id") int id, Staffs staff) {
+        staffService.updatePassword(id, staff);
 
         return "redirect:/logout";
     }
@@ -131,8 +136,10 @@ public class StaffsController {
     // view detail Staff
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession,
-                         @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+                         @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Staffs staffs = staffService.getStaffById(id);
             model.addAttribute("staffsObject", staffs);
 
@@ -145,8 +152,10 @@ public class StaffsController {
     // view delete Staff
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession,
-                         @SessionAttribute(required=false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
+                         @SessionAttribute(required = false) LoggedUser logged_user) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Staffs staffs = staffService.getStaffById(id);
             model.addAttribute("staffsObject", staffs);
 
@@ -160,11 +169,13 @@ public class StaffsController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") int id
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-        Staffs staffs = staffService.getStaffById(id);
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            Staffs staffs = staffService.getStaffById(id);
 
-        staffService.deleteStaff(staffs, logged_user);
-        return "redirect:/staff/index";
+            staffService.deleteStaff(staffs, logged_user);
+            return "redirect:/staff/index";
         }
         return "redirect:/login";
     }

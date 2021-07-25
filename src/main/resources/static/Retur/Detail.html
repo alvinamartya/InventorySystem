@@ -37,9 +37,9 @@
                         <label>Destination Warehouse</label>
                         <p th:text="*{getDestList().name}"></p>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" th:if='*{!order_type.equals("T")}'>
                         <label>Driver</label>
-                        <p><b th:text="*{driver_id}"> - </b><span th:text="*{driverList.name}"></span></p>
+                        <p><b th:text="${drivername}"></b></span></p>
                     </div>
                     <div class="form-group">
                         <label>Created By</label>
@@ -88,7 +88,7 @@
                     </div>
 
                     <div style="margin-top:50px;float:left">
-                        <a th:href="@{'/retur/index'}">Back To List</a>
+                        <a th:href="@{/retur/index/{level}(level=${level})}">Back To List</a>
                     </div>
                 </div>
             </div>

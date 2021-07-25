@@ -28,14 +28,14 @@ public class LoginController {
 
     @RequestMapping("/login")
     public String login(HttpSession httpsession, @ModelAttribute LoggedUser logged_user) {
-        if(Session.isLogin(logged_user,httpsession)){
-            if(logged_user.getRole_id().equals(1)){
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
+            if (logged_user.getRole_id().equals(1)) {
                 return "redirect:/";
-            }
-            else if(logged_user.getRole_id().equals(2)){
+            } else if (logged_user.getRole_id().equals(2)) {
                 return "redirect:/";
-            }
-            else if(logged_user.getRole_id().equals(3)){
+            } else if (logged_user.getRole_id().equals(3)) {
                 return "redirect:/";
             }
 
@@ -47,17 +47,15 @@ public class LoginController {
     @PostMapping("/login/authentication")
     public String authentication
             (final Model model, @ModelAttribute LoggedUser logged_user, Staffs staff, RedirectAttributes redirectAttrs) {
-
         String email = staff.getEmail();
-
-        if(loginService.checkEmail(email)){
+        if (loginService.checkEmail(email)) {
             Staffs staffData = loginService.getStaff(email);
-            if(loginService.authentication(staffData.getPassword(), staff.getPassword())){
+            if (loginService.authentication(staffData.getPassword(), staff.getPassword())) {
                 LoggedUser data = new LoggedUser();
                 data.setId(staffData.getId());
                 data.setName(staffData.getName());
                 data.setRole_id(staffData.getRole_id());
-                switch(staffData.getRole_id()) {
+                switch (staffData.getRole_id()) {
                     case 1:
                         data.setRole_name("Transaction Admin");
                         break;
@@ -77,13 +75,11 @@ public class LoginController {
                 data.setIs_branch(staffData.getWarehousesList().getIs_branch());
                 model.addAttribute("logged_user", data);
                 return "redirect:/";
-            }
-            else{
+            } else {
                 redirectAttrs.addFlashAttribute("wrong_password", "Password Not Match!");
                 return "redirect:/login";
             }
-        }
-        else{
+        } else {
             redirectAttrs.addFlashAttribute("wrong_email", "Email Not Found!");
             return "redirect:/login";
         }

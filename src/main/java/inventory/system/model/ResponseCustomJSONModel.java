@@ -1,13 +1,13 @@
-package inventory.system.entity;
+package inventory.system.model;
 
-public class ResponseCustomJSON {
+public class ResponseCustomJSONModel {
     private String status;
     private Object data;
 
-    public ResponseCustomJSON() {
+    public ResponseCustomJSONModel() {
     }
 
-    public ResponseCustomJSON(String status, Object data) {
+    public ResponseCustomJSONModel(String status, Object data) {
         this.status = status;
         this.data = data;
     }

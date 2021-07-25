@@ -3,10 +3,7 @@ package inventory.system.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import inventory.system.entity.Retur;
-import inventory.system.entity.ReturDetail;
-import inventory.system.entity.ReturDetailInput;
-import inventory.system.entity.ReturInput;
+import inventory.system.entity.*;
 import inventory.system.repository.ReturDetailRepository;
 import inventory.system.repository.ReturRepository;
 import inventory.system.utils.GeneratorId;
@@ -27,33 +24,38 @@ public class ReturService {
     @Autowired
     ReturDetailRepository returDetailRepository;
 
-    public List<Retur> getAllRetur(){
-        List<Retur> returList = (List<Retur>) returRepository.findAll();
-//        returList.sort(
-//                Comparator
-//                        .comparing(Retur::getDate)
-//                        .thenComparing(Retur::getId)
-//
-//        );
-        return returList;
+    public List<Retur> getAllRetur() {
+        return (List<Retur>) returRepository.findAll();
     }
 
-    public List<Retur> saveRetur(ReturInput returInput){
+    public List<Retur> getAllReturByWarehouse(String warehouse_id, int level) {
+        if (level == 1) {
+            return returRepository.findByWarehouseLv1(warehouse_id);
+        } else if (level == 2) {
+            return returRepository.findByWarehouseLv2(warehouse_id);
+        } else if (level == 3) {
+            return returRepository.findByWarehouseLv3(warehouse_id);
+        }
+        return (List<Retur>) returRepository.findAll();
+    }
+
+    public List<Retur> saveRetur(ReturInput returInput, LoggedUser loggedUser) {
         Retur retur = new Retur();
         String returId = generateId(returInput.getOrigin_warehouse_id(),
                 returInput.getDest_warehouse_id(),
                 returInput.getDest_type(),
                 returInput.getOrigin_type());
-        retur.setId(returId);
 
+        retur.setId(returId);
         retur.setOrigin_id(returInput.getOrigin_warehouse_id());
         retur.setOrder_type(returInput.getOrigin_type());
-
         retur.setDest_id(returInput.getDest_warehouse_id());
         retur.setDest_type(returInput.getDest_type());
-
         retur.setDate(new Date());
-        retur.setDriver_id(returInput.getDriver_id());
+
+        if (!returInput.getDriver_id().equals(0)) {
+            retur.setDriver_id(returInput.getDriver_id());
+        }
 
         retur.setChecked_at(new Date());
         retur.setChecked_by("-");
@@ -62,10 +64,12 @@ public class ReturService {
         retur.setApproved_by("-");
 
         retur.setCreated_at(new Date());
-        retur.setCreated_by("Admin Transaksi");
+        retur.setCreated_by(loggedUser.getName());
 
         retur.setUpdated_at(new Date());
-        retur.setUpdated_by("Admin Transaksi");
+        retur.setUpdated_by(loggedUser.getName());
+
+        retur.setWarehouse_at(loggedUser.getWarehouse_id());
 
         returRepository.save(retur);
 
@@ -73,37 +77,36 @@ public class ReturService {
 
         List<ReturDetailInput> detailList = null;
         try {
-            detailList = objectMapper.readValue(returInput.getDetailJSON(), new TypeReference<List<ReturDetailInput>>() {});
+            detailList = objectMapper.readValue(returInput.getDetailJSON(),
+                    new TypeReference<List<ReturDetailInput>>() {
+                    });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        insertDetail(returId, detailList);
+        insertDetail(returId, Objects.requireNonNull(detailList));
 
         return getAllRetur();
     }
 
-    public int insertDetail(String returId, List<ReturDetailInput> detailList){
+    public void insertDetail(String returId, List<ReturDetailInput> detailList) {
 
-        List<ReturDetail> arrayReturDetail = new ArrayList<ReturDetail>();
+        List<ReturDetail> arrayReturDetail = new ArrayList<>();
 
-        for(int k = 0; k<detailList.size(); k++){
+        for (ReturDetailInput returDetailInput : detailList) {
             ReturDetail returDetail = new ReturDetail();
             returDetail.setRetur_id(returId);
-            returDetail.setProduct_id(detailList.get(k).getProductID());
-            returDetail.setOrigin_shelf_id(detailList.get(k).getProductOrigin());
-            returDetail.setDest_shelf_id(detailList.get(k).getProductDest());
-            returDetail.setQty(detailList.get(k).getProductQty());
+            returDetail.setProduct_id(returDetailInput.getProductID());
+            returDetail.setOrigin_shelf_id(returDetailInput.getProductOrigin());
+            returDetail.setDest_shelf_id(returDetailInput.getProductDest());
+            returDetail.setQty(returDetailInput.getProductQty());
             arrayReturDetail.add(returDetail);
         }
 
         returDetailRepository.saveAll(arrayReturDetail);
-
-        return 1;
     }
 
     public List<ReturDetail> getReturDetail(String id) {
-        List<ReturDetail> listDetail = returDetailRepository.findReturDetailByReturId(id);
-        return listDetail;
+        return returDetailRepository.findReturDetailByReturId(id);
     }
 
     public Retur getReturById(String id) {
@@ -119,12 +122,12 @@ public class ReturService {
     }
 
     //ID Retur Origin Otomatis
-    private String generateId(String originId, String destId, String destType,String originType) {
+    private String generateId(String originId, String destId, String destType, String originType) {
         int lastCounter = getLastCounter(originType);
 
         String typeId = originType.equals("W") ? "W" : "T";
         String typeDest = destType.equals("W") ? "W" : "S";
-        String dateId = LocalDate.now().toString().replace("-","");
+        String dateId = LocalDate.now().toString().replace("-", "");
         return "FR" + "-" + typeId + originId + "-" + typeDest + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
     }
 
@@ -175,7 +178,6 @@ public class ReturService {
 
     @Transactional
     public void delete(Retur retur) {
-        //orderdetailsRepository.deleteDetail(order.getId());
         returRepository.delete(retur);
     }
 }

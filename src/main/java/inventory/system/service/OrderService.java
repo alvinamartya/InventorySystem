@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import inventory.system.entity.*;
+import inventory.system.model.OrderDetailInputModel;
 import inventory.system.repository.OrderDetailRepository;
 import inventory.system.repository.OrderRepository;
+import inventory.system.repository.ShelfDetailRepository;
 import inventory.system.utils.GeneratorId;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -19,24 +20,25 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
-    @Autowired
+    @Resource
     OrderRepository ordersRepository;
 
-    @Autowired
+    @Resource
     OrderDetailRepository orderDetailsRepository;
+
+    @Resource
+    ShelfDetailRepository shelfDetailRepository;
 
     public List<Order> getAllOrder() {
         return (List<Order>) ordersRepository.findAll();
     }
 
     public List<Order> getAllOrderByWarehouse(String warehouse_id, int level) {
-        if(level==1){
+        if (level == 1) {
             return ordersRepository.findByWarehouseLv1(warehouse_id);
-        }
-        else if(level==2){
+        } else if (level == 2) {
             return ordersRepository.findByWarehouseLv2(warehouse_id);
-        }
-        else if(level==3){
+        } else if (level == 3) {
             return ordersRepository.findByWarehouseLv3(warehouse_id);
         }
         return (List<Order>) ordersRepository.findAll();
@@ -44,17 +46,17 @@ public class OrderService {
 
     public void saveOrder(OrderInput orderinput, LoggedUser loggedUser) {
         Order orders = new Order();
-        String orderid = generateId(orderinput.getOrigin_warehouse_id()
+        String orderId = generateId(orderinput.getOrigin_warehouse_id()
                 , orderinput.getDest_warehouse_id()
                 , orderinput.getOrigin_type()
                 , orderinput.getDest_type());
-        orders.setId(orderid);
+        orders.setId(orderId);
         orders.setOrigin_id(orderinput.getOrigin_warehouse_id());
         orders.setOrigin_type(orderinput.getOrigin_type());
         orders.setDest_id(orderinput.getDest_warehouse_id());
         orders.setDest_type(orderinput.getDest_type());
         orders.setDate(new Date());
-        if(!orderinput.getDriver_id().equals(0)){
+        if (!orderinput.getDriver_id().equals(0)) {
             orders.setDriver_id(orderinput.getDriver_id());
         }
 
@@ -70,25 +72,24 @@ public class OrderService {
         orders.setWarehouse_at(loggedUser.getWarehouse_id());
         ordersRepository.save(orders);
 
-
         ObjectMapper objectMapper = new ObjectMapper();
-        List<OrderDetailInput> detailList = null;
+        List<OrderDetailInputModel> detailList = null;
         try {
             detailList = objectMapper.readValue(
                     orderinput.getDetailJSON(),
-                    new TypeReference<List<OrderDetailInput>>() {
+                    new TypeReference<List<OrderDetailInputModel>>() {
                     });
         } catch (JsonProcessingException e) {
             System.out.println(e.getMessage());
         }
 
-        insertDetail(orderid, Objects.requireNonNull(detailList));
+        insertDetail(orderId, Objects.requireNonNull(detailList));
         getAllOrder();
     }
 
-    public void insertDetail(String orderId, List<OrderDetailInput> detailList) {
+    public void insertDetail(String orderId, List<OrderDetailInputModel> detailList) {
         List<OrderDetail> arrayOrderDetail = new ArrayList<OrderDetail>();
-        for (OrderDetailInput orderDetailInput : detailList) {
+        for (OrderDetailInputModel orderDetailInput : detailList) {
             OrderDetail orderdetail = new OrderDetail();
             orderdetail.setOrder_id(orderId);
             orderdetail.setProduct_id(orderDetailInput.getProductID());
@@ -121,7 +122,7 @@ public class OrderService {
         String typeOrId = originType.equals("Gudang") ? "W" : "S";
         String typeDestId = destType.equals("Gudang") ? "W" : "T";
 
-        String dateId = LocalDate.now().toString().replace("-","");
+        String dateId = LocalDate.now().toString().replace("-", "");
         return "FO" + "-" + typeOrId + originId + "-" + typeDestId + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
 
     }
@@ -185,8 +186,17 @@ public class OrderService {
         ordersRepository.delete(order);
     }
 
+    public void moveShelfDetail(List<OrderDetail> listOrderDetail) {
+        for (OrderDetail orderDetail : listOrderDetail) {
+            Product product = orderDetail.getProductList();
+            ProductCategory productCategory = product.getProductCategory();
+            boolean isCanStale = productCategory.getIs_can_be_stale() == 1;
+        }
+    }
 
+    public void getRowAndColumn(List<ShelfDetail> shelfDetails) {
 
+    }
 }
 
 

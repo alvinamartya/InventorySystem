@@ -1,7 +1,6 @@
 package inventory.system.entity;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "order_details")
@@ -110,5 +109,30 @@ public class OrderDetail {
 
     public void setOriginshelfList(Shelf originshelfList) {
         this.originshelfList = originshelfList;
+    }
+
+    public OrderDetail(Integer id, String order_id, Integer product_id, String dest_shelf_id, String origin_shelf_id, Integer quantity, Order orderList, Product productList, Shelf destshelfList, Shelf originshelfList) {
+        this.id = id;
+        this.order_id = order_id;
+        this.product_id = product_id;
+        this.dest_shelf_id = dest_shelf_id;
+        this.origin_shelf_id = origin_shelf_id;
+        this.quantity = quantity;
+        this.orderList = orderList;
+        this.productList = productList;
+        this.destshelfList = destshelfList;
+        this.originshelfList = originshelfList;
+    }
+
+    public OrderDetail(Integer id, String order_id, Integer product_id, String dest_shelf_id, String origin_shelf_id, Integer quantity) {
+        this.id = id;
+        this.order_id = order_id;
+        this.product_id = product_id;
+        this.dest_shelf_id = dest_shelf_id;
+        this.origin_shelf_id = origin_shelf_id;
+        this.quantity = quantity;
+    }
+
+    public OrderDetail() {
     }
 }
