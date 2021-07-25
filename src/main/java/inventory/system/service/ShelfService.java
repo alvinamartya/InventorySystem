@@ -1,8 +1,10 @@
 package inventory.system.service;
 
 import inventory.system.entity.LoggedUser;
+import inventory.system.entity.Product;
 import inventory.system.entity.Shelf;
 import inventory.system.entity.ShelfDetail;
+import inventory.system.repository.ProductRepository;
 import inventory.system.repository.ShelfDetailRepository;
 import inventory.system.repository.ShelfRepository;
 import inventory.system.utils.GeneratorId;
@@ -20,6 +22,9 @@ public class ShelfService {
     ShelfRepository shelfRepository;
 
     @Autowired
+    ProductService productService;
+
+    @Autowired
     ShelfDetailRepository shelfDetailRepository;
 
     public List<Shelf> getAllShelf() {
@@ -32,6 +37,11 @@ public class ShelfService {
 
     public List<Shelf> getAllShelfRR() {
         return shelfRepository.findAllRR();
+    }
+
+    public List<Shelf> getShelfByCategory(String id) {
+        Product product = productService.getProductById(Integer.parseInt(id));
+        return shelfRepository.findShelfByCategoryRO(product.getProduct_category_id());
     }
 
     public void saveShelf(Shelf shelf, LoggedUser loggedUser) {
@@ -144,4 +154,6 @@ public class ShelfService {
         shelfDetailRepository.deleteDetail(shelf.getId());
         shelfRepository.delete(shelf);
     }
+
+
 }

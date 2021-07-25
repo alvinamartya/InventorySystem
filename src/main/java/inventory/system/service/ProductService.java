@@ -2,7 +2,12 @@ package inventory.system.service;
 
 import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Product;
+import inventory.system.entity.Supplier;
+import inventory.system.entity.SupplierDetail;
+import inventory.system.model.OrderDetailInputModel;
 import inventory.system.repository.ProductRepository;
+import inventory.system.repository.SupplierDetailsRepository;
+import inventory.system.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +20,9 @@ public class ProductService {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    SupplierDetailsRepository supplierdetailRepository;
+
     public List<Product> getAllProduct() {
         List<Product> productList = (List<Product>) productRepository.findAll();
         productList.sort(
@@ -23,6 +31,15 @@ public class ProductService {
                         .thenComparing(Product::getName)
         );
 
+        return productList;
+    }
+
+    public List<Product> getProductBySupplier(String id) {
+        List<SupplierDetail> supplierdetailList = supplierdetailRepository.findSupplierDetailBySupId(id);
+        List<Product> productList = new ArrayList<Product>();
+        for (SupplierDetail suppDetail : supplierdetailList) {
+            productList.addAll(productRepository.findBySupplierId(suppDetail.getProduct_category_id()));
+        }
         return productList;
     }
 
@@ -92,4 +109,6 @@ public class ProductService {
         unit.add("Dus");
         return unit;
     }
+
+
 }
