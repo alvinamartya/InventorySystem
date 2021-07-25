@@ -108,12 +108,5 @@ public class ReturDetail {
         this.destshelfList = destshelfList;
     }
 
-    public Shelf getOriginshelfList() {
-        return originshelfList;
-    }
-
-    public void setOriginshelfList(Shelf originshelfList) {
-        this.originshelfList = originshelfList;
-    }
 
 }

@@ -33,10 +33,6 @@ public class Retur {
     @JoinColumn(name = "dest_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Warehouses destList;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "driver_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Driver driverList;
-
     public Retur(){
 
     }
@@ -198,14 +194,6 @@ public class Retur {
 
     public void setDestList(Warehouses destList) {
         this.destList = destList;
-    }
-
-    public Driver getDriverList() {
-        return driverList;
-    }
-
-    public void setDriverList(Driver driverList) {
-        this.driverList = driverList;
     }
 
     public String getWarehouse_at() {
