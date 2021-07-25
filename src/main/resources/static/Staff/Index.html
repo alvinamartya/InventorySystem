@@ -92,16 +92,21 @@
                                     </div>
                                 </td>
 
-                                <td width="30%" th:if='${staffs.status.equals("A")}'>
-                                    <div>
-                                        <a th:href="@{detail/{id}(id=${staffs.id})}" class="btn btn-info">Detail</a>
-                                        <a th:href="@{edit/{id}(id=${staffs.id})}" class="btn btn-outline-primary">Edit</a>
-                                        <a th:href="@{delete/{id}(id=${staffs.id})}" class="btn btn-danger">Delete</a>
-                                    </div>
+                                <td th:if='${staffs.status.equals("A")}'>
+                                    <a title="See Detail" th:href="@{detail/{id}(id=${staffs.id})}" class="btn btn-info custom-icon-btn">
+                                        <i class="material-icons text-white">info</i></a>
+                                    <a title="Edit Item" th:href="@{edit/{id}(id=${staffs.id})}" class="btn btn-outline-primary custom-icon-btn">
+                                        <i class="material-icons text-primary custom-outline">edit</i>
+                                    </a>
+                                    <a title="Deactivate Item" th:href="@{delete/{id}(id=${staffs.id})}" class="btn btn-danger custom-icon-btn">
+                                        <i class="material-icons text-white">delete</i>
+                                    </a>
                                 </td>
 
-                                <td width="30%" th:unless='${staffs.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${staffs.id})}" class="btn btn-info">Detail</a>
+                                <td th:unless='${staffs.status.equals("A")}'>
+                                    <a title="See Detail" th:href="@{detail/{id}(id=${staffs.id})}" class="btn btn-info custom-icon-btn">
+                                        <i class="material-icons text-white">info</i></a>
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>

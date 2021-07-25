@@ -28,7 +28,9 @@ public class LoginController {
 
     @RequestMapping("/login")
     public String login(HttpSession httpsession, @ModelAttribute LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             if (logged_user.getRole_id().equals(1)) {
                 return "redirect:/";
             } else if (logged_user.getRole_id().equals(2)) {

@@ -1,6 +1,9 @@
 package inventory.system.controllers;
 
 import inventory.system.entity.*;
+import inventory.system.model.DriverCustomJSONModel;
+import inventory.system.model.ResponseCustomJSONModel;
+import inventory.system.model.WarehouseCustomJSONModel;
 import inventory.system.service.DriverService;
 import inventory.system.service.StoresService;
 import inventory.system.service.WarehousesService;
@@ -25,66 +28,66 @@ public class WarehouseRESTController {
 
     /*Level 2 Pusat - Cabang*/
     @RequestMapping("/api/getCabang")
-    public ResponseCustomJSON getCabang(@RequestBody WarehouseCustomJSON datapost) {
+    public ResponseCustomJSONModel getCabang(@RequestBody WarehouseCustomJSONModel datapost) {
         List<Warehouses> warehouseList = warehouseService.getCabangByPusat(datapost.getId());
 
-        List<WarehouseCustomJSON> data = new ArrayList<>();
+        List<WarehouseCustomJSONModel> data = new ArrayList<>();
 
         for (Warehouses warehouses : warehouseList) {
-            WarehouseCustomJSON warehouse = new WarehouseCustomJSON();
+            WarehouseCustomJSONModel warehouse = new WarehouseCustomJSONModel();
             warehouse.setId(warehouses.getId());
             warehouse.setName(warehouses.getName());
             data.add(warehouse);
         }
-        return new ResponseCustomJSON("Done", data);
+        return new ResponseCustomJSONModel("Done", data);
     }
 
     /*Level 2 Retur Cabang - Pusat*/
     @RequestMapping("/api/getPusat")
-    public ResponseCustomJSON getPusat(@RequestBody WarehouseCustomJSON datapost) {
+    public ResponseCustomJSONModel getPusat(@RequestBody WarehouseCustomJSONModel datapost) {
         List<Warehouses> warehouseList = warehouseService.getPusatByCabang(datapost.getId());
 
-        List<WarehouseCustomJSON> data = new ArrayList<>();
+        List<WarehouseCustomJSONModel> data = new ArrayList<>();
 
         for(int k = 0; k<warehouseList.size(); k++){
-            WarehouseCustomJSON warehouse = new WarehouseCustomJSON();
+            WarehouseCustomJSONModel warehouse = new WarehouseCustomJSONModel();
             warehouse.setId(warehouseList.get(k).getId());
             warehouse.setName(warehouseList.get(k).getName());
             data.add(warehouse);
         }
-        ResponseCustomJSON response = new ResponseCustomJSON("Done", data);
+        ResponseCustomJSONModel response = new ResponseCustomJSONModel("Done", data);
         return response;
     }
 
     /*Level 3 Cabang - Toko*/
     @RequestMapping("/api/getStore")
-    public ResponseCustomJSON getStore(@RequestBody WarehouseCustomJSON datapost) {
+    public ResponseCustomJSONModel getStore(@RequestBody WarehouseCustomJSONModel datapost) {
         List<Stores> warehouseList = warehouseService.getStoreByCabang(datapost.getId());
 
-        List<WarehouseCustomJSON> data = new ArrayList<>();
+        List<WarehouseCustomJSONModel> data = new ArrayList<>();
 
         for (Stores stores : warehouseList) {
-            WarehouseCustomJSON warehouse = new WarehouseCustomJSON();
+            WarehouseCustomJSONModel warehouse = new WarehouseCustomJSONModel();
             warehouse.setId(Integer.toString(stores.getId()));
             warehouse.setName(stores.getName());
             data.add(warehouse);
         }
-        return new ResponseCustomJSON("Done", data);
+        return new ResponseCustomJSONModel("Done", data);
     }
 
     /*Level 2,3 Get Driver*/
     @RequestMapping("/api/getDriver")
-    public ResponseCustomJSON getDriver(@RequestBody WarehouseCustomJSON datapost) {
+    public ResponseCustomJSONModel getDriver(@RequestBody WarehouseCustomJSONModel datapost) {
         List<Driver> driverList = driverService.getDriverByWarehouse(datapost.getId());
 
-        List<DriverCustomJSON> data = new ArrayList<>();
+        List<DriverCustomJSONModel> data = new ArrayList<>();
 
         for (Driver value : driverList) {
-            DriverCustomJSON driver = new DriverCustomJSON();
+            DriverCustomJSONModel driver = new DriverCustomJSONModel();
             driver.setId(Integer.toString(value.getId()));
             driver.setName(value.getName());
             data.add(driver);
         }
-        return new ResponseCustomJSON("Done", data);
+        return new ResponseCustomJSONModel("Done", data);
     }
 }

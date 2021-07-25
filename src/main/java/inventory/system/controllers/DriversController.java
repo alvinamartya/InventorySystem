@@ -29,7 +29,9 @@ public class DriversController {
     // view index
     @RequestMapping("/index")
     public String index(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Driver> driversList = driverService.getAllDriver();
             model.addAttribute("listDriver", driversList);
             return "Driver/Index";
@@ -40,7 +42,9 @@ public class DriversController {
     // view create
     @RequestMapping("/create")
     public String create(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             model.addAttribute("driverObject", new Driver());
 
             List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
@@ -54,7 +58,9 @@ public class DriversController {
     // save driver
     @PostMapping("/save")
     public String save(Driver driver, RedirectAttributes redirectAttrs, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             driverService.saveDriver(driver, logged_user);
             redirectAttrs.addFlashAttribute("success_create", "Driver Successfully Added!");
             return "redirect:/driver/index";
@@ -66,7 +72,9 @@ public class DriversController {
     @GetMapping("/edit/{id}")
     public String update(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Driver drivers = driverService.getDriverById(id);
             model.addAttribute("driverObject", drivers);
 
@@ -83,7 +91,9 @@ public class DriversController {
     public String update(@PathVariable("id") int id, Driver driver,
                          BindingResult result, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             if (result.hasErrors()) {
                 driver.setId(id);
                 return "Driver/Edit";
@@ -101,7 +111,9 @@ public class DriversController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Driver drivers = driverService.getDriverById(id);
             model.addAttribute("driverObject", drivers);
 
@@ -114,7 +126,9 @@ public class DriversController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Driver drivers = driverService.getDriverById(id);
             model.addAttribute("driverObject", drivers);
 
@@ -127,7 +141,9 @@ public class DriversController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Driver driver = driverService.getDriverById(id);
             driverService.delete(driver, logged_user);
 
@@ -141,7 +157,9 @@ public class DriversController {
     @GetMapping("/deactivate/{id}")
     public String deactivate(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Driver drivers = driverService.getDriverById(id);
             model.addAttribute("driverObject", drivers);
 
@@ -154,7 +172,9 @@ public class DriversController {
     @GetMapping("/activate/{id}")
     public String active(@PathVariable(value = "id") Integer id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Driver drivers = driverService.getDriverById(id);
             model.addAttribute("driverObject", drivers);
 
@@ -167,7 +187,9 @@ public class DriversController {
     @PostMapping("/activate-confirmed/{id}")
     public String activateConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Driver driver = driverService.getDriverById(id);
             driverService.activate(driver, logged_user);
 

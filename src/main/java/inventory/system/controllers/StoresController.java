@@ -24,7 +24,9 @@ public class StoresController {
     // view index
     @RequestMapping("/index")
     public String index(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Stores> storesList = storesService.getAllStores();
             model.addAttribute("listStore", storesList);
             return "Store/Index";
@@ -35,7 +37,9 @@ public class StoresController {
     // view create
     @RequestMapping("/create")
     public String create(Model model, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             model.addAttribute("storeObject", new Stores());
             return "Store/Create";
         }
@@ -45,7 +49,9 @@ public class StoresController {
     // save store
     @PostMapping("/save")
     public String save(Stores stores, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             storesService.saveStores(stores, logged_user);
             return "redirect:/store/index";
         }

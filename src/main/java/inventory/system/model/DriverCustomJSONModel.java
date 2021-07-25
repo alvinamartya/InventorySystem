@@ -1,13 +1,13 @@
-package inventory.system.entity;
+package inventory.system.model;
 
-public class DriverCustomJSON {
+public class DriverCustomJSONModel {
     private String id;
     private String name;
 
-    public DriverCustomJSON() {
+    public DriverCustomJSONModel() {
     }
 
-    public DriverCustomJSON(String id, String name) {
+    public DriverCustomJSONModel(String id, String name) {
         this.id = id;
         this.name = name;
     }

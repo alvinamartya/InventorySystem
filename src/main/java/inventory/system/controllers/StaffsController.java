@@ -30,7 +30,9 @@ public class StaffsController {
     @RequestMapping("/index")
     public String getStaff(Model model, HttpSession httpsession,
                            @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Staffs> staffsList = staffService.getAllStaff();
 
             model.addAttribute("listStaff", staffsList);
@@ -43,7 +45,9 @@ public class StaffsController {
     @RequestMapping("/create")
     public String viewAddStaff(Model model, HttpSession httpsession,
                                @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
             model.addAttribute("listWarehouse", warehouseList);
             model.addAttribute("staffObject", new Staffs());
@@ -59,7 +63,9 @@ public class StaffsController {
     public String addStaff(@ModelAttribute("current_staff") Staffs currStaff, Staffs staffs, Model model,
                            RedirectAttributes redirectAttrs, HttpSession httpsession,
                            @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             if (staffService.isEmailExist(staffs.getEmail())) {
                 staffService.saveStaff(staffs, logged_user);
 
@@ -79,7 +85,9 @@ public class StaffsController {
     @GetMapping("/edit/{id}")
     public String Update(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession,
                          @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Staffs staffs = staffService.getStaffById(id);
             List<Warehouses> warehouseList = warehouseService.getAllWarehouses();
             model.addAttribute("listWarehouse", warehouseList);
@@ -94,7 +102,9 @@ public class StaffsController {
     public String update(@PathVariable("id") int id, Staffs staff,
                          BindingResult result, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             if (result.hasErrors()) {
                 staff.setId(id);
                 return "Staff/Edit";
@@ -127,7 +137,9 @@ public class StaffsController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession,
                          @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Staffs staffs = staffService.getStaffById(id);
             model.addAttribute("staffsObject", staffs);
 
@@ -141,7 +153,9 @@ public class StaffsController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") Integer id, Model model, HttpSession httpsession,
                          @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Staffs staffs = staffService.getStaffById(id);
             model.addAttribute("staffsObject", staffs);
 
@@ -155,7 +169,9 @@ public class StaffsController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") int id
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Staffs staffs = staffService.getStaffById(id);
 
             staffService.deleteStaff(staffs, logged_user);

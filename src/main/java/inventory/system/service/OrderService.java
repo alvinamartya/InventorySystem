@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import inventory.system.entity.*;
+import inventory.system.model.OrderDetailInputModel;
 import inventory.system.repository.OrderDetailRepository;
 import inventory.system.repository.OrderRepository;
+import inventory.system.repository.ShelfDetailRepository;
 import inventory.system.utils.GeneratorId;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -19,11 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
-    @Autowired
+    @Resource
     OrderRepository ordersRepository;
 
-    @Autowired
+    @Resource
     OrderDetailRepository orderDetailsRepository;
+
+    @Resource
+    ShelfDetailRepository shelfDetailRepository;
 
     public List<Order> getAllOrder() {
         return (List<Order>) ordersRepository.findAll();
@@ -69,11 +73,11 @@ public class OrderService {
         ordersRepository.save(orders);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        List<OrderDetailInput> detailList = null;
+        List<OrderDetailInputModel> detailList = null;
         try {
             detailList = objectMapper.readValue(
                     orderinput.getDetailJSON(),
-                    new TypeReference<List<OrderDetailInput>>() {
+                    new TypeReference<List<OrderDetailInputModel>>() {
                     });
         } catch (JsonProcessingException e) {
             System.out.println(e.getMessage());
@@ -83,9 +87,9 @@ public class OrderService {
         getAllOrder();
     }
 
-    public void insertDetail(String orderId, List<OrderDetailInput> detailList) {
+    public void insertDetail(String orderId, List<OrderDetailInputModel> detailList) {
         List<OrderDetail> arrayOrderDetail = new ArrayList<OrderDetail>();
-        for (OrderDetailInput orderDetailInput : detailList) {
+        for (OrderDetailInputModel orderDetailInput : detailList) {
             OrderDetail orderdetail = new OrderDetail();
             orderdetail.setOrder_id(orderId);
             orderdetail.setProduct_id(orderDetailInput.getProductID());
@@ -182,7 +186,17 @@ public class OrderService {
         ordersRepository.delete(order);
     }
 
+    public void moveShelfDetail(List<OrderDetail> listOrderDetail) {
+        for (OrderDetail orderDetail : listOrderDetail) {
+            Product product = orderDetail.getProductList();
+            ProductCategory productCategory = product.getProductCategory();
+            boolean isCanStale = productCategory.getIs_can_be_stale() == 1;
+        }
+    }
 
+    public void getRowAndColumn(List<ShelfDetail> shelfDetails) {
+
+    }
 }
 
 

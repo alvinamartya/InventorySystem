@@ -11,13 +11,13 @@ public interface ReturRepository extends CrudRepository<Retur, String> {
 
     @Query("select a from Retur a where a.warehouse_at=:warehouse_id " +
             "AND a.order_type='T' AND a.dest_type='W' order by a.updated_at desc")
-    public List<Retur> findByWarehouseLv1(@Param("warehouse_id") String warehouse_id);
+    List<Retur> findByWarehouseLv1(@Param("warehouse_id") String warehouse_id);
 
     @Query("select a from Retur a where a.warehouse_at=:warehouse_id " +
             "AND a.order_type='W' AND a.dest_type='W' order by a.updated_at desc")
-    public List<Retur> findByWarehouseLv2(@Param("warehouse_id") String warehouse_id);
+    List<Retur> findByWarehouseLv2(@Param("warehouse_id") String warehouse_id);
 
     @Query("select a from Retur a where a.warehouse_at=:warehouse_id " +
             "AND a.order_type='W' AND a.dest_type='S' order by a.updated_at desc")
-    public List<Retur> findByWarehouseLv3(@Param("warehouse_id") String warehouse_id);
+    List<Retur> findByWarehouseLv3(@Param("warehouse_id") String warehouse_id);
 }

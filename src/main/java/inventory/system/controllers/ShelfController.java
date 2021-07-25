@@ -32,7 +32,9 @@ public class ShelfController {
     @RequestMapping("/index")
     public String index(Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Shelf> shelfsList = shelfService.getAllShelf();
             model.addAttribute("listShelf", shelfsList);
             return "Shelf/Index";
@@ -44,7 +46,9 @@ public class ShelfController {
     @RequestMapping("/create")
     public String create(Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             model.addAttribute("shelfObject", new Shelf());
 
             List<ProductCategory> categoryList = categoryService.getAllProductCategory();
@@ -62,7 +66,9 @@ public class ShelfController {
     @PostMapping("/save")
     public String save(Shelf shelf, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             shelfService.saveShelf(shelf, logged_user);
             redirectAttrs.addFlashAttribute("success_create", "Shelf Successfully Added!");
 
@@ -75,7 +81,9 @@ public class ShelfController {
     @GetMapping("/edit/{id}")
     public String update(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Shelf shelfs = shelfService.getShelfById(id);
             model.addAttribute("shelfObject", shelfs);
 
@@ -92,7 +100,9 @@ public class ShelfController {
     public String update(@PathVariable("id") String id, Shelf shelf,
                          BindingResult result, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             if (result.hasErrors()) {
                 shelf.setId(id);
                 return "Shelf/Edit";
@@ -109,7 +119,9 @@ public class ShelfController {
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Shelf shelfs = shelfService.getShelfById(id);
             model.addAttribute("shelfObject", shelfs);
 
@@ -125,7 +137,9 @@ public class ShelfController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable(value = "id") String id, Model model
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Shelf shelfs = shelfService.getShelfById(id);
             model.addAttribute("shelfObject", shelfs);
 
@@ -141,7 +155,9 @@ public class ShelfController {
     @PostMapping("/delete-confirmed/{id}")
     public String deleteConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Shelf shelf = shelfService.getShelfById(id);
             shelfService.delete(shelf);
 

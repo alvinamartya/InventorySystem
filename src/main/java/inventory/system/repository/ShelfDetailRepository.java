@@ -15,4 +15,7 @@ public interface ShelfDetailRepository extends CrudRepository<ShelfDetail, Integ
     @Modifying
     @Query("delete from ShelfDetail a where a.shelf_id=:id_shelf")
     void deleteDetail(@Param("id_shelf") String id_shelf);
+
+    @Query("select a from ShelfDetail a where a.product_id=:product_id")
+    List<ShelfDetail> findAllByShelfProductId(@Param("product_id") Integer product_id);
 }

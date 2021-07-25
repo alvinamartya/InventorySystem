@@ -40,7 +40,9 @@ public class OrderController {
     @RequestMapping("/index/{level}")
     public String index(@PathVariable(value = "level") int level, Model model, HttpSession httpsession,
                         @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             List<Order> ordersList = orderService.getAllOrderByWarehouse(logged_user.getWarehouse_id(), level);
             int is_trans_admin = (logged_user.getRole_id() == 1) ? 1 : 0;
             model.addAttribute("is_trans_admin", is_trans_admin);
@@ -57,7 +59,9 @@ public class OrderController {
     @RequestMapping("/create/{level}")
     public String create(@PathVariable(value = "level") int level, Model model, HttpSession httpsession,
                          @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             String destType = "";
             String originType = "";
             String destId = "";
@@ -106,7 +110,9 @@ public class OrderController {
     @PostMapping("/save/{level}")
     public String save(@PathVariable(value = "level") int level, OrderInput orderinput, RedirectAttributes redirectAttrs
             , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             orderService.saveOrder(orderinput, logged_user);
             redirectAttrs.addFlashAttribute("success_create", "Order Successfully Added!");
             return "redirect:/order/index/" + level;
@@ -118,7 +124,9 @@ public class OrderController {
     @GetMapping("/detail/{id}/{level}")
     public String detail(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
                          @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Order orders = orderService.getOrderById(id);
             model.addAttribute("orderObject", orders);
 
@@ -138,7 +146,9 @@ public class OrderController {
     @GetMapping("/check/{id}/{level}")
     public String check(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
                         @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Order orders = orderService.getOrderById(id);
             model.addAttribute("orderObject", orders);
 
@@ -162,7 +172,9 @@ public class OrderController {
     public String checkConfirmed(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level,
                                  RedirectAttributes redirectAttrs, HttpSession httpsession,
                                  @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             String staffName = logged_user.getName();
 
             orderService.check(id, staffName);
@@ -177,7 +189,9 @@ public class OrderController {
     @GetMapping("/approve/{id}/{level}")
     public String approve(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level, Model model, HttpSession httpsession,
                           @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             Order orders = orderService.getOrderById(id);
             model.addAttribute("orderObject", orders);
 
@@ -202,8 +216,9 @@ public class OrderController {
     public String approveConfirmed(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level,
                                    RedirectAttributes redirectAttrs, HttpSession httpsession,
                                    @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
-            //**----Dari Session
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             String staffName = logged_user.getName();
 
             orderService.approve(id, staffName);
@@ -212,14 +227,19 @@ public class OrderController {
             return "redirect:/order/index/" + level;
         }
         return "redirect:/login";
+//        List<OrderDetail> orderDetails = orderService.getOrderDetail(id);
+//        orderService.moveShelfDetail(orderDetails);
+
+//        return "redirect:/order/index/" + level;
     }
 
     @RequestMapping("/reject-confirmed/{id}/{level}")
     public String rejectConfirmed(@PathVariable(value = "id") String id, @PathVariable(value = "level") String level,
                                   RedirectAttributes redirectAttrs, HttpSession httpsession,
                                   @SessionAttribute(required = false) LoggedUser logged_user) {
-        if (Session.isLogin(logged_user, httpsession)) {
-            //**----Dari Session
+        if(logged_user == null || httpsession == null) {
+            return "redirect:/login";
+        } else if (Session.isLogin(logged_user, httpsession)) {
             String staffName = logged_user.getName();
 
             orderService.reject(id, staffName);
