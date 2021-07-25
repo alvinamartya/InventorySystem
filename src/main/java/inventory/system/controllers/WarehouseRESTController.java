@@ -2,11 +2,10 @@ package inventory.system.controllers;
 
 import inventory.system.entity.*;
 import inventory.system.model.DriverCustomJSONModel;
+import inventory.system.model.ProductCustomJSONModel;
 import inventory.system.model.ResponseCustomJSONModel;
 import inventory.system.model.WarehouseCustomJSONModel;
-import inventory.system.service.DriverService;
-import inventory.system.service.StoresService;
-import inventory.system.service.WarehousesService;
+import inventory.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +24,12 @@ public class WarehouseRESTController {
 
     @Autowired
     DriverService driverService;
+
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    ShelfService shelfService;
 
     /*Level 2 Pusat - Cabang*/
     @RequestMapping("/api/getCabang")
@@ -87,6 +92,38 @@ public class WarehouseRESTController {
             driver.setId(Integer.toString(value.getId()));
             driver.setName(value.getName());
             data.add(driver);
+        }
+        return new ResponseCustomJSONModel("Done", data);
+    }
+
+    /*Get Product By Supplier*/
+    @RequestMapping("/api/getProduct")
+    public ResponseCustomJSONModel getProduct(@RequestBody ProductCustomJSONModel datapost) {
+        List<Product> productList = productService.getProductBySupplier(datapost.getId());
+
+        List<ProductCustomJSONModel> data = new ArrayList<>();
+
+        for (Product products : productList) {
+            ProductCustomJSONModel product = new ProductCustomJSONModel();
+            product.setId(Integer.toString(products.getId()));
+            product.setName(products.getName());
+            data.add(product);
+        }
+        return new ResponseCustomJSONModel("Done", data);
+    }
+
+    /*Get Shelf By Category*/
+    @RequestMapping("/api/getCategorizedShelf")
+    public ResponseCustomJSONModel getShelf(@RequestBody ProductCustomJSONModel datapost) {
+        List<Shelf> shelfList = shelfService.getShelfByCategory(datapost.getId());
+
+        List<ProductCustomJSONModel> data = new ArrayList<>();
+
+        for (Shelf shelfs : shelfList) {
+            ProductCustomJSONModel product = new ProductCustomJSONModel();
+            product.setId(shelfs.getId());
+            product.setName(shelfs.getId());
+            data.add(product);
         }
         return new ResponseCustomJSONModel("Done", data);
     }

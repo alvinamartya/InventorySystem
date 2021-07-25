@@ -69,7 +69,6 @@ public class OrderController {
             List<Supplier> supplierOriginList = new ArrayList<>();
             List<Warehouses> warehouseOriginList = new ArrayList<>();
             List<Warehouses> warehouseDestList = new ArrayList<>();
-            List<Product> productList = productService.getAllProduct();
             List<Shelf> shelfList = shelfService.getAllShelfRO();
 
             if (level == 1) {
@@ -97,7 +96,6 @@ public class OrderController {
 
             model.addAttribute("orderObject", new OrderInput(originType, destType, originId, destId));
             model.addAttribute("listWarehouseDest", warehouseDestList);
-            model.addAttribute("listProduct", productList);
             model.addAttribute("listShelf", shelfList);
             model.addAttribute("level", level);
 

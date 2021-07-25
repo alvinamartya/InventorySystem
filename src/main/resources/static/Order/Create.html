@@ -121,10 +121,10 @@
                                     <thead>
 
                                     <tr>
-                                        <th width="20%">Product</th>
-                                        <th width="30%">Origin Shelf</th>
-                                        <th width="30%">Dest Shelf</th>
-                                        <th width="15%">Quantity</th>
+                                        <th width="20%">Product<span style="color: red;">*</span></th>
+                                        <th width="30%">Origin Shelf<span style="color: red;">*</span></th>
+                                        <th width="30%">Dest Shelf<span style="color: red;">*</span></th>
+                                        <th width="15%">Quantity<span style="color: red;">*</span></th>
                                         <th width="5%" style="border-left-style: none"></th>
                                     </tr>
                                     </thead>
@@ -133,29 +133,20 @@
                                         <td class="product_id">
                                             <select class="form-control">
                                                 <option value=""> -Select Product- </option>
-                                                <option th:each="product : ${listProduct}"
-                                                        th:value="${product.id}"
-                                                        th:utext="${product.name}"/>
                                             </select>
                                         </td>
                                         <td class="product_origin">
                                             <select class="form-control">
                                                 <option value=""> -Select Origin Shelf- </option>
-                                                <option th:each="shelf : ${listShelf}"
-                                                        th:value="${shelf.id}"
-                                                        th:utext="${shelf.id}"/>
                                             </select>
                                         </td>
                                         <td class="product_dest">
                                             <select class="form-control">
                                                 <option value=""> -Select Dest Shelf- </option>
-                                                <option th:each="shelf : ${listShelf}"
-                                                        th:value="${shelf.id}"
-                                                        th:utext="${shelf.id}"/>
                                             </select>
                                         </td>
                                         <td class="product_qty">
-                                            <input type="text" class="form-control" placeholder="Fill Quantity">
+                                            <input type="number" value="0" class="form-control" placeholder="Fill Quantity">
                                         </td>
                                         <td style="border-left-style: none"></td>
                                     </tr>
@@ -349,6 +340,22 @@
             table.appendChild(clone); // add new row to end of table
         }
 
+        function addRow(){
+            var html_code = '';
+            html_code += '<tr>';
+            html_code += '<td class="product_id"><select class="form-control"><option value=""> -Select Product-</option></select></td>';
+            html_code += '<td class="product_origin"><select class="form-control"><option value=""> -Select Origin Shelf-</option></select></td>';
+            html_code += '<td class="product_dest"><select class="form-control"><option value=""> -Select Dest Shelf-</option></select></td>';
+            html_code += '<td class="product_qty"><input type="number" value="0" class="form-control" placeholder="Fill Quantity"></td>';
+            html_code += "<td style='border-left-style: none'><button type='button' name='remove' data-row='row' class='btn btn-danger btn-xs remove'><span class='fa fa-trash fa-lg'></span></button></td>";
+            html_code += '</tr>';
+            $('#crud_table').append(html_code);
+        }
+
+
+
+
+
         var count = 1;
         //Plus1
         $('#plus1').click(function() {
@@ -425,6 +432,7 @@
         function setCounter(count) {
             $('#counterTamu').html(count);
         }
+
         $(document).on('click', '.remove', function() {
             $('#alertvalidation').removeClass('show');
             $(this).parent().closest("tr").remove();
@@ -588,8 +596,76 @@
                 $('#divForm').removeClass('loaderElement');
             }
 
+            function populateProduct(id){
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getProduct',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $("#crud_table").find("tr:gt(1)").remove();
+                        $('.product_id select').find('option').not(':first').remove();
+                        $('.product_origin select').find('option').not(':first').remove();
+                        $('.product_dest select').find('option').not(':first').remove();
+
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $('.product_id select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+            }
+
+            function populateShelf(id, element){
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getCategorizedShelf',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $(element).parent().closest("tr").find('.product_origin select').find('option').not(':first').remove();
+                        $(element).parent().closest("tr").find('.product_dest select').find('option').not(':first').remove();
+
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $(element).parent().closest("tr").find('.product_origin select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                            $(element).parent().closest("tr").find('.product_dest select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+            }
+
             $(".ddlOriginLevel1").change(function () {
-                var id = $(this).val();
+                var idSupplier = $(this).val();
+                populateProduct(idSupplier);
             })
 
             $(".ddlOriginLevel2").change(function () {
@@ -599,6 +675,12 @@
             $(".ddlOriginLevel3").change(function () {
                 var id = $(this).val();
             })
+
+            $(".product_id select").change(function () {
+                var idProd = $(this).val();
+                populateShelf(idProd, this);
+            })
+
 
         });
         $('#btnSave').click(function(event) {
