@@ -1,7 +1,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{_layoutSuperAdmin}">
+      layout:decorate="~{_layoutMasterAdmin}">
 
 <div layout:fragment="content">
     <!--######### INSERT SECTION HEREEE ################ -->
@@ -53,7 +53,7 @@
                                 <td th:text="${supplierDetail.getSupplier().name}"></td>
                                 <td th:text="${supplierDetail.getProductCategory().name}"></td>
                                 <td>
-                                    <a th:href="@{/supplierDetail/deleteSupDet/{id}(id=${supplierDetail.id})}" class="btn btn-danger"
+                                    <a th:href="@{/supplierDetail/deleteSupDet/{id}/{ids}(id=${supplierDetail.id},ids=${supplierDetail.supplier_id})}" class="btn btn-danger"
                                        onclick="return confirm('Are you sure to delete this?');">Deactivate</a>
                                 </td>
                             </tr>

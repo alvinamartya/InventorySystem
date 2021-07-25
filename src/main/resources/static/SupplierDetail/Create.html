@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="card-block">
-                    <form th:action="@{/supplierDetail/save}" th:object="${supplierDetailObject}" method="post">
+                    <form th:action="@{/supplierDetail/save/{id}(id=${id})}" th:object="${supplierDetailObject}" method="post">
 
                         <div class="form-group" th:object="${listSupplier}">
                             <h5 th:text="${listSupplier.name}"></h5>
