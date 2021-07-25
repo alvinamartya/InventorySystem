@@ -84,24 +84,19 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <p class="nav-title">MASTER</p>
-
+                <p class="nav-title">Monitoring</p>
+                <!-- /dashboard -->
+                <!-- apps -->
                 <li>
-                    <a th:href="@{/product/index}">
-                        <i class="material-icons text-bluegrey">view_module</i>
-                        <span>Product</span>
+                    <a th:href="@{/monitoring-order}">
+                        <i class="material-icons text-green">view_module</i>
+                        <span>Monitoring Order</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/product-category/index}">
-                        <i class="material-icons text-red">list</i>
-                        <span>Product Category</span>
-                    </a>
-                </li>
-                <li th:classappend="${#httpServletRequest.getRequestURI() == '/shelf' ? 'active':''}">
-                    <a th:href="@{/shelf/index}">
-                        <i class="material-icons text-deeppurple">view_agenda</i>
-                        <span>Shelf</span>
+                    <a th:href="@{/monitoring-retur}">
+                        <i class="material-icons text-red">view_module</i>
+                        <span>Monitoring Retur</span>
                     </a>
                 </li>
                 <p class="nav-title">TRANSACTION</p>

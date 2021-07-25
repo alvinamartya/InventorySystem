@@ -1,0 +1,62 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layoutTransactionAdmin}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Monitoring Retur
+                    </div>
+                    <div class="card-block">
+                        <div class="table-responsive">
+                            <table class="table table-bordered datatable">
+                                <thead class="thead-default">
+                                <tr style="vertical-align: top;">
+                                    <th>No</th>
+                                    <th>Order ID</th>
+                                    <th>Product name</th>
+                                    <th>Origin Name</th>
+                                    <th>Dest Name</th>
+                                    <th>Origin Shelf</th>
+                                    <th>Dest Shelf</th>
+                                    <th>Date</th>
+                                    <th>Quantity</th>
+                                    <th>Type</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="monitoringRetur, counter: ${listMonitoringRetur}">
+                                    <th th:text="${counter.count}"></th>
+                                    <td th:text="${monitoringRetur.retur_id}"></td>
+                                    <td th:text="${monitoringRetur.product_name}"></td>
+                                    <td th:text="${monitoringRetur.origin_name}"></td>
+                                    <td th:text="${monitoringRetur.dest_name}"></td>
+                                    <td th:text="${monitoringRetur.origin_shelf}"></td>
+                                    <td th:text="${monitoringRetur.dest_shelf}"></td>
+                                    <td th:text="${monitoringRetur.date}"></td>
+                                    <td th:text="${monitoringRetur.quantity}"></td>
+                                    <td>
+                                        <div th:switch="${monitoringRetur.type}">
+                                            <span th:case="out" class="tag tag-pill tag-danger">Out</span>
+                                            <span th:case="in" class="tag tag-pill tag-success">In</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

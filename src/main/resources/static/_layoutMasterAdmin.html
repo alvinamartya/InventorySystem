@@ -4,10 +4,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1"/>
     <meta name="msapplication-tap-highlight" content="no">
 
     <meta name="mobile-web-app-capable" content="yes">
@@ -25,17 +25,17 @@
     <link rel="icon" type="image/png" href="../assets/images/icon_djadjan.png"/>
 
     <!-- page stylesheets -->
-    <link rel="stylesheet" href="../assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.css" />
+    <link rel="stylesheet" href="../assets/vendor/bower-jvectormap/jquery-jvectormap-1.2.2.css"/>
     <!-- end page stylesheets -->
 
     <!-- build:css({.tmp,app}) styles/app.min.css -->
-    <link rel="stylesheet" th:href="@{'/assets/vendor/bootstrap/dist/css/bootstrap.css'}" />
-    <link rel="stylesheet" th:href="@{'/assets/vendor/pace/themes/blue/pace-theme-minimal.css'}" />
-    <link rel="stylesheet" th:href="@{'/assets/vendor/font-awesome/css/font-awesome.css'}" />
-    <link rel="stylesheet" th:href="@{'/assets/vendor/animate.css/animate.css'}" />
-    <link rel="stylesheet" th:href="@{'/assets/styles/app.css'}"  id="load_styles_before" />
-    <link rel="stylesheet" th:href="@{'/assets/styles/shortcodes.css'}" />
-    <link rel="stylesheet" th:href="@{'/assets/styles/app.skins.css'}"  />
+    <link rel="stylesheet" th:href="@{'/assets/vendor/bootstrap/dist/css/bootstrap.css'}"/>
+    <link rel="stylesheet" th:href="@{'/assets/vendor/pace/themes/blue/pace-theme-minimal.css'}"/>
+    <link rel="stylesheet" th:href="@{'/assets/vendor/font-awesome/css/font-awesome.css'}"/>
+    <link rel="stylesheet" th:href="@{'/assets/vendor/animate.css/animate.css'}"/>
+    <link rel="stylesheet" th:href="@{'/assets/styles/app.css'}" id="load_styles_before"/>
+    <link rel="stylesheet" th:href="@{'/assets/styles/shortcodes.css'}"/>
+    <link rel="stylesheet" th:href="@{'/assets/styles/app.skins.css'}"/>
     <link rel="stylesheet" th:href="@{'/assets/vendor/select2/select2.css'}">
     <!-- endbuild -->
 </head>
@@ -54,14 +54,14 @@
             <!-- /toggle offscreen menu -->
             <!-- logo -->
             <a class="brand-logo">
-                <img class="expanding-hidden" th:src="@{'/assets/images/logo_djajan_horizontal.png'}" alt="" />
+                <img class="expanding-hidden" th:src="@{'/assets/images/logo_djajan_horizontal.png'}" alt=""/>
             </a>
             <!-- /logo -->
         </div>
         <div class="nav-profile dropdown">
             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                 <div class="user-image">
-                    <img th:src="@{'/assets/images/avatar.jpg'}" class="avatar img-circle" alt="user" title="user" />
+                    <img th:src="@{'/assets/images/avatar.jpg'}" class="avatar img-circle" alt="user" title="user"/>
                 </div>
                 <div class="user-info expanding-hidden">
                     <span th:text="${session.logged_user.name}"></span>
@@ -87,27 +87,45 @@
                 <!-- /dashboard -->
                 <!-- apps -->
                 <li>
-                    <a th:href="@{/warehouse/index}">
-                        <i class="material-icons text-primary">home</i>
-                        <span>Warehouses</span>
-                    </a>
-                </li>
-                <li>
                     <a th:href="@{/store/index}">
                         <i class="material-icons text-green">store</i>
                         <span>Stores</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/driver/index}">
-                        <i class="material-icons text-primary">directions_car</i>
-                        <span>Driver</span>
-                    </a>
-                </li>
-                <li>
                     <a th:href="@{/supplier/index}">
                         <i class="material-icons text-danger">extension</i>
                         <span>Supplier</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/product/index}">
+                        <i class="material-icons text-bluegrey">view_module</i>
+                        <span>Product</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/product-category/index}">
+                        <i class="material-icons text-red">list</i>
+                        <span>Product Category</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/warehouse/index}">
+                        <i class="material-icons text-primary">home</i>
+                        <span>Warehouses</span>
+                    </a>
+                </li>
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/shelf' ? 'active':''}">
+                    <a th:href="@{/shelf/index}">
+                        <i class="material-icons text-deeppurple">view_agenda</i>
+                        <span>Shelf</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/driver/index}">
+                        <i class="material-icons text-primary">directions_car</i>
+                        <span>Driver</span>
                     </a>
                 </li>
             </ul>
@@ -129,7 +147,7 @@
                     <!-- /toggle offscreen menu -->
                     <!-- logo -->
                     <a class="brand-logo hidden-xs-down">
-                        <img src="images/logo_white.png" alt="logo" />
+                        <img src="images/logo_white.png" alt="logo"/>
                     </a>
                     <!-- /logo -->
                 </div>
@@ -171,7 +189,8 @@
     <!-- /content panel -->
 
     <!--/Log Out Modal-->
-    <div class="modal fade logout-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal fade logout-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -196,7 +215,7 @@
 </div>
 
 <!-- build:js({.tmp,app}) scripts/app.min.js -->
-<script th:src="@{'/assets/vendor/jquery/dist/jquery.js'}" ></script>
+<script th:src="@{'/assets/vendor/jquery/dist/jquery.js'}"></script>
 <script th:src="@{'/assets/vendor/pace/pace.js'}"></script>
 <script th:src="@{'/assets/vendor/tether/dist/js/tether.js'}"></script>
 <script th:src="@{'/assets/vendor/bootstrap/dist/js/bootstrap.js'}"></script>
@@ -219,11 +238,11 @@
 
 <!-- initialize page scripts -->
 <script th:src="@{'/assets/scripts/dashboard/dashboard.js'}"></script>
-<script th:src="@{'/assets/vendor/sweetalert/dist/sweetalert.min.js'}" ></script>
-<script th:src="@{'/assets/scripts/ui/alert.js'}" ></script>
-<script th:src="@{'/assets/vendor/datatables/media/js/jquery.dataTables.js'}" ></script>
-<script th:src="@{'/assets/vendor/datatables/media/js/dataTables.bootstrap4.js'}" ></script>
-<script th:src="@{'/assets/scripts/forms/plugins.js'}" ></script>
+<script th:src="@{'/assets/vendor/sweetalert/dist/sweetalert.min.js'}"></script>
+<script th:src="@{'/assets/scripts/ui/alert.js'}"></script>
+<script th:src="@{'/assets/vendor/datatables/media/js/jquery.dataTables.js'}"></script>
+<script th:src="@{'/assets/vendor/datatables/media/js/dataTables.bootstrap4.js'}"></script>
+<script th:src="@{'/assets/scripts/forms/plugins.js'}"></script>
 <!-- end initialize page scripts -->
 
 <script>
