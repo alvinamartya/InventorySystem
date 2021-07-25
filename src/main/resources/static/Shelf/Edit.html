@@ -79,43 +79,63 @@
 
     <script type="text/javascript">
         function ValidateInput() {
-            const validate = [0, 0, 0, 0];
+            const validate = [0, 0, 0, 0, 0, 0];
 
-            if ($(txtName).val() === '') {
-                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            if ($(txtIdWarehouse).val() === '') {
+                setErrorFor($(txtIdWarehouse), 'Warehouse Cannot Be Empty');
             } else {
-                setClearFor($(txtName));
+                setClearFor($(txtIdWarehouse));
                 validate[0] = 1;
             }
 
-            if ($(txtIdVehicle).val() === '') {
-                setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
+            if ($(txtType).val() === '') {
+                setErrorFor($(txtType), 'Type Cannot Be Empty');
             } else {
-                setClearFor($(txtIdVehicle));
+                setClearFor($(txtType));
                 validate[1] = 1;
             }
 
-            if ($(txtIdWarehouse).val() === '') {
-                setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
+            if ($(txtCategory).val() === '') {
+                setErrorFor($(txtCategory), 'Product Category Cannot Be Empty');
             } else {
-                setClearFor($(txtIdWarehouse));
+                setClearFor($(txtCategory));
                 validate[2] = 1;
             }
 
-            if ($(txtPhone).val() === '') {
-                setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
-            } else if (!isDigit($(txtPhone).val())) {
-                setErrorFor($(txtPhone), 'Phone Number must be numeric');
+            if ($(txtRow).val() === '') {
+                setErrorFor($(txtRow), 'Row Cannot Be Empty');
+            } else if (!isDigit($(txtRow).val())) {
+                setErrorFor($(txtRow), 'Row must be numeric');
             } else {
-                setClearFor($(txtPhone));
+                setClearFor($(txtRow));
                 validate[3] = 1;
             }
 
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+            if ($(txtColumn).val() === '') {
+                setErrorFor($(txtColumn), 'Column Cannot Be Empty');
+            } else if (!isDigit($(txtColumn).val())) {
+                setErrorFor($(txtColumn), 'Column must be numeric');
+            } else {
+                setClearFor($(txtColumn));
+                validate[4] = 1;
+            }
+
+            if ($(txtQty).val() === '') {
+                setErrorFor($(txtQty), 'Quantity Cannot Be Empty');
+            } else if (!isDigit($(txtQty).val())) {
+                setErrorFor($(txtQty), 'Quantity must be numeric');
+            } else {
+                setClearFor($(txtQty));
+                validate[5] = 1;
+            }
+
+
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1 && validate[4] == 1 && validate[5] == 1) {
                 return true;
             } else {
                 return false;
             }
+            return true;
         }
 
         function setClearFor(input) {

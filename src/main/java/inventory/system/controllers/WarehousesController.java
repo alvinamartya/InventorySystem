@@ -48,11 +48,13 @@ public class WarehousesController {
 
     // save warehouse
     @PostMapping("/save")
-    public String save(Warehouses warehouses, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+    public String save(Warehouses warehouses, RedirectAttributes redirectAttrs,
+                       HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
             warehousesService.saveWarehouses(warehouses, logged_user);
+            redirectAttrs.addFlashAttribute("success_create", "Warehouse Successfully Added!");
             return "redirect:/warehouse/index";
         }
         return "redirect:/login";
@@ -75,7 +77,7 @@ public class WarehousesController {
 
     // update warehouse
     @PostMapping("/update/{id}")
-    public String update(@PathVariable("id") String id, Warehouses warehouses,
+    public String update(@PathVariable("id") String id, RedirectAttributes redirectAttrs, Warehouses warehouses,
                          BindingResult result, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
@@ -86,6 +88,7 @@ public class WarehousesController {
             }
 
             warehousesService.update(id, warehouses, logged_user);
+            redirectAttrs.addFlashAttribute("success_update", "Warehouse Successfully Updated!");
             return "redirect:/warehouse/index";
         }
         return "redirect:/login";
@@ -123,14 +126,14 @@ public class WarehousesController {
 
     // confirm to delete warehouse
     @PostMapping("/delete-confirmed/{id}")
-    public String deleteConfirmed(@PathVariable("id") String id
-            , HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+    public String deleteConfirmed(@PathVariable("id") String id, RedirectAttributes redirectAttrs,
+            HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
             Warehouses warehouses = warehousesService.getWarehousesById(id);
-
             warehousesService.deleteWarehouses(warehouses, logged_user);
+            redirectAttrs.addFlashAttribute("success_deactive", "Warehouse Successfully Deactivated!");
             return "redirect:/warehouse/index";
         }
         return "redirect:/login";

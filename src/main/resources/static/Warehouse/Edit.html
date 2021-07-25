@@ -91,16 +91,7 @@
                 validate[2] = 1;
             }
 
-            if ($(txtBranch).val() === '') {
-                setErrorFor($(txtBranch), 'Branch Cannot Be Empty');
-            } else if (!isDigit($(txtBranch).val())) {
-                setErrorFor($(txtBranch), 'Branch must be numeric');
-            } else {
-                setClearFor($(txtBranch));
-                validate[3] = 1;
-            }
-
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1) {
                 return true;
             } else {
                 return false;

@@ -76,7 +76,9 @@ public class SuppliersController {
 
     // update supplier
     @PostMapping("/update/{id}")
-    public String update(@PathVariable("id") String id, Supplier supplier, BindingResult result, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+    public String update(@PathVariable("id") String id, Supplier supplier,
+                         RedirectAttributes redirectAttrs, BindingResult result,
+                         HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
@@ -86,6 +88,7 @@ public class SuppliersController {
             }
 
             supplierService.update(id, supplier);
+            redirectAttrs.addFlashAttribute("success_update", "Supplier Successfully Updated!");
             return "redirect:/supplier/index";
         }
         return "redirect:/login";
