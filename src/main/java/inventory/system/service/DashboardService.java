@@ -1,19 +1,14 @@
 package inventory.system.service;
 
 import inventory.system.entity.*;
-import inventory.system.model.DashboardCardAdminMasterModel;
-import inventory.system.model.DashboardCardOrderModel;
-import inventory.system.model.DashboardCardOrderWarehouseModel;
-import inventory.system.model.DashboardCardSuperAdminModel;
+import inventory.system.model.*;
 import inventory.system.repository.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -415,5 +410,65 @@ public class DashboardService {
         }
 
         return dashboardCardAdminMasterModel;
+    }
+    public List<DashboardChartModel> getDashboardOrderAll() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<DashboardChartModel> dashboardChartModels = new ArrayList<>();
+
+        Map<String, Integer> dashboardMap = ((List<Order>)orderRepository.findAll())
+                .stream()
+                .map(x -> new DashboardChartModel(formatter.format(x.getDate()), 1))
+                .collect(Collectors.groupingBy(DashboardChartModel::getDate, Collectors.summingInt(DashboardChartModel::getTotalOrder)));
+
+        dashboardMap.forEach((date, totalOrder) -> {
+            dashboardChartModels.add(new DashboardChartModel(date, totalOrder));
+        });
+
+        return dashboardChartModels;
+    }
+    public List<DashboardChartModel> getDashboardReturAll() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<DashboardChartModel> dashboardChartModels = new ArrayList<>();
+
+        Map<String, Integer> dashboardMap = ((List<Retur>)returRepository.findAll())
+                .stream()
+                .map(x -> new DashboardChartModel(formatter.format(x.getDate()), 1))
+                .collect(Collectors.groupingBy(DashboardChartModel::getDate, Collectors.summingInt(DashboardChartModel::getTotalOrder)));
+
+        dashboardMap.forEach((date, totalOrder) -> {
+            dashboardChartModels.add(new DashboardChartModel(date, totalOrder));
+        });
+
+        return dashboardChartModels;
+    }
+    public List<DashboardChartModel> getDashboardOrderInByWarehouseId(String warehouseId) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<DashboardChartModel> dashboardChartModels = new ArrayList<>();
+
+        Map<String, Integer> dashboardMap = orderRepository.findByWarehouseDest(warehouseId)
+                .stream()
+                .map(x -> new DashboardChartModel(formatter.format(x.getDate()), 1))
+                .collect(Collectors.groupingBy(DashboardChartModel::getDate, Collectors.summingInt(DashboardChartModel::getTotalOrder)));
+
+        dashboardMap.forEach((date, totalOrder) -> {
+            dashboardChartModels.add(new DashboardChartModel(date, totalOrder));
+        });
+
+        return dashboardChartModels;
+    }
+    public List<DashboardChartModel> getDashboardOrderOutByWarehouseId(String warehouseId) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<DashboardChartModel> dashboardChartModels = new ArrayList<>();
+
+        Map<String, Integer> dashboardMap = orderRepository.findByWarehouseOrigin(warehouseId)
+                .stream()
+                .map(x -> new DashboardChartModel(formatter.format(x.getDate()), 1))
+                .collect(Collectors.groupingBy(DashboardChartModel::getDate, Collectors.summingInt(DashboardChartModel::getTotalOrder)));
+
+        dashboardMap.forEach((date, totalOrder) -> {
+            dashboardChartModels.add(new DashboardChartModel(date, totalOrder));
+        });
+
+        return dashboardChartModels;
     }
 }
