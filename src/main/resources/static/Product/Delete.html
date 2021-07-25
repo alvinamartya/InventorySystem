@@ -38,7 +38,7 @@
                     </div>
 
                     <div style="margin-top:50px;float:right">
-                        <a href="" onclick="confirmDelete(); return false;" class="btn m-b3"
+                        <a href=""  th:onclick="*{status=='A'} ? 'confirmDelete(); return false;' : 'confirmActive(); return false;'"  class="btn m-b3"
                            th:classappend="*{status=='A'} ? 'btn-danger' : 'btn-success'"
                            th:text="*{status=='A'} ? 'Deactivate':'Activate'"></a>
 
@@ -58,6 +58,12 @@
     <script>
         function confirmDelete() {
             const confirmDelete = confirm("Are you sure to delete this data?");
+            if(confirmDelete == true) {
+                $("#formDelete").submit();
+            }
+        }
+        function confirmActive() {
+            const confirmDelete = confirm("Are you sure to activate this data?");
             if(confirmDelete == true) {
                 $("#formDelete").submit();
             }
