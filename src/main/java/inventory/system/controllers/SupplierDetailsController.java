@@ -63,15 +63,16 @@ public class SupplierDetailsController {
     }
 
     // save SupplierDetail
-    @PostMapping("/save")
-    public String save(SupplierDetail supplierDetail, RedirectAttributes redirectAttrs, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+    @PostMapping("/save/{id}")
+    public String save(@PathVariable(value = "id") String supplier_id, SupplierDetail supplierDetail,
+                       RedirectAttributes redirectAttrs, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
             supplierDetailService.saveSupplierDetail(supplierDetail);
 
             redirectAttrs.addFlashAttribute("success_create", "Supplier Detail Successfully Added!");
-            return "SupplierDetail/Index";
+            return "redirect:/supplierDetail/index/" + supplier_id;
         }
         return "redirect:/login";
     }
@@ -107,16 +108,17 @@ public class SupplierDetailsController {
     }
 
     //delete without view
-    @RequestMapping("/deleteSupDet/{id}")
-    public String deleteSupDet(@PathVariable(value = "id") Integer id,
-                               RedirectAttributes redirectAttrs, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+    @RequestMapping("/deleteSupDet/{id}/{ids}")
+    public String deleteSupDet(@PathVariable(value = "id") Integer id, @PathVariable(value = "ids") String ids,
+                               RedirectAttributes redirectAttrs,
+                               HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
             this.supplierDetailService.deleteSupplierDetailById(id);
 
             redirectAttrs.addFlashAttribute("success_deactive", "Supplier Detail Successfully Deactivated!");
-            return "SupplierDetail/Index";
+            return "redirect:/supplierDetail/index/" + ids;
         }
         return "redirect:/login";
     }
