@@ -31,11 +31,6 @@ public class Order {
 
     private int status_order_id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "origin_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Warehouses originList;
-
-
     public String getWarehouse_at() {
         return warehouse_at;
     }
@@ -171,13 +166,4 @@ public class Order {
     public void setStatus_order_id(int status_order_id) {
         this.status_order_id = status_order_id;
     }
-
-    public Warehouses getOriginList() {
-        return originList;
-    }
-
-    public void setOriginList(Warehouses originList) {
-        this.originList = originList;
-    }
-
 }
