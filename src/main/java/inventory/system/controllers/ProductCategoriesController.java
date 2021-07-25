@@ -90,7 +90,7 @@ public class ProductCategoriesController {
 
             productCategoryService.update(id, productCategory);
             redirectAttrs.addFlashAttribute("success_update", "Product Category Successfully Updated!");
-            return "redirec:/product-category/index";
+            return "redirect:/product-category/index";
         }
         return "redirect:/login";
     }
@@ -135,7 +135,7 @@ public class ProductCategoriesController {
             ProductCategory productCategory = productCategoryService.getProductCategoryById(id);
             productCategoryService.delete(productCategory, logged_user);
 
-            redirectAttrs.addFlashAttribute("success_deactive", "Product Category Successfully Deactivated!");
+            redirectAttrs.addFlashAttribute("success_active", "Product Category Successfully Deactivated!");
             return "redirect:/product-category/index";
         }
         return "redirect:/login";

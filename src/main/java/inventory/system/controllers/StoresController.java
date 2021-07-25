@@ -48,11 +48,13 @@ public class StoresController {
 
     // save store
     @PostMapping("/save")
-    public String save(Stores stores, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
+    public String save(Stores stores, RedirectAttributes redirectAttrs,
+                       HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
             storesService.saveStores(stores, logged_user);
+            redirectAttrs.addFlashAttribute("success_create", "Store Successfully Added!");
             return "redirect:/store/index";
         }
         return "redirect:/login";
@@ -73,7 +75,7 @@ public class StoresController {
 
     // update store
     @PostMapping("/update/{id}")
-    public String update(@PathVariable("id") int id, Stores store,
+    public String update(@PathVariable("id") int id, RedirectAttributes redirectAttrs, Stores store,
                          BindingResult result, HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if (Session.isLogin(logged_user, httpsession)) {
             if (result.hasErrors()) {
@@ -82,6 +84,7 @@ public class StoresController {
             }
 
             storesService.update(id, store, logged_user);
+            redirectAttrs.addFlashAttribute("success_update", "Store Successfully Updated!");
             return "redirect:/store/index";
         }
         return "redirect:/login";
@@ -115,12 +118,14 @@ public class StoresController {
 
     // confirm to delete store
     @PostMapping("/delete-confirmed/{id}")
-    public String deleteConfirmed(@PathVariable("id") int id,
+    public String deleteConfirmed(@PathVariable("id") int id, RedirectAttributes redirectAttrs,
                                   HttpSession httpsession, @SessionAttribute(required = false) LoggedUser logged_user) {
         if (Session.isLogin(logged_user, httpsession)) {
             Stores stores = storesService.getStoresById(id);
-
             storesService.deleteStores(stores, logged_user);
+
+            redirectAttrs.addFlashAttribute("success_deactive", "Store Successfully Updated!");
+
             return "redirect:/store/index";
         }
         return "redirect:/login";

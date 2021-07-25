@@ -88,17 +88,8 @@
                 validate[2] = 1;
             }
 
-            if ($(txtPhone).val() === '') {
-                setErrorFor($(txtPhone), 'Branch Cannot Be Empty');
-            } else if (!isDigit($(txtPhone).val())) {
-                setErrorFor($(txtPhone), 'Branch must be numeric');
-            } else {
-                setClearFor($(txtPhone));
-                validate[3] = 1;
-            }
 
-
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1) {
                 return true;
             } else {
                 return false;
