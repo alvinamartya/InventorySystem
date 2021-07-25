@@ -1,6 +1,7 @@
 package inventory.system.repository;
 
 import inventory.system.entity.Order;
+import inventory.system.model.DashboardChartModel;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

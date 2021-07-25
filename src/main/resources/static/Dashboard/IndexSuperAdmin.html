@@ -5,6 +5,7 @@
 
 <div layout:fragment="content">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--######### INSERT SECTION HEREEE ################ -->
     <div>
         <div class="row" th:object="${dashboardOrderObject}">
@@ -206,49 +207,68 @@
     <!--######### END OF SECTION HEREEE ################ -->
 
     <script>
-        const xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-        const yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+        $.get( "dashboard-order", function( data ) {
+            const xValues = data.map((data) => {
+                return data.date;
+            });
+            const yValues = data.map((data) => {
+                return data.totalOrder;
+            });
 
-        new Chart("orderIn", {
-            type: "line",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    fill: true,
-                    lineTension: 0,
-                    backgroundColor: "rgba(82,208,58,0.37)",
-                    // backgroundColor: "rgba(0,0,255,1.0)",
-                    borderColor: "rgba(82,208,58,1.0)",
-                    data: yValues
-                }]
-            },
-            options: {
-                legend: {display: false},
-                scales: {
-                    yAxes: [{ticks: {min: 6, max: 16}}],
+            const min = yValues.sort()[0];
+            const max = yValues.reverse()[0];
+
+            new Chart("orderIn", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        fill: true,
+                        lineTension: 0,
+                        backgroundColor: "rgba(82,208,58,0.37)",
+                        borderColor: "rgba(82,208,58,1.0)",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    scales: {
+                        yAxes: [{ticks: {min: min <= 0 ? 0 : min - 1, max: max+1}}],
+                    }
                 }
-            }
+            });
         });
 
-        new Chart("orderOut", {
-            type: "line",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    fill: true,
-                    lineTension: 0,
-                    backgroundColor: "rgba(82,208,58,0.37)",
-                    // backgroundColor: "rgba(0,0,255,1.0)",
-                    borderColor: "rgba(82,208,58,1.0)",
-                    data: yValues
-                }]
-            },
-            options: {
-                legend: {display: false},
-                scales: {
-                    yAxes: [{ticks: {min: 6, max: 16}}],
+        $.get("dashboard-retur", function( data ) {
+            const xValues = data.map((data) => {
+                return data.date;
+            });
+            const yValues = data.map((data) => {
+                return data.totalOrder;
+            });
+
+            const min = yValues.sort()[0];
+            const max = yValues.reverse()[0];
+
+            new Chart("orderOut", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        fill: true,
+                        lineTension: 0,
+                        backgroundColor: "rgba(82,208,58,0.37)",
+                        borderColor: "rgba(82,208,58,1.0)",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    scales: {
+                        yAxes: [{ticks: {min: min <= 0 ? 0 : min - 1, max: max+1}}],
+                    }
                 }
-            }
+            });
         });
     </script>
 </div>
