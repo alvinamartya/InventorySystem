@@ -61,7 +61,7 @@
 
                         <div th:if='${!level.equals(1)}' class="form-group">
                             <label for="txtIdDriver">Driver<span style="color: red;">*</span></label>
-                            <select class="form-control txtiddriver" id="txtIdDriver" th:field="*{driver_id}">
+                            <select class="form-control txtIdDriver" id="txtIdDriver" th:field="*{driver_id}">
                                 <option value=""> -Select Driver- </option>
                                 <option th:each="driver : ${listDriver}"
                                         th:value="${driver.id}"
@@ -676,13 +676,14 @@
                 var id = $(this).val();
             })
 
-            $(document).on('change', '.product_id select', function() {
-                var idProd = $(this).val();
-                populateShelf(idProd, this);
-            });
 
+            $(document).on('change', '.product_id select', function() {
+                    var idProd = $(this).val();
+                    populateShelf(idProd, this);
+                });
 
         });
+
         $('#btnSave').click(function(event) {
             //event.preventDefault();
             if (ValidateAll() == true) {

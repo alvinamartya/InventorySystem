@@ -1,0 +1,66 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layoutTransactionAdmin}">
+
+<div layout:fragment="content">
+    <!--######### INSERT SECTION HEREEE ################ -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Order Shelf List
+                </div>
+                <div class="card-block">
+                    <form th:action="@{/warehouse-shelf-order}" th:object="${shelfObject}"
+                          method="post">
+                        <label for="txtIdShelf">Shelf ID<span style="color: red;">*</span></label>
+                        <div class="row" style="padding-bottom:50px">
+                            <div class="col-md-6">
+                                <select class="form-control" th:field="${shelfObject.id}" id="txtIdShelf">
+                                    <option value=""> -Select Shelf- </option>
+                                    <option th:each="shelf : ${listShelf}"
+                                            th:value="${shelf.id}"
+                                            th:text="${shelf.id}"
+                                            th:selected="${shelf.id == shelfObject.id}"
+                                    />
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" id="btnSave" class="btn btn-primary m-b3">Find Shelf Detail</button>
+                            </div>
+
+                        </div>
+
+
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-bordered datatable">
+                            <thead>
+                            <tr>
+                                <th>Row</th>
+                                <th>Col</th>
+                                <th>Product ID</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="shelfdetail, counter: ${detailShelf}">
+                                <td th:text="${shelfdetail.row_shelf}"></td>
+                                <td th:text="${shelfdetail.col_shelf}"></td>
+
+                                <td>
+                                    <span th:if='${shelfdetail.product_id==null}'><i>Empty</i></span>
+                                    <span th:if='${shelfdetail.product_id!=null}' th:text="${shelfdetail.productList.name}"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--######### END OF SECTION HEREEE ################ -->
+</div>
+
+</html>

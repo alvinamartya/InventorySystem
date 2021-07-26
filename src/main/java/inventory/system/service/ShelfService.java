@@ -48,6 +48,17 @@ public class ShelfService {
         Product product = productService.getProductById(Integer.parseInt(id));
         return shelfRepository.findShelfByCategoryRR(product.getProduct_category_id());
     }
+    public List<Shelf> getAllShelfByWarehouseRO(String warehouse_id) {
+        return shelfRepository.findShelfByWarehouseRO(warehouse_id);
+    }
+
+    public List<Shelf> getAllShelfByWarehouseRR(String warehouse_id) {
+        return shelfRepository.findShelfByWarehouseRR(warehouse_id);
+    }
+
+    public List<ShelfDetail> getAllShelfById(String shelf_id) {
+        return shelfRepository.findShelfDetailById(shelf_id);
+    }
 
     public void saveShelf(Shelf shelf, LoggedUser loggedUser) {
         Shelf newShelf = new Shelf();
@@ -159,6 +170,7 @@ public class ShelfService {
         shelfDetailRepository.deleteDetail(shelf.getId());
         shelfRepository.delete(shelf);
     }
+
 
 
 }
