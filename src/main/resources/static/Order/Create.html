@@ -134,6 +134,9 @@
                                             <select class="form-control">
                                                 <option value=""> -Select Product- </option>
                                             </select>
+                                            <select class="form-control" th:if="${!level.equals(1)}">
+                                                <option value=""> -Select Product- </option>
+                                            </select>
                                         </td>
                                         <td class="product_origin">
                                             <select class="form-control">

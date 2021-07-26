@@ -70,6 +70,7 @@ public class OrderController {
             List<Warehouses> warehouseOriginList = new ArrayList<>();
             List<Warehouses> warehouseDestList = new ArrayList<>();
             List<Shelf> shelfList = shelfService.getAllShelfRO();
+            List<Product> productList = productService.getAllProduct();
 
             if (level == 1) {
                 supplierOriginList = supplierService.getAllSupplier();
@@ -82,6 +83,7 @@ public class OrderController {
                 warehouseOriginList = warehouseService.getAllWarehousesPusat();
                 model.addAttribute("listWarehouseOr", warehouseOriginList);
                 warehouseDestList = warehouseService.getAllWarehousesCabang();
+                model.addAttribute("listProduct", productList);
                 originType = "Gudang";
                 destType = "Gudang";
                 originId = logged_user.getWarehouse_id();
@@ -89,6 +91,7 @@ public class OrderController {
                 warehouseOriginList = warehouseService.getAllWarehousesCabang();
                 model.addAttribute("listWarehouseOr", warehouseOriginList);
                 warehouseDestList = warehouseService.getAllWarehousesCabang();
+                model.addAttribute("listProduct", productList);
                 originType = "Gudang";
                 destType = "Toko";
                 originId = logged_user.getWarehouse_id();
