@@ -9,6 +9,9 @@ public class RowColumnModel {
         this.column = column;
     }
 
+    public RowColumnModel() {
+    }
+
     public int getRow() {
         return row;
     }

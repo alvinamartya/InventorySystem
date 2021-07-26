@@ -8,6 +8,7 @@ import inventory.system.model.OrderDetailInputModel;
 import inventory.system.repository.OrderDetailRepository;
 import inventory.system.repository.OrderRepository;
 import inventory.system.repository.ShelfDetailRepository;
+import inventory.system.utils.FifoShelfDetail;
 import inventory.system.utils.GeneratorId;
 import org.springframework.stereotype.Service;
 
@@ -186,16 +187,45 @@ public class OrderService {
         ordersRepository.delete(order);
     }
 
-    public void moveShelfDetail(List<OrderDetail> listOrderDetail) {
+    public void moveShelfDetailOrder(String id) {
+        List<OrderDetail> listOrderDetail = orderDetailsRepository.findAllByOrder(id);
         for (OrderDetail orderDetail : listOrderDetail) {
             Product product = orderDetail.getProductList();
             ProductCategory productCategory = product.getProductCategory();
             boolean isCanStale = productCategory.getIs_can_be_stale() == 1;
+            boolean isFromWarehouse = orderDetail.getOrderList().getOrigin_type().equals("Gudang");
+            boolean isToWarehouse = orderDetail.getOrderList().getDest_type().equals("Gudang");
+
+            for (int i = 0; i < orderDetail.getQuantity(); i++) {
+                List<ShelfDetail> shelfOriginDetails = shelfDetailRepository.findAllByShelf(orderDetail.getOrigin_shelf_id());
+                List<ShelfDetail> shelfDestDetails = shelfDetailRepository.findAllByShelf(orderDetail.getDest_shelf_id());
+
+                // move product to dest
+                if(isToWarehouse) {
+                    ShelfDetail shelfDest = FifoShelfDetail.getRowAndColumnDest(shelfDestDetails);
+                    Date date = null;
+
+                    if (isCanStale) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DATE, 30);
+                        date = cal.getTime();
+                    }
+
+                    shelfDest.setProduct_id(orderDetail.getProduct_id());
+                    shelfDest.setExpired_at(date);
+                    shelfDetailRepository.save(shelfDest);
+                }
+
+                // delete product from origin
+                if(isFromWarehouse) {
+                    ShelfDetail shelfOrigin = FifoShelfDetail.getRowAndColumnOrigin(shelfOriginDetails, isCanStale, orderDetail.getProduct_id());
+                    shelfOrigin.setExpired_at(null);
+                    shelfOrigin.setProduct_id(null);
+
+                    shelfDetailRepository.save(shelfOrigin);
+                }
+            }
         }
-    }
-
-    public void getRowAndColumn(List<ShelfDetail> shelfDetails) {
-
     }
 }
 

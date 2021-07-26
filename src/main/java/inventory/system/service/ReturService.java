@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import inventory.system.entity.*;
 import inventory.system.repository.ReturDetailRepository;
 import inventory.system.repository.ReturRepository;
+import inventory.system.repository.ShelfDetailRepository;
+import inventory.system.utils.FifoShelfDetail;
 import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
@@ -23,6 +26,9 @@ public class ReturService {
 
     @Autowired
     ReturDetailRepository returDetailRepository;
+
+    @Resource
+    ShelfDetailRepository shelfDetailRepository;
 
     public List<Retur> getAllRetur() {
         return (List<Retur>) returRepository.findAll();
@@ -179,5 +185,37 @@ public class ReturService {
     @Transactional
     public void delete(Retur retur) {
         returRepository.delete(retur);
+    }
+
+
+    public void moveShelfDetailRetur(String id) {
+        List<ReturDetail> listReturDetail = returDetailRepository.findReturDetailByReturId(id);
+        for (ReturDetail returDetail : listReturDetail) {
+            Product product = returDetail.getProductList();
+            ProductCategory productCategory = product.getProductCategory();
+            boolean isFromWarehouse = returDetail.getReturList().getOrder_type().equals("W");
+            boolean isToWarehouse = returDetail.getReturList().getDest_type().equals("W");
+
+            for (int i = 0; i < returDetail.getQty(); i++) {
+                List<ShelfDetail> shelfOriginDetails = shelfDetailRepository.findAllByShelf(returDetail.getOrigin_shelf_id());
+                List<ShelfDetail> shelfDestDetails = shelfDetailRepository.findAllByShelf(returDetail.getDest_shelf_id());
+
+                // move product to dest
+                if(isToWarehouse) {
+                    ShelfDetail shelfDest = FifoShelfDetail.getRowAndColumnDest(shelfDestDetails);
+
+                    shelfDest.setProduct_id(returDetail.getProduct_id());
+                    shelfDetailRepository.save(shelfDest);
+                }
+
+                // delete product from origin
+                if(isFromWarehouse) {
+                    ShelfDetail shelfOrigin = FifoShelfDetail.getRowAndColumnOrigin(shelfOriginDetails, false, returDetail.getProduct_id());
+                    shelfOrigin.setProduct_id(null);
+
+                    shelfDetailRepository.save(shelfOrigin);
+                }
+            }
+        }
     }
 }
