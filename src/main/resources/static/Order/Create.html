@@ -131,11 +131,14 @@
                                     <tbody>
                                     <tr id="baseRow">
                                         <td class="product_id">
-                                            <select class="form-control">
+                                            <select class="form-control"  th:if="${level.equals(1)}">
                                                 <option value=""> -Select Product- </option>
                                             </select>
                                             <select class="form-control" th:if="${!level.equals(1)}">
                                                 <option value=""> -Select Product- </option>
+                                                <option th:each="product : ${listProduct}"
+                                                        th:value="${product.id}"
+                                                        th:utext="${product.name}"/>
                                             </select>
                                         </td>
                                         <td class="product_origin">

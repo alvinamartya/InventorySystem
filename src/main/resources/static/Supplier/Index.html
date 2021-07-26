@@ -70,17 +70,6 @@
                                     </div>
                                 </td>
 
-                                <td width="30%" th:if='${supplier.status.equals("A")}'>
-                                    <a th:href="@{/supplierDetail/index/{id}(id=${supplier.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{edit/{id}(id=${supplier.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{delete/{id}(id=${supplier.id})}" class="btn btn-danger">Deactivate</a>
-                                </td>
-
-                                <td width="30%" th:unless='${supplier.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${supplier.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{activate/{id}(id=${supplier.id})}" class="btn btn-success">Activate</a>
-                                </td>
-
 
 
                                 <td th:if='${supplier.status.equals("A")}'>
