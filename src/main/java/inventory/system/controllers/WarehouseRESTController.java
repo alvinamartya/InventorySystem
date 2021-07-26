@@ -127,4 +127,20 @@ public class WarehouseRESTController {
         }
         return new ResponseCustomJSONModel("Done", data);
     }
+
+    /*Get Shelf By Category*/
+    @RequestMapping("/api/getCategorizedShelfRR")
+    public ResponseCustomJSONModel getShelfRR(@RequestBody ProductCustomJSONModel datapost) {
+        List<Shelf> shelfList = shelfService.getShelfByCategoryRR(datapost.getId());
+
+        List<ProductCustomJSONModel> data = new ArrayList<>();
+
+        for (Shelf shelfs : shelfList) {
+            ProductCustomJSONModel product = new ProductCustomJSONModel();
+            product.setId(shelfs.getId());
+            product.setName(shelfs.getId());
+            data.add(product);
+        }
+        return new ResponseCustomJSONModel("Done", data);
+    }
 }

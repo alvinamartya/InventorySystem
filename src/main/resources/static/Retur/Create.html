@@ -27,7 +27,7 @@
 
                         <div class="form-group">
                             <span th:text="${!level.equals(1)} ? 'Origin Warehouse':'Store'"></span> <span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdWarehouseRetur" th:field="*{origin_warehouse_id}"
+                            <select class="form-control" id="txtIdWarehouseRetur" th:field="*{origin_warehouse_id}" th:readonly="${level.equals(2)}"
                                     th:classappend="${level.equals(1)} ? 'ddlOriginLevel1':
                                                     (${level.equals(2)} ? 'ddlOriginLevel2':
                                                     (${level.equals(3)} ? 'ddlOriginLevel3':''))" >
@@ -53,7 +53,8 @@
                         <div class="form-group">
                             <label for="txtIdWarehouse">
                                 <span th:text="${!level.equals(3)} ? 'Destination Warehouse':'Destination Supplier'"></span> <span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}" th:readonly="${level.equals(1)}">
+                            <select class="form-control" id="txtIdWarehouse" th:field="*{dest_warehouse_id}"
+                                    th:classappend="${level.equals(3)} ? 'ddlDestLevel3'">
                                 <option value="" th:text="${!level.equals(3)} ? ' -Select Warehouse- ':' -Select Supplier- '"></option>
                                 <option th:each="warehouse : ${listWarehouseRe}"
                                         th:value="${warehouse.id}"
@@ -65,7 +66,7 @@
 
                         <div th:if='${!level.equals(1)}' class="form-group">
                             <label for="txtIdDriver">Driver<span style="color: red;">*</span></label>
-                            <select class="form-control" id="txtIdDriver" th:field="*{driver_id}">
+                            <select class="form-control txtIdDriver" id="txtIdDriver" th:field="*{driver_id}">
                                 <option value=""> -Select Driver- </option>
                                 <option th:each="driver : ${listDriver}"
                                         th:value="${driver.id}"
@@ -535,6 +536,73 @@
                 $('#divForm').removeClass('loaderElement');
             }
 
+            function populateProduct(id){
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getProduct',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $("#crud_table").find("tr:gt(1)").remove();
+                        $('.product_id select').find('option').not(':first').remove();
+                        $('.product_origin select').find('option').not(':first').remove();
+                        $('.product_dest select').find('option').not(':first').remove();
+
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $('.product_id select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+            }
+
+            function populateShelf(id, element){
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getCategorizedShelfRR',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $(element).parent().closest("tr").find('.product_origin select').find('option').not(':first').remove();
+                        $(element).parent().closest("tr").find('.product_dest select').find('option').not(':first').remove();
+
+                        console.log(resp);
+                        console.log(resp.data);
+
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $(element).parent().closest("tr").find('.product_origin select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                            $(element).parent().closest("tr").find('.product_dest select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+            }
+
             $(".ddlOriginLevel1").change(function () {
                 var id = $(this).val();
             })
@@ -543,11 +611,18 @@
                 var id = $(this).val();
             })
 
-            $(".ddlOriginLevel3").change(function () {
-                var id = $(this).val();
+            $(".ddlDestLevel3").change(function () {
+                var idSupplier = $(this).val();
+                populateProduct(idSupplier);
             })
 
+            $(document).on('change', '.product_id select', function() {
+                var idProd = $(this).val();
+                populateShelf(idProd, this);
+            });
+
         });
+
         $('#btnSave').click(function(event) {
             //event.preventDefault();
             if (ValidateAll() == true) {

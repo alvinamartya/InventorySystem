@@ -44,6 +44,10 @@ public class ShelfService {
         return shelfRepository.findShelfByCategoryRO(product.getProduct_category_id());
     }
 
+    public List<Shelf> getShelfByCategoryRR(String id) {
+        Product product = productService.getProductById(Integer.parseInt(id));
+        return shelfRepository.findShelfByCategoryRR(product.getProduct_category_id());
+    }
     public List<Shelf> getAllShelfByWarehouseRO(String warehouse_id) {
         return shelfRepository.findShelfByWarehouseRO(warehouse_id);
     }
