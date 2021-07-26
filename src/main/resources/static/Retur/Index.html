@@ -19,6 +19,12 @@
                                 <span th:text="${success_create}"></span>
                             </div>
                         </div>
+                        <div class="col-md-12 col-lg-12" th:if="${success_checked}">
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <span th:text="${success_checked}"></span>
+                            </div>
+                        </div>
 
                         <div class="col-md-4" style="padding-bottom:30px">
                             <a th:if="${level.equals(1)}" href="/retur/create/1" class="btn btn-primary">+ Add New</a>
@@ -39,7 +45,7 @@
                                 <th>Date</th>
                                 <th>Checked By</th>
                                 <th>Approved By</th>
-                                <th>Action</th>
+                                <th width="15%">Action</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -44,6 +44,11 @@ public class ShelfService {
         return shelfRepository.findShelfByCategoryRO(product.getProduct_category_id());
     }
 
+    public List<Shelf> getShelfByCategoryRR(String id) {
+        Product product = productService.getProductById(Integer.parseInt(id));
+        return shelfRepository.findShelfByCategoryRR(product.getProduct_category_id());
+    }
+
     public void saveShelf(Shelf shelf, LoggedUser loggedUser) {
         Shelf newShelf = new Shelf();
         String shelfId = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());

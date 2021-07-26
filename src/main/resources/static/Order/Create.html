@@ -676,10 +676,10 @@
                 var id = $(this).val();
             })
 
-            $(".product_id select").change(function () {
+            $(document).on('change', '.product_id select', function() {
                 var idProd = $(this).val();
                 populateShelf(idProd, this);
-            })
+            });
 
 
         });

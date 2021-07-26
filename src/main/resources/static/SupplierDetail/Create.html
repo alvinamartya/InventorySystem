@@ -52,38 +52,15 @@
         function ValidateInput() {
             const validate = [0, 0, 0, 0];
 
-            if ($(txtName).val() === '') {
-                setErrorFor($(txtName), 'Name Cannot Be Empty');
+            if ($(txtIDProductCategory).val() === '') {
+                setErrorFor($(txtIDProductCategory), 'Product Category Cannot Be Empty');
             } else {
-                setClearFor($(txtName));
+                setClearFor($(txtIDProductCategory));
                 validate[0] = 1;
             }
 
-            if ($(txtIdVehicle).val() === '') {
-                setErrorFor($(txtIdVehicle), 'Vehicle ID Cannot Be Empty');
-            } else {
-                setClearFor($(txtIdVehicle));
-                validate[1] = 1;
-            }
 
-            if ($(txtIdWarehouse).val() === '') {
-                setErrorFor($(txtIdWarehouse), 'Warehouse ID Cannot Be Empty');
-            } else {
-                setClearFor($(txtIdWarehouse));
-                validate[2] = 1;
-            }
-
-            if ($(txtPhone).val() === '') {
-                setErrorFor($(txtPhone), 'Phone Number Cannot Be Empty');
-            } else if (!isDigit($(txtPhone).val())) {
-                setErrorFor($(txtPhone), 'Phone Number must be numeric');
-            } else {
-                setClearFor($(txtPhone));
-                validate[3] = 1;
-            }
-
-
-            if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
+            if (validate[0] == 1) {
                 return true;
             } else {
                 return false;

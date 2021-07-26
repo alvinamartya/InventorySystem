@@ -12,6 +12,10 @@ public interface ShelfRepository extends CrudRepository<Shelf, String> {
     List<Shelf> findAllRO();
     @Query("select a from Shelf a where a.type_shelf='Rak Retur'")
     List<Shelf> findAllRR();
+
     @Query("select a from Shelf a where a.product_category_id=:category_id and a.type_shelf='Rak Order'")
     List<Shelf> findShelfByCategoryRO(@Param("category_id") String category_id);
+
+    @Query("select a from Shelf a where a.product_category_id=:category_id and a.type_shelf='Rak Retur'")
+    List<Shelf> findShelfByCategoryRR(@Param("category_id") String category_id);
 }
