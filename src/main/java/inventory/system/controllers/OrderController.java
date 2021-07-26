@@ -130,6 +130,7 @@ public class OrderController {
 
             List<OrderDetail> listDetail = orderService.getOrderDetail(id);
             model.addAttribute("detailorderObject", listDetail);
+
             model.addAttribute("level", level);
             if (!orders.getOrigin_type().equals("Pemasok")) {
                 Driver driver = driverService.getDriverById(orders.getDriver_id());

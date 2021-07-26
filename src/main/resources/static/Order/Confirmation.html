@@ -23,10 +23,6 @@
                         <p th:if='*{origin_type.equals("Gudang")}'>Warehouse</p>
                     </div>
                     <div class="form-group">
-                        <label>Origin Warehouse</label>
-                        <p th:text="*{originList.name}"></p>
-                    </div>
-                    <div class="form-group">
                         <label>Destination Type</label>
                         <p th:if='*{dest_type.equals("Toko")}'>Store</p>
                         <p th:if='*{dest_type.equals("Gudang")}'>Warehouse</p>
