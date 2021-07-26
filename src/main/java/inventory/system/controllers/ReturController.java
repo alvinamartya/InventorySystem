@@ -234,6 +234,7 @@ public class ReturController {
             String staffName = logged_user.getName();
 
             returService.approve(id, staffName);
+            returService.moveShelfDetailRetur(id);
 
             redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Approved!");
             return "redirect:/retur/index/" + level;

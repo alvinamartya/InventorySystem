@@ -220,15 +220,12 @@ public class OrderController {
             String staffName = logged_user.getName();
 
             orderService.approve(id, staffName);
+            orderService.moveShelfDetailOrder(id);
 
             redirectAttrs.addFlashAttribute("success_checked", "Order Successfully Approved!");
             return "redirect:/order/index/" + level;
         }
         return "redirect:/login";
-//        List<OrderDetail> orderDetails = orderService.getOrderDetail(id);
-//        orderService.moveShelfDetail(orderDetails);
-
-//        return "redirect:/order/index/" + level;
     }
 
     @RequestMapping("/reject-confirmed/{id}/{level}")
