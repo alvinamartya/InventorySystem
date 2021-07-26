@@ -233,7 +233,7 @@ public class ReturController {
         } else if (Session.isLogin(logged_user, httpsession)) {
 
             boolean successMove = returService.moveShelfDetailRetur(id);
-            if(successMove) {
+            if(!successMove) {
                 String staffName = logged_user.getName();
                 returService.approve(id, staffName);
                 redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Approved!");

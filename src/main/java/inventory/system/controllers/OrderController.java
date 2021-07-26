@@ -222,7 +222,7 @@ public class OrderController {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
             boolean successMove = orderService.moveShelfDetailOrder(id);
-            if(successMove) {
+            if(!successMove) {
                 String staffName = logged_user.getName();
                 orderService.approve(id, staffName);
                 redirectAttrs.addFlashAttribute("success_checked", "Order Successfully Approved!");
