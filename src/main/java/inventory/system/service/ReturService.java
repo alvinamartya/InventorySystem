@@ -245,34 +245,4 @@ public class ReturService {
     }
 
 
-    public void moveShelfDetailRetur(String id) {
-        List<ReturDetail> listReturDetail = returDetailRepository.findReturDetailByReturId(id);
-        for (ReturDetail returDetail : listReturDetail) {
-            Product product = returDetail.getProductList();
-            ProductCategory productCategory = product.getProductCategory();
-            boolean isFromWarehouse = returDetail.getReturList().getOrder_type().equals("W");
-            boolean isToWarehouse = returDetail.getReturList().getDest_type().equals("W");
-
-            for (int i = 0; i < returDetail.getQty(); i++) {
-                List<ShelfDetail> shelfOriginDetails = shelfDetailRepository.findAllByShelf(returDetail.getOrigin_shelf_id());
-                List<ShelfDetail> shelfDestDetails = shelfDetailRepository.findAllByShelf(returDetail.getDest_shelf_id());
-
-                // move product to dest
-                if(isToWarehouse) {
-                    ShelfDetail shelfDest = FifoShelfDetail.getRowAndColumnDest(shelfDestDetails);
-
-                    shelfDest.setProduct_id(returDetail.getProduct_id());
-                    shelfDetailRepository.save(shelfDest);
-                }
-
-                // delete product from origin
-                if(isFromWarehouse) {
-                    ShelfDetail shelfOrigin = FifoShelfDetail.getRowAndColumnOrigin(shelfOriginDetails, false, returDetail.getProduct_id());
-                    shelfOrigin.setProduct_id(null);
-
-                    shelfDetailRepository.save(shelfOrigin);
-                }
-            }
-        }
-    }
 }
