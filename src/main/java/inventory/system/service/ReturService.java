@@ -182,6 +182,63 @@ public class ReturService {
         returRepository.save(retur);
     }
 
+    public boolean moveShelfDetailRetur(String id) {
+        boolean isErr = false;
+        List<ShelfDetail> toShelfWarehouseList = new ArrayList<>();
+        List<ShelfDetail> fromShelfWarehouseList = new ArrayList<>();
+
+        List<ReturDetail> listReturDetail = returDetailRepository.findReturDetailByReturId(id);
+        for (ReturDetail returDetail : listReturDetail) {
+            Product product = returDetail.getProductList();
+            ProductCategory productCategory = product.getProductCategory();
+            boolean isFromWarehouse = returDetail.getReturList().getOrder_type().equals("W");
+            boolean isToWarehouse = returDetail.getReturList().getDest_type().equals("W");
+
+            for (int i = 0; i < returDetail.getQty(); i++) {
+                List<ShelfDetail> shelfOriginDetails = shelfDetailRepository.findAllByShelf(returDetail.getOrigin_shelf_id());
+                List<ShelfDetail> shelfDestDetails = shelfDetailRepository.findAllByShelf(returDetail.getDest_shelf_id());
+
+                // move product to dest
+                if(isToWarehouse) {
+                    ShelfDetail shelfDest = FifoShelfDetail.getShelfDest(shelfDestDetails);
+                    if(shelfDest != null) {
+                        toShelfWarehouseList.add(shelfDest);
+                        shelfDest.setProduct_id(returDetail.getProduct_id());
+                        shelfDetailRepository.save(shelfDest);
+                    } else {
+                        isErr = true;
+                        break;
+                    }
+                }
+
+                // delete product from origin
+                if(isFromWarehouse) {
+                    ShelfDetail shelfOrigin = FifoShelfDetail.getShelfOrigin(shelfOriginDetails, false, returDetail.getProduct_id());
+                    if(shelfOrigin != null) {
+                        fromShelfWarehouseList.add(shelfOrigin);
+                        shelfOrigin.setProduct_id(null);
+                        shelfDetailRepository.save(shelfOrigin);
+                    } else {
+                        isErr = true;
+                        break;
+                    }
+                }
+            }
+
+            if(isErr) break;
+        }
+
+
+        if(isErr) reverseRetur(toShelfWarehouseList, fromShelfWarehouseList);
+
+        return isErr;
+    }
+
+    private void reverseRetur(List<ShelfDetail> toWarehouseShelf, List<ShelfDetail> fromWarehouseShelf) {
+        shelfDetailRepository.saveAll(toWarehouseShelf);
+        shelfDetailRepository.saveAll(fromWarehouseShelf);
+    }
+
     @Transactional
     public void delete(Retur retur) {
         returRepository.delete(retur);
