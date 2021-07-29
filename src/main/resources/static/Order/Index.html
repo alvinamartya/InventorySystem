@@ -21,12 +21,13 @@
                         </div>
                         <!--                        -->
                         <div class="col-md-12 col-lg-12" th:if="${success_delete}">
-                            <div class="alert alert-success alert-dismissable">
+                            <div class="alert alert-danger alert-dismissable">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 <span th:text="${success_delete}"></span>
                             </div>
                         </div>
                         <!--                        -->
+
                         <div class="col-md-4" style="padding-bottom:30px">
                             <a th:if="${level.equals(1)}" href="/order/create/1" class="btn btn-primary">+ Add New</a>
                             <a th:if="${level.equals(2)}" href="/order/create/2" class="btn btn-primary">+ Add New</a>
@@ -48,7 +49,7 @@
                                 <th>Last Modified</th>
                                 <th>Last Modified By</th>
                                 <th>Status</th>
-                                <th width="10%">Action</th>
+                                <th width="15%">Action</th>
                             </tr>
                             </thead>
                             <tbody>

@@ -58,88 +58,89 @@ public class DashboardService {
             }
         }
 
-        String warehouseId = warehouses.get().getId();
-        List<Order> orderCheckingList = ((List<Order>) orderRepository.findAll())
-                .stream()
-                .filter(x -> x.getStatus_order_id() == 1 && x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
-                .sorted(Comparator.comparing(Order::getDate))
-                .collect(Collectors.toList());
-        List<Retur> returs = ((List<Retur>) returRepository.findAll())
-                .stream()
-                .filter(x -> x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
-                .sorted(Comparator.comparing(Retur::getDate))
-                .collect(Collectors.toList());
-        List<Order> orderApprovedList = ((List<Order>) orderRepository.findAll())
-                .stream()
-                .filter(x -> x.getStatus_order_id() == 4 && x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
-                .sorted(Comparator.comparing(Order::getDate))
-                .collect(Collectors.toList());
-        List<Order> orderRejectedList = ((List<Order>) orderRepository.findAll())
-                .stream()
-                .filter(x -> x.getStatus_order_id() == 3 && x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
-                .sorted(Comparator.comparing(Order::getDate))
-                .collect(Collectors.toList());
-        List<Order> orderInList = ((List<Order>) orderRepository.findAll())
-                .stream()
-                .filter(x -> x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
-                .sorted(Comparator.comparing(Order::getDate))
-                .collect(Collectors.toList());
-        List<Order> orderOutList = ((List<Order>) orderRepository.findAll())
-                .stream()
-                .filter(x -> x.getOrigin_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
-                .sorted(Comparator.comparing(Order::getDate))
-                .collect(Collectors.toList());
+        if(warehouses.isPresent()) {
+            String warehouseId = warehouses.get().getId();
+            List<Order> orderCheckingList = ((List<Order>) orderRepository.findAll())
+                    .stream()
+                    .filter(x -> x.getStatus_order_id() == 1 && x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
+                    .sorted(Comparator.comparing(Order::getDate))
+                    .collect(Collectors.toList());
+            List<Retur> returs = ((List<Retur>) returRepository.findAll())
+                    .stream()
+                    .filter(x -> x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
+                    .sorted(Comparator.comparing(Retur::getDate))
+                    .collect(Collectors.toList());
+            List<Order> orderApprovedList = ((List<Order>) orderRepository.findAll())
+                    .stream()
+                    .filter(x -> x.getStatus_order_id() == 4 && x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
+                    .sorted(Comparator.comparing(Order::getDate))
+                    .collect(Collectors.toList());
+            List<Order> orderRejectedList = ((List<Order>) orderRepository.findAll())
+                    .stream()
+                    .filter(x -> x.getStatus_order_id() == 3 && x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
+                    .sorted(Comparator.comparing(Order::getDate))
+                    .collect(Collectors.toList());
+            List<Order> orderInList = ((List<Order>) orderRepository.findAll())
+                    .stream()
+                    .filter(x -> x.getDest_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
+                    .sorted(Comparator.comparing(Order::getDate))
+                    .collect(Collectors.toList());
+            List<Order> orderOutList = ((List<Order>) orderRepository.findAll())
+                    .stream()
+                    .filter(x -> x.getOrigin_id().equals(warehouseId) && x.getDest_type().equals("Gudang"))
+                    .sorted(Comparator.comparing(Order::getDate))
+                    .collect(Collectors.toList());
 
-        // set total
-        System.out.println(orderCheckingList.size());
-        dashboardCardTransactionModel.setTotalCheckingList(orderCheckingList.size());
-        dashboardCardTransactionModel.setTotalRetur(returs.size());
-        dashboardCardTransactionModel.setTotalApproved(orderApprovedList.size());
-        dashboardCardTransactionModel.setTotalRejected(orderRejectedList.size());
-        dashboardCardTransactionModel.setTotalIn(orderInList.size());
-        dashboardCardTransactionModel.setTotalOut(orderOutList.size());
+            // set total
+            dashboardCardTransactionModel.setTotalCheckingList(orderCheckingList.size());
+            dashboardCardTransactionModel.setTotalRetur(returs.size());
+            dashboardCardTransactionModel.setTotalApproved(orderApprovedList.size());
+            dashboardCardTransactionModel.setTotalRejected(orderRejectedList.size());
+            dashboardCardTransactionModel.setTotalIn(orderInList.size());
+            dashboardCardTransactionModel.setTotalOut(orderOutList.size());
 
-        // set last update
-        if (orderCheckingList.size() > 0) {
-            Order lastOrderChecking = orderCheckingList.get(orderCheckingList.size() - 1);
-            dashboardCardTransactionModel.setLastUpdateChecking(formatter.format(lastOrderChecking.getDate()));
-        } else {
-            dashboardCardTransactionModel.setLastUpdateChecking(formatter.format(new Date()));
-        }
+            // set last update
+            if (orderCheckingList.size() > 0) {
+                Order lastOrderChecking = orderCheckingList.get(orderCheckingList.size() - 1);
+                dashboardCardTransactionModel.setLastUpdateChecking(formatter.format(lastOrderChecking.getDate()));
+            } else {
+                dashboardCardTransactionModel.setLastUpdateChecking(formatter.format(new Date()));
+            }
 
-        if (returs.size() > 0) {
-            Retur lastRetur = returs.get(returs.size() - 1);
-            dashboardCardTransactionModel.setLastUpdateRetur(formatter.format(lastRetur.getDate()));
-        } else {
-            dashboardCardTransactionModel.setLastUpdateRetur(formatter.format(new Date()));
-        }
+            if (returs.size() > 0) {
+                Retur lastRetur = returs.get(returs.size() - 1);
+                dashboardCardTransactionModel.setLastUpdateRetur(formatter.format(lastRetur.getDate()));
+            } else {
+                dashboardCardTransactionModel.setLastUpdateRetur(formatter.format(new Date()));
+            }
 
-        if (orderApprovedList.size() > 0) {
-            Order lastOrderApproved = orderApprovedList.get(orderApprovedList.size() - 1);
-            dashboardCardTransactionModel.setLastUpdateApproved(formatter.format(lastOrderApproved.getDate()));
-        } else {
-            dashboardCardTransactionModel.setLastUpdateApproved(formatter.format(new Date()));
-        }
+            if (orderApprovedList.size() > 0) {
+                Order lastOrderApproved = orderApprovedList.get(orderApprovedList.size() - 1);
+                dashboardCardTransactionModel.setLastUpdateApproved(formatter.format(lastOrderApproved.getDate()));
+            } else {
+                dashboardCardTransactionModel.setLastUpdateApproved(formatter.format(new Date()));
+            }
 
-        if (orderRejectedList.size() > 0) {
-            Order lastOrderRejected = orderRejectedList.get(orderRejectedList.size() - 1);
-            dashboardCardTransactionModel.setLastUpdateRejected(formatter.format(lastOrderRejected.getDate()));
-        } else {
-            dashboardCardTransactionModel.setLastUpdateRejected(formatter.format(new Date()));
-        }
+            if (orderRejectedList.size() > 0) {
+                Order lastOrderRejected = orderRejectedList.get(orderRejectedList.size() - 1);
+                dashboardCardTransactionModel.setLastUpdateRejected(formatter.format(lastOrderRejected.getDate()));
+            } else {
+                dashboardCardTransactionModel.setLastUpdateRejected(formatter.format(new Date()));
+            }
 
-        if (orderInList.size() > 0) {
-            Order lastOrder = orderInList.get(orderInList.size() - 1);
-            dashboardCardTransactionModel.setLastUpdateIn(formatter.format(lastOrder.getDate()));
-        } else {
-            dashboardCardTransactionModel.setLastUpdateIn(formatter.format(new Date()));
-        }
+            if (orderInList.size() > 0) {
+                Order lastOrder = orderInList.get(orderInList.size() - 1);
+                dashboardCardTransactionModel.setLastUpdateIn(formatter.format(lastOrder.getDate()));
+            } else {
+                dashboardCardTransactionModel.setLastUpdateIn(formatter.format(new Date()));
+            }
 
-        if (orderOutList.size() > 0) {
-            Order lastOrder = orderOutList.get(orderOutList.size() - 1);
-            dashboardCardTransactionModel.setLastUpdateOut(formatter.format(lastOrder.getDate()));
-        } else {
-            dashboardCardTransactionModel.setLastUpdateOut(formatter.format(new Date()));
+            if (orderOutList.size() > 0) {
+                Order lastOrder = orderOutList.get(orderOutList.size() - 1);
+                dashboardCardTransactionModel.setLastUpdateOut(formatter.format(lastOrder.getDate()));
+            } else {
+                dashboardCardTransactionModel.setLastUpdateOut(formatter.format(new Date()));
+            }
         }
 
         return dashboardCardTransactionModel;

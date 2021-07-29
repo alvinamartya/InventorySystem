@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class FifoShelfDetail {
     // get product in shelf origin
-    public static ShelfDetail getRowAndColumnOrigin(List<ShelfDetail> shelfDetails, boolean isCanBeStale, Integer productId) {
+    public static ShelfDetail getShelfOrigin(List<ShelfDetail> shelfDetails, boolean isCanBeStale, Integer productId) {
         ShelfDetail shelfDetail = null;
         if (isCanBeStale) {
             shelfDetail = shelfDetails
@@ -37,7 +37,7 @@ public class FifoShelfDetail {
     }
 
     // change row and column to test in unit test
-    public static ShelfDetail getRowAndColumnDest(List<ShelfDetail> shelfDetails) {
+    public static ShelfDetail getShelfDest(List<ShelfDetail> shelfDetails) {
         List<ShelfDetail> emptyShelfDetail = shelfDetails
                 .stream()
                 .filter(x -> x.getProduct_id() == null)
@@ -86,7 +86,7 @@ public class FifoShelfDetail {
     }
 
     // quantity product in origin shelf is same with quantity input
-    public static boolean isQuantityOriginSame(
+    public static boolean isQuantityOriginGreaterOrEquals(
             List<ShelfDetail> originShelfDetail,
             int quantityOrder,
             int productId
@@ -100,7 +100,7 @@ public class FifoShelfDetail {
     }
 
     // quantity product in dest shelf is same with quantity input
-    public static boolean isQuantityDestSame(
+    public static boolean isQuantityDestGreaterOrEquals(
             List<ShelfDetail> destShelfDetail,
             int quantityOrder
     ) {

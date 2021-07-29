@@ -41,7 +41,7 @@ class OrderServiceTest {
         List<ShelfDetail> shelfDetais = new ArrayList<>();
         shelfDetais.add(new ShelfDetail(1, "RO-00002-00002-00001", null, null, 1, 1));
 
-        ShelfDetail selectedShelfDetail = FifoShelfDetail.getRowAndColumnDest(shelfDetais);
+        ShelfDetail selectedShelfDetail = FifoShelfDetail.getShelfDest(shelfDetais);
         boolean x = selectedShelfDetail.getRow_shelf() == 1 && selectedShelfDetail.getCol_shelf() == 1;
         assertTrue(x);
     }
@@ -51,7 +51,7 @@ class OrderServiceTest {
         List<ShelfDetail> shelfDetails = new ArrayList<>();
         shelfDetails.add(new ShelfDetail(1, "RO-00002-00002-00001", 1, new Date(), 1, 1));
 
-        ShelfDetail selectedShelfDetail = FifoShelfDetail.getRowAndColumnDest(shelfDetails);
+        ShelfDetail selectedShelfDetail = FifoShelfDetail.getShelfDest(shelfDetails);
         boolean x = selectedShelfDetail == null;
         assertTrue(x);
     }
@@ -62,7 +62,7 @@ class OrderServiceTest {
         shelfDetails.add(new ShelfDetail(1, "RO-00002-00002-00001", 1, new Date(), 1, 1));
         shelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", null, null, 1, 2));
 
-        ShelfDetail selectedShelfDetail = FifoShelfDetail.getRowAndColumnDest(shelfDetails);
+        ShelfDetail selectedShelfDetail = FifoShelfDetail.getShelfDest(shelfDetails);
         boolean x = selectedShelfDetail.getRow_shelf() == 1 && selectedShelfDetail.getCol_shelf() == 2;
         assertTrue(x);
     }
@@ -73,7 +73,7 @@ class OrderServiceTest {
         shelfDetails.add(new ShelfDetail(1, "RO-00002-00002-00001", null, null, 1, 1));
         shelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", 1, new Date(), 1, 2));
 
-        ShelfDetail selectedShelfDetail = FifoShelfDetail.getRowAndColumnDest(shelfDetails);
+        ShelfDetail selectedShelfDetail = FifoShelfDetail.getShelfDest(shelfDetails);
         boolean x = selectedShelfDetail.getRow_shelf() == 1 && selectedShelfDetail.getCol_shelf() == 1;
         assertTrue(x);
     }
@@ -85,7 +85,7 @@ class OrderServiceTest {
         shelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", 1, new Date(), 1, 2));
         shelfDetails.add(new ShelfDetail(3, "RO-00002-00002-00001", null, null, 1, 3));
 
-        ShelfDetail selectedShelfDetail = FifoShelfDetail.getRowAndColumnDest(shelfDetails);
+        ShelfDetail selectedShelfDetail = FifoShelfDetail.getShelfDest(shelfDetails);
         boolean x = selectedShelfDetail.getRow_shelf() == 1 && selectedShelfDetail.getCol_shelf() == 3;
         assertTrue(x);
     }
@@ -104,8 +104,8 @@ class OrderServiceTest {
         destShelfDetails.add(new ShelfDetail(2, "RO-00003-00002-00001", null, null, 1, 2));
         destShelfDetails.add(new ShelfDetail(3, "RO-00003-00002-00001", null, null, 1, 3));
 
-        ShelfDetail selectedOriginShelfDetail = FifoShelfDetail.getRowAndColumnOrigin(originShelfDetails, false, 1);
-        ShelfDetail selectedDestShelfDetail = FifoShelfDetail.getRowAndColumnDest(destShelfDetails);
+        ShelfDetail selectedOriginShelfDetail = FifoShelfDetail.getShelfOrigin(originShelfDetails, false, 1);
+        ShelfDetail selectedDestShelfDetail = FifoShelfDetail.getShelfDest(destShelfDetails);
 
         boolean err = FifoShelfDetail.moveShelfHasError(selectedOriginShelfDetail, selectedDestShelfDetail);
         assertTrue(err);
@@ -119,7 +119,7 @@ class OrderServiceTest {
         originShelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", 1, new Date(), 1, 2));
         originShelfDetails.add(new ShelfDetail(3, "RO-00002-00002-00001", null, null, 1, 3));
 
-        boolean quantityIsSame = !FifoShelfDetail.isQuantityOriginSame(originShelfDetails, 3, 1);
+        boolean quantityIsSame = !FifoShelfDetail.isQuantityOriginGreaterOrEquals(originShelfDetails, 3, 1);
         assertTrue(quantityIsSame);
     }
 
@@ -131,7 +131,7 @@ class OrderServiceTest {
         originShelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", 1, new Date(), 1, 2));
         originShelfDetails.add(new ShelfDetail(3, "RO-00002-00002-00001", null, null, 1, 3));
 
-        boolean quantityIsSame = FifoShelfDetail.isQuantityOriginSame(originShelfDetails, 2, 1);
+        boolean quantityIsSame = FifoShelfDetail.isQuantityOriginGreaterOrEquals(originShelfDetails, 2, 1);
         assertTrue(quantityIsSame);
     }
 
@@ -142,7 +142,7 @@ class OrderServiceTest {
         destShelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", null, null, 1, 2));
         destShelfDetails.add(new ShelfDetail(3, "RO-00002-00002-00001", null, null, 1, 3));
 
-        boolean quantityDestIsNotSame = !FifoShelfDetail.isQuantityDestSame(destShelfDetails, 3);
+        boolean quantityDestIsNotSame = !FifoShelfDetail.isQuantityDestGreaterOrEquals(destShelfDetails, 3);
         assertTrue(quantityDestIsNotSame);
     }
 
@@ -153,7 +153,7 @@ class OrderServiceTest {
         destShelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", null, null, 1, 2));
         destShelfDetails.add(new ShelfDetail(3, "RO-00002-00002-00001", null, null, 1, 3));
 
-        boolean quantityDestIsNotSame = FifoShelfDetail.isQuantityDestSame(destShelfDetails, 2);
+        boolean quantityDestIsNotSame = FifoShelfDetail.isQuantityDestGreaterOrEquals(destShelfDetails, 2);
         assertTrue(quantityDestIsNotSame);
     }
 
@@ -167,7 +167,7 @@ class OrderServiceTest {
             originShelfDetails.add(new ShelfDetail(2, "RO-00002-00002-00001", 1, dateFormat.parse("2021-07-30"), 1, 1));
             originShelfDetails.add(new ShelfDetail(3, "RO-00002-00002-00001", 1, dateFormat.parse("2021-07-29"), 1, 1));
 
-            ShelfDetail selectedShelfDetail = FifoShelfDetail.getRowAndColumnOrigin(originShelfDetails, true, 1);
+            ShelfDetail selectedShelfDetail = FifoShelfDetail.getShelfOrigin(originShelfDetails, true, 1);
             boolean x = dateFormat.format(selectedShelfDetail.getExpired_at()).equals("2021-07-29");
             assertTrue(x);
         } catch (ParseException e) {

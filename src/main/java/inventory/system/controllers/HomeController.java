@@ -39,7 +39,6 @@ public class HomeController {
                 case 1:
                     DashboardCardOrderModel dashboardCardTransactionModel = dashboardService.getDashboardCardAdminTransaction(logged_user.getId());
                     model.addAttribute("dashboardObject", dashboardCardTransactionModel);
-                    System.out.println(logged_user.getWarehouse_id());
                     model.addAttribute("warehouseId", logged_user.getWarehouse_id());
                     return "Dashboard/IndexTransactionAdmin";
                 case 2:
