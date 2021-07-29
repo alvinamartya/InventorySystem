@@ -231,12 +231,15 @@ public class ReturController {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
-            String staffName = logged_user.getName();
 
-            returService.approve(id, staffName);
-            returService.moveShelfDetailRetur(id);
-
-            redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Approved!");
+            boolean error = returService.moveShelfDetailRetur(id);
+            if(!error) {
+                String staffName = logged_user.getName();
+                returService.approve(id, staffName);
+                redirectAttrs.addFlashAttribute("success_checked", "Retur Successfully Approved!");
+            } else {
+                redirectAttrs.addFlashAttribute("success_checked", "Retur failed to be approved");
+            }
             return "redirect:/retur/index/" + level;
         }
         return "redirect:/login";

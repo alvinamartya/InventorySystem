@@ -3,12 +3,12 @@ package inventory.system.service;
 import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Staffs;
 import inventory.system.repository.StaffsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
 import java.security.SecureRandom;
 import java.util.Date;
@@ -18,10 +18,10 @@ import java.util.Optional;
 @Service
 public class StaffService {
 
-    @Autowired
+    @Resource
     StaffsRepository staffsRepository;
 
-    @Autowired
+    @Resource
     JavaMailSender mailSender;
 
     public void sendEmailStaff(Staffs staff) {
@@ -55,8 +55,6 @@ public class StaffService {
             }
         }).start();
     }
-
-
     public void sendEmailUpdatePassword(Staffs staff) {
         new Thread(() -> {
             String from = "djadjan@use-narwhal.com";
@@ -82,16 +80,13 @@ public class StaffService {
             }
         }).start();
     }
-
     public boolean isEmailExist(String email) {
         Optional<Staffs> optional = staffsRepository.findByEmail(email);
         return !optional.isPresent();
     }
-
     public List<Staffs> getAllStaff() {
         return staffsRepository.findAllByRole();
     }
-
     public void saveStaff(Staffs staffs, LoggedUser loggedUser) {
         staffs.setPassword(encodePassword("djadjanwarehouse"));
         staffs.setStatus("A");
@@ -102,14 +97,12 @@ public class StaffService {
         staffsRepository.save(staffs);
         sendEmailStaff(staffs);
     }
-
     public String encodePassword(String inputPassword) {
         int strength = 10;
         BCryptPasswordEncoder bCryptPasswordEncoder =
                 new BCryptPasswordEncoder(strength, new SecureRandom());
         return bCryptPasswordEncoder.encode(inputPassword);
     }
-
     public Staffs getStaffById(Integer id) {
         Optional<Staffs> optional = staffsRepository.findById(id);
         Staffs staffs = null;
@@ -120,8 +113,7 @@ public class StaffService {
         }
         return staffs;
     }
-
-    public int update(int id, Staffs staff, LoggedUser loggedUser) {
+    public void update(int id, Staffs staff, LoggedUser loggedUser) {
         Staffs staffs = staffsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
         staffs.setName(staff.getName());
@@ -135,11 +127,8 @@ public class StaffService {
         staffs.setUpdated_by(loggedUser.getName());
 
         staffsRepository.save(staffs);
-
-        return 1;
     }
-
-    public int updatePassword(int id, Staffs staff) {
+    public void updatePassword(int id, Staffs staff) {
         Staffs staffs = staffsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
 
@@ -147,9 +136,7 @@ public class StaffService {
         staffs.setUpdated_at(new Date());
 
         staffsRepository.save(staffs);
-        return 1;
     }
-
     public void deleteStaff(Staffs staffs, LoggedUser loggedUser) {
         staffs.setStatus("D");
         staffs.setUpdated_at(new Date());

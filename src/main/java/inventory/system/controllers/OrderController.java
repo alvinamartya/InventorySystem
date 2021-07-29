@@ -153,7 +153,6 @@ public class OrderController {
             List<OrderDetail> listDetail = orderService.getOrderDetail(id);
             model.addAttribute("detailorderObject", listDetail);
             model.addAttribute("level", level);
-
             model.addAttribute("state", "check");
 
             if (!orders.getOrigin_type().equals("Pemasok")) {
@@ -217,12 +216,14 @@ public class OrderController {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
-            String staffName = logged_user.getName();
-
-            orderService.approve(id, staffName);
-            orderService.moveShelfDetailOrder(id);
-
-            redirectAttrs.addFlashAttribute("success_checked", "Order Successfully Approved!");
+            boolean error = orderService.moveShelfDetailOrder(id);
+            if(!error) {
+                String staffName = logged_user.getName();
+                orderService.approve(id, staffName);
+                redirectAttrs.addFlashAttribute("success_create", "Order Successfully Approved!");
+            } else {
+                redirectAttrs.addFlashAttribute("success_delete", "Order failed to be approved");
+            }
             return "redirect:/order/index/" + level;
         }
         return "redirect:/login";

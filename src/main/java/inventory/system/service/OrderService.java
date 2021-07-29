@@ -60,7 +60,6 @@ public class OrderService {
         if (!orderinput.getDriver_id().equals(0)) {
             orders.setDriver_id(orderinput.getDriver_id());
         }
-
         orders.setCreated_at(new Date());
         orders.setCreated_by(loggedUser.getName());
         orders.setChecked_at(new Date());
@@ -119,7 +118,9 @@ public class OrderService {
     }
 
     private String generateId(String originId, String destId, String originType, String destType) {
-        int lastCounter = getLastCounter(originType);
+        int lastCounter = getLastCounter(originType, originId);
+        System.out.println(lastCounter);
+
         String typeOrId = originType.equals("Gudang") ? "W" : "S";
         String typeDestId = destType.equals("Gudang") ? "W" : "T";
 
@@ -128,14 +129,16 @@ public class OrderService {
 
     }
 
-    private int getLastCounter(String originType) {
+    private int getLastCounter(String originType, String originId) {
         List<Order> orderList = getAllOrder();
 
         if (orderList.size() > 0) {
             List<Order> orderFiltered = orderList
                     .stream()
                     .filter(x ->
-                            x.getOrigin_type().equals(originType))
+                            x.getOrigin_id().equals(originId) &&
+                                    x.getOrigin_type().equals(originType)
+                    )
                     .collect(Collectors.toList());
 
             if (orderFiltered.size() > 0) {
@@ -187,45 +190,79 @@ public class OrderService {
         ordersRepository.delete(order);
     }
 
-    public void moveShelfDetailOrder(String id) {
+    public boolean moveShelfDetailOrder(String id) {
+        boolean isError = false;
+
+        List<ShelfDetail> toShelfWarehouseList = new ArrayList<>();
+        List<ShelfDetail> fromShelfWarehouseList = new ArrayList<>();
         List<OrderDetail> listOrderDetail = orderDetailsRepository.findAllByOrder(id);
+
         for (OrderDetail orderDetail : listOrderDetail) {
+            List<ShelfDetail> shelfOriginDetails = shelfDetailRepository.findAllByShelf(orderDetail.getOrigin_shelf_id());
+            List<ShelfDetail> shelfDestDetails = shelfDetailRepository.findAllByShelf(orderDetail.getDest_shelf_id());
+
             Product product = orderDetail.getProductList();
             ProductCategory productCategory = product.getProductCategory();
             boolean isCanStale = productCategory.getIs_can_be_stale() == 1;
             boolean isFromWarehouse = orderDetail.getOrderList().getOrigin_type().equals("Gudang");
             boolean isToWarehouse = orderDetail.getOrderList().getDest_type().equals("Gudang");
 
-            for (int i = 0; i < orderDetail.getQuantity(); i++) {
-                List<ShelfDetail> shelfOriginDetails = shelfDetailRepository.findAllByShelf(orderDetail.getOrigin_shelf_id());
-                List<ShelfDetail> shelfDestDetails = shelfDetailRepository.findAllByShelf(orderDetail.getDest_shelf_id());
+            boolean isQuantityOriginGreaterOrEqual = FifoShelfDetail.isQuantityOriginGreaterOrEquals(shelfOriginDetails, orderDetail.getQuantity(), orderDetail.getProduct_id());
+            boolean isQuantityDestGreaterOrEqual = FifoShelfDetail.isQuantityDestGreaterOrEquals(shelfDestDetails, orderDetail.getQuantity());
 
-                // move product to dest
-                if(isToWarehouse) {
-                    ShelfDetail shelfDest = FifoShelfDetail.getRowAndColumnDest(shelfDestDetails);
-                    Date date = null;
+            if(isQuantityOriginGreaterOrEqual && isQuantityDestGreaterOrEqual) {
+                for (int i = 0; i < orderDetail.getQuantity(); i++) {
+                    shelfOriginDetails = shelfDetailRepository.findAllByShelf(orderDetail.getOrigin_shelf_id());
+                    shelfDestDetails = shelfDetailRepository.findAllByShelf(orderDetail.getDest_shelf_id());
 
-                    if (isCanStale) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.DATE, 30);
-                        date = cal.getTime();
+                    // move product to dest
+                    if (isToWarehouse) {
+                        ShelfDetail shelfDest = FifoShelfDetail.getShelfDest(shelfDestDetails);
+                        if (shelfDest != null) {
+                            toShelfWarehouseList.add(shelfDest);
+                            Date date = null;
+
+                            if (isCanStale) {
+                                Calendar cal = Calendar.getInstance();
+                                cal.add(Calendar.DATE, 30);
+                                date = cal.getTime();
+                            }
+
+                            shelfDest.setProduct_id(orderDetail.getProduct_id());
+                            shelfDest.setExpired_at(date);
+                            shelfDetailRepository.save(shelfDest);
+                        } else {
+                            isError = true;
+                            break;
+                        }
                     }
 
-                    shelfDest.setProduct_id(orderDetail.getProduct_id());
-                    shelfDest.setExpired_at(date);
-                    shelfDetailRepository.save(shelfDest);
+                    // delete product from origin
+                    if (isFromWarehouse) {
+                        ShelfDetail shelfOrigin = FifoShelfDetail.getShelfOrigin(shelfOriginDetails, isCanStale, orderDetail.getProduct_id());
+                        if (shelfOrigin != null) {
+                            fromShelfWarehouseList.add(shelfOrigin);
+                            shelfOrigin.setExpired_at(null);
+                            shelfOrigin.setProduct_id(null);
+                            shelfDetailRepository.save(shelfOrigin);
+                        } else {
+                            isError = true;
+                            break;
+                        }
+                    }
                 }
-
-                // delete product from origin
-                if(isFromWarehouse) {
-                    ShelfDetail shelfOrigin = FifoShelfDetail.getRowAndColumnOrigin(shelfOriginDetails, isCanStale, orderDetail.getProduct_id());
-                    shelfOrigin.setExpired_at(null);
-                    shelfOrigin.setProduct_id(null);
-
-                    shelfDetailRepository.save(shelfOrigin);
-                }
+            } else {
+                isError = true;
             }
+            if (isError) break;
         }
+        if (isError) reverseOrder(toShelfWarehouseList, fromShelfWarehouseList);
+        return isError;
+    }
+
+    private void reverseOrder(List<ShelfDetail> toWarehouseShelf, List<ShelfDetail> fromWarehouseShelf) {
+        shelfDetailRepository.saveAll(toWarehouseShelf);
+        shelfDetailRepository.saveAll(fromWarehouseShelf);
     }
 }
 

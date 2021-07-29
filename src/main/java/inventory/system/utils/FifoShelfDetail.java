@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 public class FifoShelfDetail {
     // get product in shelf origin
-    public static ShelfDetail getRowAndColumnOrigin(List<ShelfDetail> shelfDetails, boolean isCanBeStale, Integer productId) {
+    public static ShelfDetail getShelfOrigin(List<ShelfDetail> shelfDetails, boolean isCanBeStale, Integer productId) {
         ShelfDetail shelfDetail = null;
         if (isCanBeStale) {
             shelfDetail = shelfDetails
                     .stream()
-                    .filter(x -> x.getProduct_id().equals(productId))
+                    .filter(x -> x.getProduct_id() != null && x.getProduct_id().equals(productId))
                     .min(
                             Comparator
                                     .comparing(ShelfDetail::getRow_shelf)
@@ -24,7 +24,7 @@ public class FifoShelfDetail {
         } else {
             shelfDetail = shelfDetails
                     .stream()
-                    .filter(x -> x.getProduct_id().equals(productId))
+                    .filter(x -> x.getProduct_id() != null && x.getProduct_id().equals(productId))
                     .min(
                             Comparator
                                     .comparing(ShelfDetail::getRow_shelf)
@@ -37,7 +37,7 @@ public class FifoShelfDetail {
     }
 
     // change row and column to test in unit test
-    public static ShelfDetail getRowAndColumnDest(List<ShelfDetail> shelfDetails) {
+    public static ShelfDetail getShelfDest(List<ShelfDetail> shelfDetails) {
         List<ShelfDetail> emptyShelfDetail = shelfDetails
                 .stream()
                 .filter(x -> x.getProduct_id() == null)
@@ -78,5 +78,37 @@ public class FifoShelfDetail {
         }
 
         return null;
+    }
+
+    // has error when move product from origin shelf to dest shelf
+    public static boolean moveShelfHasError(ShelfDetail originShelfDetail, ShelfDetail destShelfDetail) {
+        return originShelfDetail == null || destShelfDetail == null;
+    }
+
+    // quantity product in origin shelf is same with quantity input
+    public static boolean isQuantityOriginGreaterOrEquals(
+            List<ShelfDetail> originShelfDetail,
+            int quantityOrder,
+            int productId
+    ) {
+        List<ShelfDetail> selectedProductInOriginShelf = originShelfDetail
+                .stream()
+                .filter(x -> x.getProduct_id() != null && x.getProduct_id() == productId)
+                .collect(Collectors.toList());
+
+        return selectedProductInOriginShelf.size() >= quantityOrder;
+    }
+
+    // quantity product in dest shelf is same with quantity input
+    public static boolean isQuantityDestGreaterOrEquals(
+            List<ShelfDetail> destShelfDetail,
+            int quantityOrder
+    ) {
+        List<ShelfDetail> selectedEmptyShelfDetail = destShelfDetail
+                .stream()
+                .filter(x -> x.getProduct_id() == null)
+                .collect(Collectors.toList());
+
+        return selectedEmptyShelfDetail.size() >= quantityOrder;
     }
 }
