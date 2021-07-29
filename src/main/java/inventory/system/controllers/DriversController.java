@@ -13,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.Resource;
+import javax.annotation.Resources;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -20,10 +22,10 @@ import java.util.List;
 @RequestMapping("/driver")
 public class DriversController {
 
-    @Autowired
+    @Resource
     DriverService driverService;
 
-    @Autowired
+    @Resource
     WarehousesService warehouseService;
 
     // view index

@@ -2,26 +2,23 @@ package inventory.system.service;
 
 import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Product;
-import inventory.system.entity.Supplier;
 import inventory.system.entity.SupplierDetail;
-import inventory.system.model.OrderDetailInputModel;
 import inventory.system.repository.ProductRepository;
 import inventory.system.repository.SupplierDetailsRepository;
-import inventory.system.repository.SupplierRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 
 @Service
 public class ProductService {
 
-    @Autowired
+    @Resource
     ProductRepository productRepository;
 
-    @Autowired
-    SupplierDetailsRepository supplierdetailRepository;
+    @Resource
+    SupplierDetailsRepository supplierDetailsRepository;
 
     public List<Product> getAllProduct() {
         List<Product> productList = (List<Product>) productRepository.findAll();
@@ -33,16 +30,14 @@ public class ProductService {
 
         return productList;
     }
-
     public List<Product> getProductBySupplier(String id) {
-        List<SupplierDetail> supplierdetailList = supplierdetailRepository.findSupplierDetailBySupId(id);
+        List<SupplierDetail> supplierdetailList = supplierDetailsRepository.findSupplierDetailBySupId(id);
         List<Product> productList = new ArrayList<Product>();
         for (SupplierDetail suppDetail : supplierdetailList) {
             productList.addAll(productRepository.findBySupplierId(suppDetail.getProduct_category_id()));
         }
         return productList;
     }
-
     public void saveProduct(Product product, LoggedUser loggedUser) {
         product.setStatus("A");
         product.setCreated_at(new Date());
@@ -51,8 +46,7 @@ public class ProductService {
         product.setUpdated_by(loggedUser.getName());
         productRepository.save(product);
     }
-
-    public int update(int id, Product product, LoggedUser loggedUser) {
+    public void update(int id, Product product, LoggedUser loggedUser) {
         Product p = productRepository
                 .findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product Id: " + id));
@@ -64,9 +58,7 @@ public class ProductService {
         p.setUpdated_by(loggedUser.getName());
 
         productRepository.save(p);
-        return 1;
     }
-
     public Product getProductById(int id) {
         Optional<Product> optional = productRepository.findById(id);
         Product product = null;
@@ -78,25 +70,18 @@ public class ProductService {
 
         return product;
     }
-
-    public int delete(Product product, LoggedUser loggedUser) {
+    public void delete(Product product, LoggedUser loggedUser) {
         product.setStatus("D");
         product.setUpdated_at(new Date());
         product.setUpdated_by(loggedUser.getName());
         productRepository.save(product);
-
-        return 1;
     }
-
-    public int activate(Product product, LoggedUser loggedUser) {
+    public void activate(Product product, LoggedUser loggedUser) {
         product.setStatus("A");
         product.setUpdated_at(new Date());
         product.setUpdated_by(loggedUser.getName());
         productRepository.save(product);
-
-        return 1;
     }
-
     public List<String> getUnits() {
         List<String> unit = new ArrayList<>();
 
@@ -109,6 +94,4 @@ public class ProductService {
         unit.add("Dus");
         return unit;
     }
-
-
 }

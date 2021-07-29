@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 @Service
 public class ReturService {
 
-    @Autowired
+    @Resource
     ReturRepository returRepository;
 
-    @Autowired
+    @Resource
     ReturDetailRepository returDetailRepository;
 
     @Resource
@@ -33,7 +33,6 @@ public class ReturService {
     public List<Retur> getAllRetur() {
         return (List<Retur>) returRepository.findAll();
     }
-
     public List<Retur> getAllReturByWarehouse(String warehouse_id, int level) {
         if (level == 1) {
             return returRepository.findByWarehouseLv1(warehouse_id);
@@ -44,7 +43,6 @@ public class ReturService {
         }
         return (List<Retur>) returRepository.findAll();
     }
-
     public List<Retur> saveRetur(ReturInput returInput, LoggedUser loggedUser) {
         Retur retur = new Retur();
         String returId = generateId(returInput.getOrigin_warehouse_id(),
@@ -93,7 +91,6 @@ public class ReturService {
 
         return getAllRetur();
     }
-
     public void insertDetail(String returId, List<ReturDetailInput> detailList) {
 
         List<ReturDetail> arrayReturDetail = new ArrayList<>();
@@ -110,11 +107,9 @@ public class ReturService {
 
         returDetailRepository.saveAll(arrayReturDetail);
     }
-
     public List<ReturDetail> getReturDetail(String id) {
         return returDetailRepository.findReturDetailByReturId(id);
     }
-
     public Retur getReturById(String id) {
         Optional<Retur> optional = returRepository.findById(id);
         Retur retur = null;
@@ -126,8 +121,6 @@ public class ReturService {
 
         return retur;
     }
-
-    //ID Retur Origin Otomatis
     private String generateId(String originId, String destId, String destType, String originType) {
         int lastCounter = getLastCounter(originType);
 
@@ -136,7 +129,6 @@ public class ReturService {
         String dateId = LocalDate.now().toString().replace("-", "");
         return "FR" + "-" + typeId + originId + "-" + typeDest + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
     }
-
     private int getLastCounter(String originType) {
         List<Retur> returList = getAllRetur();
 
@@ -159,8 +151,6 @@ public class ReturService {
 
         return 0;
     }
-
-    //checked
     public void check(String id, String staffName) {
         Retur retur = returRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid staff Id:" + id));
@@ -170,8 +160,6 @@ public class ReturService {
         retur.setUpdated_by(staffName);
         returRepository.save(retur);
     }
-
-    //approved
     public void approve(String id, String staffName) {
         Retur retur = returRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid staff Id:" + id));
@@ -181,13 +169,10 @@ public class ReturService {
         retur.setUpdated_by(staffName);
         returRepository.save(retur);
     }
-
     @Transactional
     public void delete(Retur retur) {
         returRepository.delete(retur);
     }
-
-
     public void moveShelfDetailRetur(String id) {
         List<ReturDetail> listReturDetail = returDetailRepository.findReturDetailByReturId(id);
         for (ReturDetail returDetail : listReturDetail) {

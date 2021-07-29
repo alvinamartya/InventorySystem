@@ -11,6 +11,7 @@ import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,32 +19,28 @@ import java.util.stream.Collectors;
 @Service
 public class ShelfService {
 
-    @Autowired
+    @Resource
     ShelfRepository shelfRepository;
 
-    @Autowired
+    @Resource
     ProductService productService;
 
-    @Autowired
+    @Resource
     ShelfDetailRepository shelfDetailRepository;
 
     public List<Shelf> getAllShelf() {
         return (List<Shelf>) shelfRepository.findAll();
     }
-
     public List<Shelf> getAllShelfRO() {
         return shelfRepository.findAllRO();
     }
-
     public List<Shelf> getAllShelfRR() {
         return shelfRepository.findAllRR();
     }
-
     public List<Shelf> getShelfByCategory(String id) {
         Product product = productService.getProductById(Integer.parseInt(id));
         return shelfRepository.findShelfByCategoryRO(product.getProduct_category_id());
     }
-
     public List<Shelf> getShelfByCategoryRR(String id) {
         Product product = productService.getProductById(Integer.parseInt(id));
         return shelfRepository.findShelfByCategoryRR(product.getProduct_category_id());
@@ -51,15 +48,12 @@ public class ShelfService {
     public List<Shelf> getAllShelfByWarehouseRO(String warehouse_id) {
         return shelfRepository.findShelfByWarehouseRO(warehouse_id);
     }
-
     public List<Shelf> getAllShelfByWarehouseRR(String warehouse_id) {
         return shelfRepository.findShelfByWarehouseRR(warehouse_id);
     }
-
     public List<ShelfDetail> getAllShelfById(String shelf_id) {
         return shelfRepository.findShelfDetailById(shelf_id);
     }
-
     public void saveShelf(Shelf shelf, LoggedUser loggedUser) {
         Shelf newShelf = new Shelf();
         String shelfId = generateId(shelf.getWarehouse_id(), shelf.getProduct_category_id(), shelf.getType_shelf());
@@ -84,7 +78,6 @@ public class ShelfService {
 
         getAllShelf();
     }
-
     public void insertDetail(String shelfId, int row, int col, int quantity) {
         List<ShelfDetail> arrayShelfDetail = new ArrayList<ShelfDetail>();
 
@@ -108,11 +101,9 @@ public class ShelfService {
 
         shelfDetailRepository.saveAll(arrayShelfDetail);
     }
-
     public List<ShelfDetail> getShelfDetail(String id) {
         return shelfDetailRepository.findAllByShelf(id);
     }
-
     public void update(String id, LoggedUser loggedUser) {
         Shelf shelf = shelfRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid shelf Id:" + id));
@@ -121,7 +112,6 @@ public class ShelfService {
         shelf.setUpdated_by(loggedUser.getName());
         shelfRepository.save(shelf);
     }
-
     public Shelf getShelfById(String id) {
         Optional<Shelf> optional = shelfRepository.findById(id);
         Shelf shelf = null;
@@ -132,14 +122,12 @@ public class ShelfService {
         }
         return shelf;
     }
-
     private String generateId(String warehouseId, String productCategoryId, String warehouseType) {
         int lastCounter = getLastCounter(warehouseId, productCategoryId, warehouseType);
 
         String typeId = warehouseType.equals("Rak Order") ? "RO" : "RR";
         return typeId + "-" + warehouseId + "-" + productCategoryId + "-" + GeneratorId.generateMasterId(lastCounter);
     }
-
     private int getLastCounter(String warehouseId, String productCategoryId, String warehouseType) {
         List<Shelf> shelfList = getAllShelf();
 
@@ -164,13 +152,9 @@ public class ShelfService {
 
         return 0;
     }
-
     @Transactional
     public void delete(Shelf shelf) {
         shelfDetailRepository.deleteDetail(shelf.getId());
         shelfRepository.delete(shelf);
     }
-
-
-
 }

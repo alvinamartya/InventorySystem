@@ -7,6 +7,7 @@ import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Service
 public class ProductCategoryService {
 
-    @Autowired
+    @Resource
     ProductCategoryRepository productCategoryRepository;
 
     public List<ProductCategory> getAllProductCategory() {
@@ -27,7 +28,6 @@ public class ProductCategoryService {
         );
         return productCategoryList;
     }
-
     public void saveProductCategory(ProductCategory productCategory, LoggedUser loggedUser) {
         productCategory.setId(GeneratorId.generateMasterId(getLastCounter()));
         productCategory.setStatus("A");
@@ -37,7 +37,6 @@ public class ProductCategoryService {
         productCategory.setUpdated_at(new Date());
         productCategoryRepository.save(productCategory);
     }
-
     private int getLastCounter() {
         List<ProductCategory> productCategoryList = getAllProductCategory();
         if (productCategoryList.size() > 0) {
@@ -47,8 +46,7 @@ public class ProductCategoryService {
 
         return 0;
     }
-
-    public int update(String id, ProductCategory productCategory) {
+    public void update(String id, ProductCategory productCategory) {
         ProductCategory p = productCategoryRepository
                 .findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product category Id: " + id));
@@ -56,10 +54,7 @@ public class ProductCategoryService {
         p.setName(productCategory.getName());
         p.setIs_can_be_stale(productCategory.getIs_can_be_stale());
         productCategoryRepository.save(p);
-
-        return 1;
     }
-
     public ProductCategory getProductCategoryById(String id) {
         Optional<ProductCategory> optional = productCategoryRepository.findById(id);
         ProductCategory productCategory = null;
@@ -71,22 +66,16 @@ public class ProductCategoryService {
 
         return productCategory;
     }
-
-    public int delete(ProductCategory productCategory, LoggedUser loggedUser) {
+    public void delete(ProductCategory productCategory, LoggedUser loggedUser) {
         productCategory.setStatus("D");
         productCategory.setUpdated_at(new Date());
         productCategory.setUpdated_by(loggedUser.getName());
         productCategoryRepository.save(productCategory);
-
-        return 1;
     }
-
-    public int activate(ProductCategory productCategory, LoggedUser loggedUser) {
+    public void activate(ProductCategory productCategory, LoggedUser loggedUser) {
         productCategory.setStatus("A");
         productCategory.setUpdated_at(new Date());
         productCategory.setUpdated_by(loggedUser.getName());
         productCategoryRepository.save(productCategory);
-
-        return 1;
     }
 }

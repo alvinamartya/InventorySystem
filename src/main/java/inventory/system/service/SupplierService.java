@@ -6,12 +6,13 @@ import inventory.system.utils.GeneratorId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 @Service
 public class SupplierService {
 
-    @Autowired
+    @Resource
     SupplierRepository supplierRepository;
 
     public List<Supplier> getAllSupplier() {
@@ -23,7 +24,6 @@ public class SupplierService {
         );
         return supplierList;
     }
-
     public void saveSupplier(Supplier supplier) {
         supplier.setId(GeneratorId.generateMasterId(getLastCounter()));
         supplier.setStatus("A");
@@ -33,7 +33,6 @@ public class SupplierService {
         supplier.setUpdated_by("Admin");
         supplierRepository.save(supplier);
     }
-
     private int getLastCounter() {
         List<Supplier> suppliers = getAllSupplier();
         if (suppliers.size() > 0) {
@@ -47,8 +46,7 @@ public class SupplierService {
 
         return 0;
     }
-
-    public int update(String id, Supplier supplier) {
+    public void update(String id, Supplier supplier) {
         Supplier s = supplierRepository
                 .findById(id)
                 .orElseThrow(() -> new IllformedLocaleException("Invalid supplier Id: " + id));
@@ -60,10 +58,7 @@ public class SupplierService {
         s.setUpdated_by("Admin");
 
         supplierRepository.save(s);
-
-        return 1;
     }
-
     public Supplier getSupplierById(String id) {
         Optional<Supplier> optional = supplierRepository.findById(id);
         Supplier supplier = null;
@@ -75,22 +70,16 @@ public class SupplierService {
 
         return supplier;
     }
-
-    public int delete(Supplier supplier) {
+    public void delete(Supplier supplier) {
         supplier.setStatus("D");
         supplier.setUpdated_at(new Date());
         supplier.setUpdated_by("Admin");
         supplierRepository.save(supplier);
-
-        return 1;
     }
-
-    public int activate(Supplier supplier) {
+    public void activate(Supplier supplier) {
         supplier.setStatus("A");
         supplier.setUpdated_at(new Date());
         supplier.setUpdated_by("Admin");
         supplierRepository.save(supplier);
-
-        return 1;
     }
 }

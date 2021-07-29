@@ -33,7 +33,6 @@ public class OrderService {
     public List<Order> getAllOrder() {
         return (List<Order>) ordersRepository.findAll();
     }
-
     public List<Order> getAllOrderByWarehouse(String warehouse_id, int level) {
         if (level == 1) {
             return ordersRepository.findByWarehouseLv1(warehouse_id);
@@ -44,7 +43,6 @@ public class OrderService {
         }
         return (List<Order>) ordersRepository.findAll();
     }
-
     public void saveOrder(OrderInput orderinput, LoggedUser loggedUser) {
         Order orders = new Order();
         String orderId = generateId(orderinput.getOrigin_warehouse_id()
@@ -87,7 +85,6 @@ public class OrderService {
         insertDetail(orderId, Objects.requireNonNull(detailList));
         getAllOrder();
     }
-
     public void insertDetail(String orderId, List<OrderDetailInputModel> detailList) {
         List<OrderDetail> arrayOrderDetail = new ArrayList<OrderDetail>();
         for (OrderDetailInputModel orderDetailInput : detailList) {
@@ -102,11 +99,9 @@ public class OrderService {
 
         orderDetailsRepository.saveAll(arrayOrderDetail);
     }
-
     public List<OrderDetail> getOrderDetail(String id) {
         return orderDetailsRepository.findAllByOrder(id);
     }
-
     public Order getOrderById(String id) {
         Optional<Order> optional = ordersRepository.findById(id);
         Order order = null;
@@ -117,9 +112,10 @@ public class OrderService {
         }
         return order;
     }
-
     private String generateId(String originId, String destId, String originType, String destType) {
-        int lastCounter = getLastCounter(originType);
+        int lastCounter = getLastCounter(originType, originId);
+        System.out.println(lastCounter);
+
         String typeOrId = originType.equals("Gudang") ? "W" : "S";
         String typeDestId = destType.equals("Gudang") ? "W" : "T";
 
@@ -127,15 +123,16 @@ public class OrderService {
         return "FO" + "-" + typeOrId + originId + "-" + typeDestId + destId + "-" + dateId + "-" + GeneratorId.generateMasterId(lastCounter);
 
     }
-
-    private int getLastCounter(String originType) {
+    private int getLastCounter(String originType, String originId) {
         List<Order> orderList = getAllOrder();
 
         if (orderList.size() > 0) {
             List<Order> orderFiltered = orderList
                     .stream()
                     .filter(x ->
-                            x.getOrigin_type().equals(originType))
+                            x.getOrigin_id().equals(originId) &&
+                            x.getOrigin_type().equals(originType)
+                    )
                     .collect(Collectors.toList());
 
             if (orderFiltered.size() > 0) {
@@ -150,7 +147,6 @@ public class OrderService {
 
         return 0;
     }
-
     public void check(String id, String staffName) {
         Order orders = ordersRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
@@ -161,7 +157,6 @@ public class OrderService {
         orders.setUpdated_by(staffName);
         ordersRepository.save(orders);
     }
-
     public void approve(String id, String staffName) {
         Order orders = ordersRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
@@ -172,7 +167,6 @@ public class OrderService {
         orders.setUpdated_by(staffName);
         ordersRepository.save(orders);
     }
-
     public void reject(String id, String staffName) {
         Order orders = ordersRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + id));
@@ -181,12 +175,10 @@ public class OrderService {
         orders.setUpdated_by(staffName);
         ordersRepository.save(orders);
     }
-
     @Transactional
     public void delete(Order order) {
         ordersRepository.delete(order);
     }
-
     public void moveShelfDetailOrder(String id) {
         List<OrderDetail> listOrderDetail = orderDetailsRepository.findAllByOrder(id);
         for (OrderDetail orderDetail : listOrderDetail) {
@@ -199,6 +191,8 @@ public class OrderService {
             for (int i = 0; i < orderDetail.getQuantity(); i++) {
                 List<ShelfDetail> shelfOriginDetails = shelfDetailRepository.findAllByShelf(orderDetail.getOrigin_shelf_id());
                 List<ShelfDetail> shelfDestDetails = shelfDetailRepository.findAllByShelf(orderDetail.getDest_shelf_id());
+
+
 
                 // move product to dest
                 if(isToWarehouse) {

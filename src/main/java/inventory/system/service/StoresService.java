@@ -6,6 +6,7 @@ import inventory.system.repository.StoresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Service
 public class StoresService {
 
-    @Autowired
+    @Resource
     StoresRepository storesRepository;
 
     public List<Stores> getAllStores() {
@@ -26,7 +27,6 @@ public class StoresService {
         );
         return storesList;
     }
-
     public List<Stores> saveStores(Stores stores, LoggedUser loggedUser) {
         stores.setStatus("A");
         stores.setCreated_at(new Date());
@@ -36,8 +36,7 @@ public class StoresService {
         storesRepository.save(stores);
         return getAllStores();
     }
-
-    public int update(int id, Stores store, LoggedUser loggedUser) {
+    public void update(int id, Stores store, LoggedUser loggedUser) {
         Stores stores = storesRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid store Id:" + id));
         stores.setName(store.getName());
@@ -49,10 +48,7 @@ public class StoresService {
         stores.setUpdated_at(new Date());
         stores.setUpdated_by(loggedUser.getName());
         storesRepository.save(stores);
-
-        return 1;
     }
-
     public Stores getStoresById(Integer id) {
         Optional<Stores> optional = storesRepository.findById(id);
         Stores stores = null;
@@ -63,7 +59,6 @@ public class StoresService {
         }
         return stores;
     }
-
     public List<Stores> deleteStores(Stores stores, LoggedUser loggedUser) {
         stores.setStatus("D");
         stores.setUpdated_at(new Date());
@@ -71,13 +66,10 @@ public class StoresService {
         storesRepository.save(stores);
         return getAllStores();
     }
-
-    public int activate(Stores stores, LoggedUser loggedUser) {
+    public void activate(Stores stores, LoggedUser loggedUser) {
         stores.setStatus("A");
         stores.setUpdated_at(new Date());
         stores.setUpdated_by(loggedUser.getName());
         storesRepository.save(stores);
-
-        return 1;
     }
 }
