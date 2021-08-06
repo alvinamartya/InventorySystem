@@ -53,6 +53,8 @@
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Address</th>
+                                <th>CP Name</th>
+                                <th>CP Number</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -63,6 +65,8 @@
                                 <td th:text="${supplier.name}"></td>
                                 <td th:text="${supplier.phone}"></td>
                                 <td th:text="${supplier.address}"></td>
+                                <td th:text="${supplier.contact_person_name}"></td>
+                                <td th:text="${supplier.contact_person_number}"></td>
                                 <td>
                                     <div th:switch="${supplier.status}">
                                         <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
