@@ -294,7 +294,7 @@ public class DashboardService {
         }
 
         if (orderWaiting.size() > 0) {
-            Order lastOrderWaiting = orderWaiting.get(orderChecking.size() - 1);
+            Order lastOrderWaiting = orderWaiting.get(orderWaiting.size() - 1);
             dashboardCardSuperAdminModel.setLasUpdateWaiting(formatter.format(lastOrderWaiting.getDate()));
         } else {
             dashboardCardSuperAdminModel.setLasUpdateWaiting(formatter.format(new Date()));

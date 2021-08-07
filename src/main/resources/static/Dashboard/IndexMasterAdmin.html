@@ -119,10 +119,11 @@
     <!--######### END OF SECTION HEREEE ################ -->
 
     <script>
-        $.get( "dashboard-order", function( data ) {
+        $.get("dashboard-order", function( data ) {
             const xValues = data.map((data) => {
                 return data.date;
             });
+
             const yValues = data.map((data) => {
                 return data.totalOrder;
             });
