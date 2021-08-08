@@ -79,16 +79,16 @@ public class OrderService {
         ObjectMapper objectMapper = new ObjectMapper();
         List<OrderDetailInputModel> detailList = null;
         try {
+            System.out.println("orderInput:" + orderinput.getDetailJSON());
             detailList = objectMapper.readValue(
                     orderinput.getDetailJSON(),
                     new TypeReference<List<OrderDetailInputModel>>() {
                     });
         } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
+            System.out.println("error:" + e.getMessage());
         }
 
         insertDetail(orderId, Objects.requireNonNull(detailList));
-        getAllOrder();
     }
 
     public void insertDetail(String orderId, List<OrderDetailInputModel> detailList) {
