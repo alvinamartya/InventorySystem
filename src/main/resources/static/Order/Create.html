@@ -240,7 +240,7 @@
         }
 
         function ValidateOrderDetail() {
-            if([[${level < 3}]]) {
+
                 var validate3 = [0];
                 var product_id = [];
                 var product_origin = [];
@@ -282,8 +282,16 @@
                     var varorigin = itemdetail[i].productOrigin;
                     var vardest = itemdetail[i].productDest;
                     var varqty = itemdetail[i].productQty;
-                    if (varname == '' || varorigin == '' || vardest == ''|| varqty == '') {
-                        detailvalid = false;
+                    if($(levelHidden).val()<3) {
+                        alert($(levelHidden).val() + "LEVEL BRO");
+                        if (varname == '' || varorigin == '' || varqty == '') {
+                            detailvalid = false;
+                        }
+                    }
+                    else{
+                        if (varname == '' || varorigin == '' || vardest == '' || varqty == '') {
+                            detailvalid = false;
+                        }
                     }
                 }
 
@@ -303,9 +311,7 @@
                 } else {
                     return false;
                 }
-            } else {
-                return true;
-            }
+
         }
 
         function setClearFor(input) {
