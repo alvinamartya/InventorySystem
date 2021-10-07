@@ -26,6 +26,14 @@
                         <p th:text="*{phone}"></p>
                     </div>
                     <div class="form-group">
+                        <label>Contact Person Name</label>
+                        <p th:text="*{contact_person_name}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Person Number</label>
+                        <p th:text="*{contact_person_number}"></p>
+                    </div>
+                    <div class="form-group">
                         <label>Status</label>
                         <div th:switch="*{status}">
                             <span th:case="'A'" class="tag tag-pill tag-success">Active</span>

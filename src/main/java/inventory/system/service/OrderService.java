@@ -10,6 +10,7 @@ import inventory.system.repository.OrderRepository;
 import inventory.system.repository.ShelfDetailRepository;
 import inventory.system.utils.FifoShelfDetail;
 import inventory.system.utils.GeneratorId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,6 +30,9 @@ public class OrderService {
 
     @Resource
     ShelfDetailRepository shelfDetailRepository;
+
+    @Autowired
+    DriverService driverService;
 
     public List<Order> getAllOrder() {
         return (List<Order>) ordersRepository.findAll();
@@ -75,16 +79,16 @@ public class OrderService {
         ObjectMapper objectMapper = new ObjectMapper();
         List<OrderDetailInputModel> detailList = null;
         try {
+            System.out.println("orderInput:" + orderinput.getDetailJSON());
             detailList = objectMapper.readValue(
                     orderinput.getDetailJSON(),
                     new TypeReference<List<OrderDetailInputModel>>() {
                     });
         } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
+            System.out.println("error:" + e.getMessage());
         }
 
         insertDetail(orderId, Objects.requireNonNull(detailList));
-        getAllOrder();
     }
 
     public void insertDetail(String orderId, List<OrderDetailInputModel> detailList) {
@@ -174,6 +178,9 @@ public class OrderService {
         orders.setUpdated_at(new Date());
         orders.setUpdated_by(staffName);
         ordersRepository.save(orders);
+        if(orders.getDriver_id()!=0){
+            driverService.updateAvailable(orders.getDriver_id());
+        }
     }
 
     public void reject(String id, String staffName) {
@@ -190,7 +197,7 @@ public class OrderService {
         ordersRepository.delete(order);
     }
 
-    public boolean moveShelfDetailOrder(String id) {
+    public boolean moveShelfDetailOrder(String id, int level) {
         boolean isError = false;
 
         List<ShelfDetail> toShelfWarehouseList = new ArrayList<>();
@@ -207,8 +214,13 @@ public class OrderService {
             boolean isFromWarehouse = orderDetail.getOrderList().getOrigin_type().equals("Gudang");
             boolean isToWarehouse = orderDetail.getOrderList().getDest_type().equals("Gudang");
 
-            boolean isQuantityOriginGreaterOrEqual = FifoShelfDetail.isQuantityOriginGreaterOrEquals(shelfOriginDetails, orderDetail.getQuantity(), orderDetail.getProduct_id());
-            boolean isQuantityDestGreaterOrEqual = FifoShelfDetail.isQuantityDestGreaterOrEquals(shelfDestDetails, orderDetail.getQuantity());
+            boolean isQuantityOriginGreaterOrEqual = true;
+            boolean isQuantityDestGreaterOrEqual = true;
+            if(level!=1){
+                isQuantityOriginGreaterOrEqual = FifoShelfDetail.isQuantityOriginGreaterOrEquals(shelfOriginDetails, orderDetail.getQuantity(), orderDetail.getProduct_id());
+                isQuantityDestGreaterOrEqual = FifoShelfDetail.isQuantityDestGreaterOrEquals(shelfDestDetails, orderDetail.getQuantity());
+            }
+
 
             if(isQuantityOriginGreaterOrEqual && isQuantityDestGreaterOrEqual) {
                 for (int i = 0; i < orderDetail.getQuantity(); i++) {

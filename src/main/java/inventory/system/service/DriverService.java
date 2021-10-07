@@ -2,7 +2,9 @@ package inventory.system.service;
 
 import inventory.system.entity.Driver;
 import inventory.system.entity.LoggedUser;
+import inventory.system.entity.Order;
 import inventory.system.repository.DriverRepository;
+import inventory.system.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class DriverService {
     @Resource
     DriverRepository driversRepository;
 
+    @Resource
+    OrderRepository ordersRepository;
+
     public List<Driver> getAllDriver() {
         List<Driver> driversList = (List<Driver>) driversRepository.findAll();
         driversList.sort(
@@ -29,9 +34,15 @@ public class DriverService {
 
         return driversList;
     }
+
     public List<Driver> getDriverByWarehouse(String id) {
         return driversRepository.findDriverByWarehouse(id);
     }
+
+    public List<Driver> getDriverByWarehouseAvailable(String id) {
+        return driversRepository.findDriverByWarehouseAvailable(id);
+    }
+
     public void saveDriver(Driver driver, LoggedUser loggedUser) {
         driver.setStatus("A");
         driver.setCreated_at(new Date());
@@ -49,6 +60,13 @@ public class DriverService {
         drivers.setPhone(driver.getPhone());
         drivers.setUpdated_at(new Date());
         drivers.setUpdated_by(loggedUser.getName());
+        driversRepository.save(drivers);
+    }
+    public void updateAvailable(int idDriver) {
+        Driver drivers = driversRepository.findById(idDriver)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid driver Id:" + idDriver));
+
+        drivers.setIs_available(1);
         driversRepository.save(drivers);
     }
     public Driver getDriverById(Integer id) {

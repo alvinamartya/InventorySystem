@@ -41,6 +41,7 @@
                                 <th>Row</th>
                                 <th>Col</th>
                                 <th>Product ID</th>
+                                <th>Unit</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -51,6 +52,11 @@
                                 <td>
                                     <span th:if='${shelfdetail.product_id==null}'><i>Empty</i></span>
                                     <span th:if='${shelfdetail.product_id!=null}' th:text="${shelfdetail.productList.name}"></span>
+                                </td>
+
+                                <td>
+                                    <span th:if='${shelfdetail.product_id==null}'><i>-</i></span>
+                                    <span th:if='${shelfdetail.product_id!=null}' th:text="${shelfdetail.productList.units}"></span>
                                 </td>
                             </tr>
                             </tbody>

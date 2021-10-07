@@ -21,6 +21,7 @@ public class Driver {
     private Date created_at;
     private String updated_by;
     private Date updated_at;
+    private Integer is_available;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -112,5 +113,13 @@ public class Driver {
 
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public Integer getIs_available() {
+        return is_available;
+    }
+
+    public void setIs_available(Integer is_available) {
+        this.is_available = is_available;
     }
 }

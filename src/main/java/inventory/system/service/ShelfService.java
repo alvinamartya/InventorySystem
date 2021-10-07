@@ -4,6 +4,7 @@ import inventory.system.entity.LoggedUser;
 import inventory.system.entity.Product;
 import inventory.system.entity.Shelf;
 import inventory.system.entity.ShelfDetail;
+import inventory.system.model.ShelfCustomJSONModel;
 import inventory.system.repository.ProductRepository;
 import inventory.system.repository.ShelfDetailRepository;
 import inventory.system.repository.ShelfRepository;
@@ -37,9 +38,37 @@ public class ShelfService {
     public List<Shelf> getAllShelfRR() {
         return shelfRepository.findAllRR();
     }
-    public List<Shelf> getShelfByCategory(String id) {
+    public List<Shelf> getShelfByCategory(String id, String warehouse_id) {
         Product product = productService.getProductById(Integer.parseInt(id));
-        return shelfRepository.findShelfByCategoryRO(product.getProduct_category_id());
+        return shelfRepository.findShelfByCategoryRO(product.getProduct_category_id(), warehouse_id);
+    }
+    public List<ShelfCustomJSONModel> getShelfByCategoryAndProduct(String id, String warehouse_id) {
+        Product product = productService.getProductById(Integer.parseInt(id));
+        List<Shelf> shelfList = shelfRepository.findShelfByCategoryRO(product.getProduct_category_id(), warehouse_id);
+        List<ShelfCustomJSONModel> shelfFiltered = new ArrayList<>();
+        for (Shelf obj : shelfList)
+        {
+            List<ShelfDetail> dt = shelfDetailRepository.findAllByShelf(obj.getId());
+            for (ShelfDetail objdt : dt){
+                if(objdt.getProduct_id()!=null){
+                    if(objdt.getProduct_id()==product.getId()){
+                        ShelfCustomJSONModel objadd = new ShelfCustomJSONModel();
+                        objadd.setId(obj.getId());
+                        objadd.setName(obj.getId());
+                        objadd.setTotalShelf(0);
+                        objadd.setFilled(shelfDetailRepository.countFilledShelf(obj.getId(),product.getId()));
+                        objadd.setEmptyShelf(0);
+                        objadd.setCapacityText("qty:"+objadd.getFilled());
+                        shelfFiltered.add(objadd);
+                        break;
+                    }
+                }
+            }
+        }
+        return shelfFiltered;
+    }
+    public Integer countFilledShelf(String id){
+        return shelfRepository.countFilledShelf(id);
     }
     public List<Shelf> getShelfByCategoryRR(String id) {
         Product product = productService.getProductById(Integer.parseInt(id));
