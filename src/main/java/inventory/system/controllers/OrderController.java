@@ -216,10 +216,11 @@ public class OrderController {
         if(logged_user == null || httpsession == null) {
             return "redirect:/login";
         } else if (Session.isLogin(logged_user, httpsession)) {
-            boolean error = orderService.moveShelfDetailOrder(id);
+            boolean error = orderService.moveShelfDetailOrder(id, Integer.parseInt(level));
             if(!error) {
                 String staffName = logged_user.getName();
                 orderService.approve(id, staffName);
+
                 redirectAttrs.addFlashAttribute("success_create", "Order Successfully Approved!");
             } else {
                 redirectAttrs.addFlashAttribute("success_delete", "Order failed to be approved");

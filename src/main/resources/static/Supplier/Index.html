@@ -53,6 +53,8 @@
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Address</th>
+                                <th>CP Name</th>
+                                <th>CP Number</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -63,25 +65,14 @@
                                 <td th:text="${supplier.name}"></td>
                                 <td th:text="${supplier.phone}"></td>
                                 <td th:text="${supplier.address}"></td>
+                                <td th:text="${supplier.contact_person_name}"></td>
+                                <td th:text="${supplier.contact_person_number}"></td>
                                 <td>
                                     <div th:switch="${supplier.status}">
                                         <span th:case="'A'" class="tag tag-pill tag-success">Active</span>
                                         <span th:case="'D'" class="tag tag-pill tag-danger">Non-Active</span>
                                     </div>
                                 </td>
-
-                                <td width="30%" th:if='${supplier.status.equals("A")}'>
-                                    <a th:href="@{/supplierDetail/index/{id}(id=${supplier.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{edit/{id}(id=${supplier.id})}" class="btn btn-outline-primary">Edit</a>
-                                    <a th:href="@{delete/{id}(id=${supplier.id})}" class="btn btn-danger">Deactivate</a>
-                                </td>
-
-                                <td width="30%" th:unless='${supplier.status.equals("A")}'>
-                                    <a th:href="@{detail/{id}(id=${supplier.id})}" class="btn btn-info">Detail</a>
-                                    <a th:href="@{activate/{id}(id=${supplier.id})}" class="btn btn-success">Activate</a>
-                                </td>
-
-
 
                                 <td th:if='${supplier.status.equals("A")}'>
                                     <a title="See Detail" th:href="@{/supplierDetail/index/{id}(id=${supplier.id})}" class="btn btn-info custom-icon-btn">

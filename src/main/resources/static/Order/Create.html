@@ -14,6 +14,7 @@
 
                 <div class="card-block" id="divForm">
                     <form th:action="@{/order/save/{id}(id=${level})}" th:object="${orderObject}" method="post">
+                        <input type="hidden" th:value="${level}" id="levelHidden"/>
                         <div class="form-group">
                             <label for="txtType">Origin Type<span style="color: red;">*</span></label>
                             <select class="form-control"  id="txtType" th:field="*{origin_type}" readonly>
@@ -136,7 +137,7 @@
                                             </select>
                                         </td>
                                         <td class="product_origin">
-                                            <select class="form-control">
+                                            <select disabled class="form-control">
                                                 <option value=""> -Select Origin Shelf- </option>
                                             </select>
                                         </td>
@@ -146,7 +147,7 @@
                                             </select>
                                         </td>
                                         <td class="product_qty">
-                                            <input type="number" value="0" class="form-control" placeholder="Fill Quantity">
+                                            <input disabled type="number" min="0" value="0" class="form-control" placeholder="Fill Quantity">
                                         </td>
                                         <td style="border-left-style: none"></td>
                                     </tr>
@@ -231,8 +232,6 @@
                 validate[3] = 1;
             }
 
-
-
             if (validate[0] == 1 && validate[1] == 1 && validate[2] == 1 && validate[3] == 1) {
                 return true;
             } else {
@@ -241,69 +240,78 @@
         }
 
         function ValidateOrderDetail() {
-            var validate3 = [0];
 
+                var validate3 = [0];
+                var product_id = [];
+                var product_origin = [];
+                var product_dest = [];
+                var product_qty = [];
+                $('.product_id').each(function() {
+                    product_id.push($(this).find("select option:selected").val());
+                });
+                $('.product_origin').each(function() {
+                    product_origin.push($(this).find("select option:selected").val());
+                });
+                $('.product_dest').each(function() {
+                    product_dest.push($(this).find("select option:selected").val());
+                });
+                $('.product_qty').each(function() {
+                    product_qty.push($(this).find("input").val());
+                });
 
-            var product_id = [];
-            var product_origin = [];
-            var product_dest = [];
-            var product_qty = [];
-            $('.product_id').each(function() {
-                product_id.push($(this).find("select option:selected").val());
-            });
-            $('.product_origin').each(function() {
-                product_origin.push($(this).find("select option:selected").val());
-            });
-            $('.product_dest').each(function() {
-                product_dest.push($(this).find("select option:selected").val());
-            });
-            $('.product_qty').each(function() {
-                product_qty.push($(this).find("input").val());
-            });
+                var itemdetail = [];
+                var i;
+                var limit = product_id.length;
 
-            var itemdetail = [];
-            var i;
-            var limit = product_id.length;
-
-            for (i = 0; i < limit; i++) {
-                var vid = product_id[i];
-                var vorigin = product_origin[i];
-                var vdest = product_dest[i];
-                var vqty = product_qty[i];
-                var itemdetails = {
-                    productID: vid,
-                    productOrigin: vorigin,
-                    productDest: vdest,
-                    productQty: vqty
-                };
-                itemdetail.push(itemdetails);
-            }
-            var detailvalid = true;
-            for (i = 0; i < itemdetail.length; i++) {
-                var varname = itemdetail[i].productID;
-                var varorigin = itemdetail[i].productOrigin;
-                var vardest = itemdetail[i].productDest;
-                var varqty = itemdetail[i].productQty;
-                if (varname == '' || varorigin == '' || vardest == ''|| varqty == '') {
-                    detailvalid = false;
+                for (i = 0; i < limit; i++) {
+                    var vid = product_id[i];
+                    var vorigin = product_origin[i];
+                    var vdest = product_dest[i];
+                    var vqty = product_qty[i];
+                    var itemdetails = {
+                        productID: vid,
+                        productOrigin: vorigin,
+                        productDest: vdest,
+                        productQty: vqty
+                    };
+                    itemdetail.push(itemdetails);
                 }
-            }
-            if (detailvalid == true) {
-                var itemdetailwrapped = JSON.stringify(itemdetail);
-                $('#arraydetail').val(itemdetailwrapped);
-                console.log(itemdetailwrapped);
-                validate3[0] = 1;
-            } else {
-                //$('#detailtable').addClass('alertborder');
-                validate3[0] = 0;
-                $('#alertDetailDiv').removeClass('hide');
-            }
+                var detailvalid = true;
+                for (i = 0; i < itemdetail.length; i++) {
+                    var varname = itemdetail[i].productID;
+                    var varorigin = itemdetail[i].productOrigin;
+                    var vardest = itemdetail[i].productDest;
+                    var varqty = itemdetail[i].productQty;
+                    if($(levelHidden).val()<3) {
+                        alert($(levelHidden).val() + "LEVEL BRO");
+                        if (varname == '' || varorigin == '' || varqty == '') {
+                            detailvalid = false;
+                        }
+                    }
+                    else{
+                        if (varname == '' || varorigin == '' || vardest == '' || varqty == '') {
+                            detailvalid = false;
+                        }
+                    }
+                }
 
-            if (validate3[0] == 1) {
-                return true;
-            } else {
-                return false;
-            }
+                if (detailvalid == true) {
+                    var itemdetailwrapped = JSON.stringify(itemdetail);
+                    $('#arraydetail').val(itemdetailwrapped);
+                    console.log(itemdetailwrapped);
+                    validate3[0] = 1;
+                } else {
+                    //$('#detailtable').addClass('alertborder');
+                    validate3[0] = 0;
+                    $('#alertDetailDiv').removeClass('hide');
+                }
+
+                if (validate3[0] == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+
         }
 
         function setClearFor(input) {
@@ -351,10 +359,6 @@
             html_code += '</tr>';
             $('#crud_table').append(html_code);
         }
-
-
-
-
 
         var count = 1;
         //Plus1
@@ -451,6 +455,7 @@
 
         $(document).ready(function() {
             if ( $('.ddlOriginLevel2').length ) {
+                $('.product_origin select').prop( "disabled", false );
                 var id = $(".ddlOriginLevel2").val();
                 var dataWrapped = {
                     'id': id,
@@ -472,8 +477,6 @@
                     success: function (resp) {
                         $('#txtIdWarehouse').find('option').not(':first').remove();
                         $('#txtIdWarehouse').attr('disabled', false);
-                        console.log(resp);
-                        console.log(resp.data);
 
                         for (var i = 0; i < resp.data.length; i++) {
                             $('#txtIdWarehouse').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
@@ -496,17 +499,19 @@
                     success: function (resp) {
                         $('#txtIdDriver').find('option').not(':first').remove();
                         $('#txtIdDriver').attr('disabled', false);
-                        console.log(resp);
-                        console.log(resp.data);
 
                         for (var i = 0; i < resp.data.length; i++) {
                             $('#txtIdDriver').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
                         }
                     }
                 });
+
+                populateAllProduct();
             }
 
+
             if ( $('.ddlOriginLevel3').length ) {
+                $('.product_origin select').prop( "disabled", false );
                 var id = $(".ddlOriginLevel3").val();
                 var dataWrapped = {
                     'id': id,
@@ -528,9 +533,6 @@
                     success: function (resp) {
                         $('#txtIdWarehouse').find('option').not(':first').remove();
                         $('#txtIdWarehouse').attr('disabled', false);
-                        console.log(resp);
-                        console.log(resp.data);
-
                         for (var i = 0; i < resp.data.length; i++) {
                             $('#txtIdWarehouse').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
                         }
@@ -552,14 +554,14 @@
                     success: function (resp) {
                         $('#txtIdDriver').find('option').not(':first').remove();
                         $('#txtIdDriver').attr('disabled', false);
-                        console.log(resp);
-                        console.log(resp.data);
 
                         for (var i = 0; i < resp.data.length; i++) {
                             $('#txtIdDriver').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
                         }
                     }
                 });
+
+                populateAllProduct();
             }
 
 
@@ -620,8 +622,36 @@
                         $('.product_origin select').find('option').not(':first').remove();
                         $('.product_dest select').find('option').not(':first').remove();
 
-                        console.log(resp);
-                        console.log(resp.data);
+                        for (var i = 0; i < resp.data.length; i++) {
+                            $('.product_id select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                        }
+                    }
+                });
+            }
+
+            function populateAllProduct(){
+                var dataWrapped = {
+                    'id': id,
+                    'name' : ''
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getAllProduct',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
+                        $("#crud_table").find("tr:gt(1)").remove();
+                        $('.product_id select').find('option').not(':first').remove();
+                        $('.product_origin select').find('option').not(':first').remove();
+                        $('.product_dest select').find('option').not(':first').remove();
 
                         for (var i = 0; i < resp.data.length; i++) {
                             $('.product_id select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
@@ -635,11 +665,17 @@
                     'id': id,
                     'name' : ''
                 };
-
+                var uri ='';
+                if($(levelHidden).val()==1){
+                    uri = 'http://localhost:8080/api/getCategorizedShelf';
+                }
+                else{
+                    uri = 'http://localhost:8080/api/getCategorizedShelfWithProduct';
+                }
                 $.ajax({
                     type: 'POST',
                     contentType : "application/json",
-                    url: 'http://localhost:8080/api/getCategorizedShelf',
+                    url: uri,
                     data: JSON.stringify(dataWrapped),
                     dataType : 'json',
                     beforeSend: function() {
@@ -650,14 +686,50 @@
                     },
                     success: function (resp) {
                         $(element).parent().closest("tr").find('.product_origin select').find('option').not(':first').remove();
+                        if($(levelHidden).val() == 3) {
+                            for (var i = 0; i < resp.data.length; i++) {
+                                if(resp.data[i].filled > 0) $(element).parent().closest("tr").find('.product_qty input').prop( "disabled", false );
+                                $(element).parent().closest("tr").find('.product_origin select').append('<option data-empty='+resp.data[i].filled+' value=' + resp.data[i].id + '>' + resp.data[i].name + ' | '+ resp.data[i].capacityText + '</option>');
+                                $(element).parent().closest("tr").find('.product_dest select').append('<option data-empty='+resp.data[i].filled+' value=' + resp.data[i].id + '>' + resp.data[i].name + ' | '+ resp.data[i].capacityText + '</option>');
+                            }
+                        }
+                        else if($(levelHidden).val()!=2){
+                            for (var i = 0; i < resp.data.length; i++) {
+                                $(element).parent().closest("tr").find('.product_origin select').append('<option data-empty='+resp.data[i].emptyShelf+' value=' + resp.data[i].id + '>' + resp.data[i].name + ' | '+ resp.data[i].capacityText + '</option>');
+                                $(element).parent().closest("tr").find('.product_dest select').append('<option data-empty='+resp.data[i].emptyShelf+' value=' + resp.data[i].id + '>' + resp.data[i].name + ' | '+ resp.data[i].capacityText + '</option>');
+                            }
+                        }
+                        else{
+                            for (var i = 0; i < resp.data.length; i++) {
+                                $(element).parent().closest("tr").find('.product_origin select').append('<option data-empty='+resp.data[i].emptyShelf+' value=' + resp.data[i].id + '>' + resp.data[i].name + ' | '+ resp.data[i].capacityText + '</option>');
+                            }
+                        }
+                    }
+                });
+            }
+
+            function populateShelfDest(id, warehouseid, element){
+                var dataWrapped = {
+                    'id': id,
+                    'name' : warehouseid
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    contentType : "application/json",
+                    url: 'http://localhost:8080/api/getCategorizedShelfDest',
+                    data: JSON.stringify(dataWrapped),
+                    dataType : 'json',
+                    beforeSend: function() {
+                        loadStart();
+                    },
+                    complete: function() {
+                        loadComplete();
+                    },
+                    success: function (resp) {
                         $(element).parent().closest("tr").find('.product_dest select').find('option').not(':first').remove();
-
-                        console.log(resp);
-                        console.log(resp.data);
-
                         for (var i = 0; i < resp.data.length; i++) {
-                            $(element).parent().closest("tr").find('.product_origin select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
-                            $(element).parent().closest("tr").find('.product_dest select').append('<option value=' + resp.data[i].id + '>' + resp.data[i].name + '</option>')
+                            $(element).parent().closest("tr").find('.product_dest select').append('<option data-empty='+resp.data[i].emptyShelf+' value=' + resp.data[i].id + '>' + resp.data[i].name + ' | '+ resp.data[i].capacityText + '</option>');
                         }
                     }
                 });
@@ -676,11 +748,44 @@
                 var id = $(this).val();
             })
 
+            $(document).on('change', '.product_dest select', function() {
+                var idSupplier = $(this).val();
+                $(this).parent().closest("tr").find('.product_qty input').prop( "disabled", false );
+                //alert($(this).find(':selected').data("empty"));
+                $(this).parent().closest("tr").find('.product_qty input').attr('max', $(this).find(':selected').data("empty"));
+            })
+
+            $(document).on('keyup', '.product_qty input', function() {
+                var max = parseInt($(this).attr('max'));
+                //alert(max);
+                if (parseInt($(this).val()) > max) {
+                    $(this).val(max);
+                }
+
+                if (parseInt($(this).val()) == 0) {
+                    $(this).val(1);
+                }
+            });
 
             $(document).on('change', '.product_id select', function() {
                     var idProd = $(this).val();
                     populateShelf(idProd, this);
-                });
+                    if($(levelHidden).val()==2){
+                        populateShelfDest(idProd, $(txtIdWarehouse).val(),this);
+                    }
+            });
+
+            $(document).on('change', '.product_dest select', function() {
+                if($(levelHidden).val()==1){
+                    $(this).parent().closest("tr").find('.product_origin select').val($(this).val());
+                }
+            });
+
+            $(document).on('change', '.product_origin select', function() {
+                if($(levelHidden).val()==3){
+                    $(this).parent().closest("tr").find('.product_dest select').val($(this).val());
+                }
+            });
 
         });
 

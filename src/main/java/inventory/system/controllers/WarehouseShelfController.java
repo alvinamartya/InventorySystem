@@ -60,7 +60,9 @@ public class WarehouseShelfController {
 
             List<Shelf> shelfsList = shelfService.getAllShelfByWarehouseRO(logged_user.getWarehouse_id());
             model.addAttribute("listShelf", shelfsList);
+
             List<ShelfDetail> listDetail = shelfService.getAllShelfById(shelf.getId());
+
             model.addAttribute("detailShelf", listDetail);
 
             model.addAttribute("shelfObject", shelf);

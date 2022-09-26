@@ -14,12 +14,30 @@ public class Supplier {
     private String address;
     private String phone;
     private String status;
+    private String contact_person_name;
+    private String contact_person_number;
     private String created_by;
     private Date created_at;
     private String updated_by;
     private Date updated_at;
 
     public Supplier() {
+    }
+
+    public String getContact_person_name() {
+        return contact_person_name;
+    }
+
+    public void setContact_person_name(String contact_person_name) {
+        this.contact_person_name = contact_person_name;
+    }
+
+    public String getContact_person_number() {
+        return contact_person_number;
+    }
+
+    public void setContact_person_number(String contact_person_number) {
+        this.contact_person_number = contact_person_number;
     }
 
     public Supplier(String id, String name, String address, String phone, String status, String created_by, Date created_at, String updated_by, Date updated_at) {
